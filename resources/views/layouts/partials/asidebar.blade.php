@@ -38,7 +38,7 @@
         </a>
         <ul class="nav nav-treeview">
             <li class="nav-item">
-            <a href="rekapitulasi" class="nav-link">
+            <a href="rekap" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Rekapitulasi</p>
             </a>
