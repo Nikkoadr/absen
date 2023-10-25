@@ -23,7 +23,7 @@
 <footer class="main-footer">
 <!-- To the right -->
 <div class="float-right d-none d-sm-inline">
-Anything you want
+Appliaction : v1.0.0 | Laravel : v{{ Illuminate\Foundation\Application::VERSION }} | PHP : v{{ PHP_VERSION }}
 </div>
 <!-- Default to the left -->
 <strong>Copyright &copy; 2023-2024 <a href="https://github.com/Nikkoadr">Nikko Adrian</a>.</strong> All rights reserved.
