@@ -31,19 +31,12 @@
 <!-- Main content -->
 <div class="content">
     <div class="container-fluid">
-    <div class="row">
+    <div class="row mx-auto d-block">
     <form method="POST" action="#">
         @csrf
-        <div class="row">
-            <div class="col-md-3">
-                <div class="mx-auto d-block" id="my_camera"></div>
-                <br/>
-                <input type="hidden" name="image" class="image-tag">
-            </div>
-            <div class="col-md-12 text-center">
-                <button class="btn btn-success">Absen Masuk</button>
-            </div>
-        </div>
+        <div class="mx-auto d-block" id="my_camera"></div>
+        <input type="hidden" name="image" class="image-tag">
+        <button class="btn btn-success m-3 mx-auto d-block">Absen</button>
     </form>
     </div>
     <!-- /.row -->
