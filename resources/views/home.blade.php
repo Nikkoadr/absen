@@ -3,15 +3,22 @@
 <!-- Ionicons -->
 <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
 <style>
     .kamera,
-    .kamera video{
+    .kamera video {
         display: inline-block;
         width: 100% !important;
         margin: auto;
         height: auto !important;
         border-radius: 15px;
     }
+</style>
+<style>
+    #map {
+        height: 180px;
+        }
 </style>
 @endsection
 @section('content')
@@ -52,6 +59,11 @@
                     <input type="hidden" id="lokasi">
                     <div class="kamera">
                     </div>
+                    <div class="row">
+                        <div class="col">
+                            <div id="map"></div>
+                        </div>
+                    </div>
                         <div class="row">
                             <div class="col">
                                 <button id="ambilFoto" class="btn btn-primary btn-block">
@@ -76,6 +88,7 @@
 @section('script')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
     Webcam.set({
         width: 320,
@@ -91,6 +104,18 @@
     }
     function berhasil(position){
         lokasi.value = position.coords.latitude + "," + position.coords.longitude;
+        var map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 16);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+        var marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
+        var circle = L.circle([-6.363041, 108.113627], {
+        color: 'red',
+        fillColor: '#f03',
+        fillOpacity: 0.3,
+        radius: 70
+    }).addTo(map);
     }
     function gagal(){
 
