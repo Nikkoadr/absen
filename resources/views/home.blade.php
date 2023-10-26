@@ -53,9 +53,6 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <form method="POST" action="#">
-                    @csrf
-                    @method('put')
                     <input type="hidden" id="lokasi">
                     <div class="kamera">
                     </div>
@@ -70,7 +67,6 @@
                                     <i class="fa-solid fa-camera-retro"></i> Absen Masuk</button>
                             </div>
                         </div>
-                </form>
             </div>
             <!-- /.card-body -->
         </div>
@@ -117,8 +113,28 @@
         radius: 70
     }).addTo(map);
     }
+
     function gagal(){
 
     }
+    $("#ambilFoto").click(function(e){
+        Webcam.snap(function(url){
+            image = url;
+        });
+        var lokasi = $("#lokasi").val();
+        $.ajax({
+            type:'POST',
+            url:'/absenMasuk',
+            data: {
+                _token: "{{ csrf_token() }}",
+                image: image,
+                lokasi: lokasi
+            },
+            cache: false,
+            success: function(respond){
+
+            }
+        });
+    })
 </script>
 @endsection

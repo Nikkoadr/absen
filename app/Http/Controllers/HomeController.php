@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -24,5 +25,13 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    }
+    public function absenMasuk(Request $request)
+    {
+        $id = Auth::user()->id;
+        $tanggal_masuk = date("Y-m-d");
+        $jam_masuk = date("H:i:s");
+        $lokasi = $request->lokasi;
+        $image = $request->image;
     }
 }
