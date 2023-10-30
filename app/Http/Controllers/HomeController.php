@@ -41,48 +41,37 @@ class HomeController extends Controller
         $tanggal_absen = date("Y-m-d");
         $jam = date("H:i:s");
         $lokasi = $request->lokasi;
-
         $foto = $request->foto;
-        $folderPath = "public/absen_file/";
-        $cek = DB::table('absensi')->where('tanggal_absen', $tanggal_absen)->where('id_user', $id_user)->count();
-        if ($cek) {
-            $keterangan = "keluar";
-        } else {
-            $keterangan = "masuk";
-        }
-        $formatNama = $id_user . "-" . $tanggal_absen . "-" . $keterangan;
+        $keterangan = DB::table('absensi')->where('tanggal_absen', $tanggal_absen)->where('id_user', $id_user)->count() ? 'keluar' : 'masuk';
         $foto_parts = explode("base64", $foto);
         $foto_base64 = base64_decode($foto_parts[1]);
-        $nama_foto = $formatNama . ".png";
-        $file = $folderPath . $nama_foto;
-        if ($cek) {
-            $data = [
-                'jam_keluar' => $jam,
-                'foto_keluar' => $nama_foto,
-                'lokasi_keluar' =>  $lokasi,
-            ];
-            $simpan = DB::table('absensi')->update($data);
-            if ($simpan) {
-                echo 'pulang';
-                Storage::put($file, $foto_base64);
-            } else {
-                echo 'error';
-            }
+        $nama_foto = "$id_user-$tanggal_absen-$keterangan" . '.png';
+
+
+        $data = [
+            'id_user' => $id_user,
+            'tanggal_absen' => $tanggal_absen,
+            'lokasi_' . $keterangan => $lokasi,
+        ];
+
+        if ($keterangan === 'masuk') {
+            $data['jam_masuk'] = $jam;
+            $data['foto_masuk'] = $nama_foto;
         } else {
-            $data = [
-                'id_user' => $id_user,
-                'tanggal_absen' => $tanggal_absen,
-                'jam_masuk' => $jam,
-                'foto_masuk' => $nama_foto,
-                'lokasi_masuk' =>  $lokasi,
-            ];
-            $simpan = DB::table('absensi')->insert($data);
-            if ($simpan) {
-                echo 'masuk';
-                Storage::put($file, $foto_base64);
-            } else {
-                echo 'error';
-            }
+            $data['jam_keluar'] = $jam;
+            $data['foto_keluar'] = $nama_foto;
+        }
+
+        $simpan = DB::table('absensi')->updateOrInsert(
+            ['tanggal_absen' => $tanggal_absen, 'id_user' => $id_user],
+            $data
+        );
+
+        if ($simpan) {
+            echo $keterangan === 'masuk' ? 'masuk' : 'pulang';
+            Storage::disk('nfs')->put("public/absen_file/$nama_foto", $foto_base64);
+        } else {
+            echo 'error';
         }
     }
 }
