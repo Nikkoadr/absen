@@ -36,8 +36,7 @@ return [
             'throw' => false,
         ],
         'nfs' => [
-            'driver' => 'nfs',
-            'host' => '10.20.30.14',
+            'driver' => 'local',
             'root' => '/var/nfs/sharing/absen_file',
         ],
 
