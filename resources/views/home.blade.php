@@ -49,24 +49,11 @@
         <div class="col-12">
         <div class="card">
             <div class="card-header">
-            <h3 class="card-title">Absen Masuk</h3>
+            <h3 class="card-title">Dashboard</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                    <input type="hidden" id="lokasi">
-                    <div class="kamera">
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div id="map"></div>
-                        </div>
-                    </div>
-                        <div class="row">
-                            <div class="col">
-                                <button id="ambilFoto" class="btn btn-primary btn-block">
-                                    <i class="fa-solid fa-camera-retro"></i> Absen Masuk</button>
-                            </div>
-                        </div>
+                TEST Dashboard
             </div>
             <!-- /.card-body -->
         </div>
@@ -82,59 +69,5 @@
 <!-- /.content-wrapper -->
 @endsection
 @section('script')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-    Webcam.set({
-        width: 320,
-        height: 240,
-        image_format: 'jpeg',
-        jpeg_quality: 60
-    });
-    Webcam.attach( '.kamera' );
 
-    var lokasi = document.getElementById('lokasi');
-    if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(berhasil, gagal)
-    }
-    function berhasil(position){
-        lokasi.value = position.coords.latitude + "," + position.coords.longitude;
-        var map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 16);
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
-        var marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
-        var circle = L.circle([-6.363041, 108.113627], {
-        color: 'red',
-        fillColor: '#f03',
-        fillOpacity: 0.3,
-        radius: 70
-    }).addTo(map);
-    }
-
-    function gagal(){
-    
-    }
-    $("#ambilFoto").click(function(e){
-        Webcam.snap(function(url){
-            image = url;
-        });
-        var lokasi = $("#lokasi").val();
-        $.ajax({
-            type:'POST',
-            url:'/absenMasuk',
-            data: {
-                _token: "{{ csrf_token() }}",
-                image: image,
-                lokasi: lokasi
-            },
-            cache: false,
-            success: function(respond){
-
-            }
-        });
-    })
-</script>
 @endsection

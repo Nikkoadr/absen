@@ -14,14 +14,13 @@ return new class extends Migration
         Schema::create('absensi', function (Blueprint $table) {
             $table->id();
             $table->string('id_user');
-            $table->date('tanggal_masuk');
+            $table->date('tanggal_absen');
             $table->time('jam_masuk');
             $table->time('jam_keluar')->nullable();
             $table->string('foto_masuk');
             $table->string('foto_keluar')->nullable();
-            $table->string('lokasi_masuk');
-            $table->string('lokasi_keluar')->nullable();
-            $table->timestamps();
+            $table->text('lokasi_masuk');
+            $table->text('lokasi_keluar')->nullable();
         });
     }
 

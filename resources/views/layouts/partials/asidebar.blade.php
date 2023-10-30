@@ -28,6 +28,14 @@
             </p>
         </a>
         </li>
+        <li class="nav-item">
+        <a href="/absen" class="nav-link {{ request()->is('absen') ? 'active' : '' }}">
+            <i class="nav-icon fa-solid fa-camera"></i>
+            <p>
+            Absen
+            </p>
+        </a>
+        </li>
         <li class="nav-item menu-close">
         <a href="#" class="nav-link {{ request()->is('rekap') ? 'active' : '' }} {{ request()->is('laporan') ? 'active' : '' }}">
             <i class="nav-icon fa-solid fa-database"></i>

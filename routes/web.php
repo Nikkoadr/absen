@@ -27,6 +27,7 @@ Auth::routes([
 ]);
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/absen', [HomeController::class, 'absen'])->name('absen');
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 Route::get('/rekap', [RekapController::class, 'index'])->name('rekap');
 Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan');

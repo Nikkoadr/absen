@@ -12,6 +12,7 @@
 <link rel="stylesheet" href=" {{ asset('assets/plugins/fontawesome-free-6.4.2/css/all.min.css') }}">
 <!-- Theme style -->
 <link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
 @yield('link')
 </head>
 <body class="hold-transition sidebar-mini">
@@ -35,6 +36,7 @@ Appliaction : v1.0.0 | Laravel : v{{ Illuminate\Foundation\Application::VERSION 
 <script src="{{ asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('assets/dist/js/adminlte.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 @yield('script')
 </body>
 </html>
