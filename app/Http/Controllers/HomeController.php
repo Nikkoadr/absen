@@ -53,7 +53,6 @@ class HomeController extends Controller
         $nama_foto = $id_user . "-" . $tanggal_absen . "-" . $keterangan . ".png";
         $foto_parts = explode("base64", $foto);
         $foto_base64 = base64_decode($foto_parts[1]);
-        $file = $nama_foto;
         if ($cek) {
             $data = [
                 'jam_keluar' => $jam,
@@ -63,7 +62,7 @@ class HomeController extends Controller
             $simpan = DB::table('absensi')->update($data);
             if ($simpan) {
                 echo 'pulang';
-                Storage::disk('nfs')->put($file, $foto_base64);
+                Storage::disk('nfs')->put($nama_foto, $foto_base64);
             } else {
                 echo 'error';
             }
@@ -78,8 +77,7 @@ class HomeController extends Controller
             $simpan = DB::table('absensi')->insert($data);
             if ($simpan) {
                 echo 'masuk';
-                Storage::put($file, $foto_base64);
-                Storage::disk('nfs')->put($file, $foto_base64);
+                Storage::disk('nfs')->put($nama_foto, $foto_base64);
             } else {
                 echo 'error';
             }
