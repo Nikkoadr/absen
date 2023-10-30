@@ -41,8 +41,9 @@ class HomeController extends Controller
         $tanggal_absen = date("Y-m-d");
         $jam = date("H:i:s");
         $lokasi = $request->lokasi;
+
         $foto = $request->foto;
-        $folderPath = "public/absensi/";
+        $folderPath = "public/absen_file/";
         $cek = DB::table('absensi')->where('tanggal_absen', $tanggal_absen)->where('id_user', $id_user)->count();
         if ($cek) {
             $keterangan = "keluar";
