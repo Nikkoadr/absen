@@ -115,7 +115,7 @@
     }
 
     function gagal(){
-
+    
     }
     $("#ambilFoto").click(function(e){
         Webcam.snap(function(url){
