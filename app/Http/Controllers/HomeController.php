@@ -62,7 +62,7 @@ class HomeController extends Controller
             $simpan = DB::table('absensi')->update($data);
             if ($simpan) {
                 echo 'pulang';
-                Storage::disk('nfs')->put($nama_foto, $foto_base64);
+                Storage::disk('local')->put($nama_foto, $foto_base64);
             } else {
                 echo 'error';
             }
@@ -77,7 +77,7 @@ class HomeController extends Controller
             $simpan = DB::table('absensi')->insert($data);
             if ($simpan) {
                 echo 'masuk';
-                Storage::disk('nfs')->put($nama_foto, $foto_base64);
+                Storage::disk('local')->put($nama_foto, $foto_base64);
             } else {
                 echo 'error';
             }
