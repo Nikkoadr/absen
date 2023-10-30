@@ -53,7 +53,7 @@ class HomeController extends Controller
         $nama_foto = $id_user . "-" . $tanggal_absen . "-" . $keterangan . ".png";
         $foto_parts = explode("base64", $foto);
         $foto_base64 = base64_decode($foto_parts[1]);
-        $file = $folderPath . $nama_foto;
+        $file = $nama_foto;
         if ($cek) {
             $data = [
                 'jam_keluar' => $jam,
