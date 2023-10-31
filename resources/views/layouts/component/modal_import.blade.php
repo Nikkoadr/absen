@@ -8,7 +8,7 @@
             </button>
         </div>
         <div class="modal-body">
-            <form action="" method="POST" enctype="multipart/form-data" class="form-horizontal">
+            <form action="/importUser" method="POST" enctype="multipart/form-data" class="form-horizontal">
                 @csrf
                 <div class="form-group">
                     <div class="form-group">

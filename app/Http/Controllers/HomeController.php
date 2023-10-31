@@ -43,7 +43,6 @@ class HomeController extends Controller
         $jam = date("H:i:s");
         $lokasi = $request->lokasi;
         $foto = $request->foto;
-        $folderPath = "/var/nfs/sharing/absen_file/";
         $cek = DB::table('absensi')->where('tanggal_absen', $tanggal_absen)->where('id_user', $id_user)->count();
         if ($cek) {
             $keterangan = "keluar";

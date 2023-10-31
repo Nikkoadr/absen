@@ -29,7 +29,11 @@ Auth::routes([
 
 Route::get('/home',         [HomeController::class, 'index'])->name('home');
 Route::get('/absen',        [HomeController::class, 'absen'])->name('absen');
+
 Route::get('/data_user',    [UserController::class, 'index'])->name('data_user');
+Route::post('/importUser', [UserController::class, 'importUser'])->name('importUser');
+Route::get('/exportuser', [UserController::class, 'exportuser'])->name('exportuser');
+
 Route::get('/profile',      [ProfileController::class, 'index'])->name('profile');
 Route::get('/rekap',        [RekapController::class, 'index'])->name('rekap');
 Route::get('/laporan',      [LaporanController::class, 'index'])->name('laporan');
