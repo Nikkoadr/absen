@@ -29,7 +29,7 @@
     <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-sm-6">
-        <h1 class="m-0">Absensi</h1>
+        <h1 class="m-0">Data Users</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
@@ -49,7 +49,9 @@
         <div class="col-12">
         <div class="card">
             <div class="card-header">
-            <h3 class="card-title">Data Users</h3>
+            <button type="button" class="btn btn-primary m-1" data-toggle="modal" data-target="#modal_import"><i class="fa-solid fa-file-import"></i> Import</button>
+            <button type="button" class="btn btn-info m-1" data-toggle="modal" data-target=""><i class="fa-solid fa-file-export"></i> Export</button>
+            <button type="button" class="btn btn-success m-1" data-toggle="modal" data-target=""><i class="fa-solid fa-user-plus"></i> Tambah</button>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -60,7 +62,7 @@
                         <th>Nama</th>
                         <th>Email</th>
                         <th>Status</th>
-                        <th>Menu</th>
+                        <th data-orderable="false">Menu</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -71,7 +73,13 @@
                         <td>{{ $data->nama }}</td>
                         <td>{{ $data->email }}</td>
                         <td>{{ $data->status }}</td>
-                        <td>Edit</td>
+                        <td width="10%" style="text-align: center">
+                            <div style=style="display: inline;">
+                                <button type="button" class="btn btn-info m-1" data-toggle="modal" data-target="#"><i class="fa-regular fa-pen-to-square"></i></button>
+                                @include('layouts.component.modal_import')
+                                <a href="hapus_data_ppdb/{{ $data->id }}" class="btn btn-danger konfirmasi m-1"><i class="far fa-trash-alt"></i></a>
+                            </div>
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>
@@ -104,6 +112,12 @@
 <script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js')}}"></script>
+<script>
+$(function () {
+    bsCustomFileInput.init();
+});
+</script>
 <script>
 $(function () {
 $("#table_user").DataTable({
