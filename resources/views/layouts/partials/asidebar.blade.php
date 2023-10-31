@@ -36,6 +36,14 @@
             </p>
         </a>
         </li>
+        <li class="nav-item">
+        <a href="/data_user" class="nav-link {{ request()->is('data_user') ? 'active' : '' }}">
+            <i class="nav-icon fa-solid fa-users"></i>
+            <p>
+            Data Users
+            </p>
+        </a>
+        </li>
         <li class="nav-item menu-close">
         <a href="#" class="nav-link {{ request()->is('rekap') ? 'active' : '' }} {{ request()->is('laporan') ? 'active' : '' }}">
             <i class="nav-icon fa-solid fa-database"></i>

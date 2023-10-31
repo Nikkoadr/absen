@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RekapController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -26,9 +27,10 @@ Auth::routes([
     'reset' => false
 ]);
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/absen', [HomeController::class, 'absen'])->name('absen');
-Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
-Route::get('/rekap', [RekapController::class, 'index'])->name('rekap');
-Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan');
-Route::post('/absenMasuk', [HomeController::class, 'absenMasuk'])->name('absenMasuk');
+Route::get('/home',         [HomeController::class, 'index'])->name('home');
+Route::get('/absen',        [HomeController::class, 'absen'])->name('absen');
+Route::get('/data_user',    [UserController::class, 'index'])->name('data_user');
+Route::get('/profile',      [ProfileController::class, 'index'])->name('profile');
+Route::get('/rekap',        [RekapController::class, 'index'])->name('rekap');
+Route::get('/laporan',      [LaporanController::class, 'index'])->name('laporan');
+Route::post('/absenMasuk',  [HomeController::class, 'absenMasuk'])->name('absenMasuk');
