@@ -50,8 +50,10 @@
         <div class="card">
             <div class="card-header">
             <button type="button" class="btn btn-primary m-1" data-toggle="modal" data-target="#modal_import"><i class="fa-solid fa-file-import"></i> Import</button>
+            @include('layouts.component.modal_import')
             <button type="button" class="btn btn-info m-1" data-toggle="modal" data-target=""><i class="fa-solid fa-file-export"></i> Export</button>
-            <button type="button" class="btn btn-success m-1" data-toggle="modal" data-target=""><i class="fa-solid fa-user-plus"></i> Tambah</button>
+            <button type="button" class="btn btn-success m-1" data-toggle="modal" data-target="#modal_tambah_user"><i class="fa-solid fa-user-plus"></i> Tambah</button>
+            @include('layouts.component.modal_tambah_user')
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -76,8 +78,7 @@
                         <td width="10%" style="text-align: center">
                             <div style=style="display: inline;">
                                 <button type="button" class="btn btn-info m-1" data-toggle="modal" data-target="#"><i class="fa-regular fa-pen-to-square"></i></button>
-                                @include('layouts.component.modal_import')
-                                <a href="hapus_data_ppdb/{{ $data->id }}" class="btn btn-danger konfirmasi m-1"><i class="far fa-trash-alt"></i></a>
+                                <a href="hapusDataUserId{{ $data->id }}" class="btn btn-danger konfirmasi m-1"><i class="far fa-trash-alt"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -124,6 +125,40 @@ $("#table_user").DataTable({
     "responsive": true, "lengthChange": false, "autoWidth": false,
     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
 }).buttons().container().appendTo('#table_user_wrapper .col-md-6:eq(0)');
+});
+</script>
+<script>
+@if (session()->has('success'))
+var Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000
+});
+    Toast.fire({
+    icon: 'success',
+    title: '{{ session('success') }}'
+    })
+@endif
+</script>
+<script>
+document.querySelectorAll('.konfirmasi').forEach(function(element) {
+    element.addEventListener('click', function (event) {
+        event.preventDefault();
+        const url = this.getAttribute('href');
+        Swal.fire({
+            text: "Anda yakin ingin menghapus data ini?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Hapus!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        });
+    });
 });
 </script>
 @endsection
