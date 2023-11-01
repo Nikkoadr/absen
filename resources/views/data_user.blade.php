@@ -51,7 +51,7 @@
             <div class="card-header">
             <button type="button" class="btn btn-primary m-1" data-toggle="modal" data-target="#modal_import"><i class="fa-solid fa-file-import"></i> Import</button>
             @include('layouts.component.modal_import')
-            <button type="button" class="btn btn-info m-1" data-toggle="modal" data-target=""><i class="fa-solid fa-file-export"></i> Export</button>
+            <a href="exportuser" class="btn btn-info m-1" target="_blank"><i class="fa-solid fa-file-export"></i> Export</a>
             <button type="button" class="btn btn-success m-1" data-toggle="modal" data-target="#modal_tambah_user"><i class="fa-solid fa-user-plus"></i> Tambah</button>
             @include('layouts.component.modal_tambah_user')
             </div>
@@ -77,7 +77,8 @@
                         <td>{{ $data->status }}</td>
                         <td width="10%" style="text-align: center">
                             <div style=style="display: inline;">
-                                <button type="button" class="btn btn-info m-1" data-toggle="modal" data-target="#"><i class="fa-regular fa-pen-to-square"></i></button>
+                                <button type="button" class="btn btn-info m-1" data-toggle="modal" data-target="#modalEditUserId{{ $data->id }}"><i class="fa-regular fa-pen-to-square"></i></button>
+                                @include('layouts.component.modal_edit_user')
                                 <a href="hapusDataUserId{{ $data->id }}" class="btn btn-danger konfirmasi m-1"><i class="far fa-trash-alt"></i></a>
                             </div>
                         </td>

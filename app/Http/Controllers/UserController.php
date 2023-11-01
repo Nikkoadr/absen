@@ -22,10 +22,12 @@ class UserController extends Controller
         Excel::import(new UsersImport, request()->file('import'));
         return back()->with(['success' => 'Data Berhasil Diimport!']);
     }
+
     public function exportUser()
     {
         return Excel::download(new UsersExport, 'data_users.xlsx');
     }
+
     public function tambah_user(Request $request)
     {
         $this->validate($request, [
@@ -42,6 +44,19 @@ class UserController extends Controller
         ]);
         return redirect()->route('data_user')->with(['success' => 'Data Berhasil Ditambahkan!']);
     }
+
+    public function edit_user($id, Request $request)
+    {
+        $data_valid = $request->validate([
+            'nama' => ['required', 'string'],
+            'email' => ['required', 'string'],
+            'status' => ['required', 'string'],
+        ]);
+        $user = User::find($id);
+        $user->update($data_valid);
+        return redirect('data_user')->with('success', 'Data Berhasil di Update');
+    }
+
     public function hapus_data_user($id)
     {
         $data = User::find($id);
