@@ -63,7 +63,7 @@
                         <th>No</th>
                         <th>Nama</th>
                         <th>Email</th>
-                        <th>Status</th>
+                        <th>Role</th>
                         <th data-orderable="false">Menu</th>
                     </tr>
                 </thead>
@@ -74,7 +74,7 @@
                         <td><?= $no++; ?></td>
                         <td>{{ $data->nama }}</td>
                         <td>{{ $data->email }}</td>
-                        <td>{{ $data->status }}</td>
+                        <td>{{ $data->role }}</td>
                         <td width="10%" style="text-align: center">
                             <div style=style="display: inline;">
                                 <button type="button" class="btn btn-info m-1" data-toggle="modal" data-target="#modalEditUserId{{ $data->id }}"><i class="fa-regular fa-pen-to-square"></i></button>

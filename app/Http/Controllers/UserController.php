@@ -34,13 +34,13 @@ class UserController extends Controller
             'nama' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'status' => ['required', 'string'],
+            'role' => ['required', 'string'],
         ]);
         User::create([
             'nama'     => $request->nama,
             'email'   => $request->email,
             'password'   => Hash::make($request->password),
-            'status'   => $request->status,
+            'role'   => $request->role,
         ]);
         return redirect()->route('data_user')->with(['success' => 'Data Berhasil Ditambahkan!']);
     }
@@ -50,7 +50,7 @@ class UserController extends Controller
         $data_valid = $request->validate([
             'nama' => ['required', 'string'],
             'email' => ['required', 'string'],
-            'status' => ['required', 'string'],
+            'role' => ['required', 'string'],
         ]);
         $user = User::find($id);
         $user->update($data_valid);
