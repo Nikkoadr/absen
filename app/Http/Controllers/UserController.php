@@ -13,7 +13,8 @@ class UserController extends Controller
 {
     public function index()
     {
-        $data_user = User::latest()->paginate(100);;
+        $this->authorize('is_admin');
+        $data_user = User::latest()->paginate(100);
         return view('data_user', compact('data_user'));
     }
 
