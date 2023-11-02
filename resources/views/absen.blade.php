@@ -138,7 +138,8 @@
             },
             cache: false,
             success: function(respond){
-                if (respond == 'masuk'){
+                var status = respond.split("|");
+                if(status[0]=="sukses"){
                         var Toast = Swal.mixin({
                             toast: true,
                             position: 'top-end',
@@ -147,10 +148,10 @@
                         });
                             Toast.fire({
                             icon: 'success',
-                            title: 'Terimakasih anda sudah melakukan absen masuk'
+                            title: status[1]
                             })
                             setTimeout("location.href='/home'", 3000);
-                } if (respond == 'pulang') {
+                } else {
                         var Toast = Swal.mixin({
                             toast: true,
                             position: 'top-end',
@@ -158,10 +159,9 @@
                             timer: 3000
                         });
                             Toast.fire({
-                            icon: 'success',
-                            title: 'Anda Sudah Absen Pulang. Hati - hati Dijalan !'
+                            icon: 'error',
+                            title: status[1]
                             })
-                            setTimeout("location.href='/home'", 3000);
                 }
 
             }
