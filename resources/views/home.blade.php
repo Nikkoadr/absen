@@ -4,22 +4,8 @@
 <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-
-<style>
-    .kamera,
-    .kamera video {
-        display: inline-block;
-        width: 100% !important;
-        margin: auto;
-        height: auto !important;
-        border-radius: 15px;
-    }
-</style>
-<style>
-    #map {
-        height: 180px;
-        }
-</style>
+<!-- Ionicons -->
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 @endsection
 @section('content')
 <!-- Content Wrapper. Contains page content -->
@@ -29,12 +15,12 @@
     <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-sm-6">
-        <h1 class="m-0">Absensi</h1>
+        <h1 class="m-0">Dashboard Absensi</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="/home">Admin</a></li>
-            <li class="breadcrumb-item active">Absensi</li>
+            <li class="breadcrumb-item active">Dashboard</li>
         </ol>
         </div><!-- /.col -->
     </div><!-- /.row -->
@@ -45,15 +31,96 @@
 <!-- Main content -->
 <div class="content">
     <div class="container-fluid">
-            <div class="row">
+        <!-- Small boxes (Stat box) -->
+    <div class="row">
+        <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-success">
+            <div class="inner">
+            <h3>Absen Masuk</h3>
+            <p>Belum Absen Masuk</p>
+            </div>
+            <div class="icon">
+            <i class="ion ion-ios-download-outline"></i>
+            </div>
+            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-info">
+            <div class="inner">
+            <h3>Absen Pulang</h3>
+            <p>Belum Absen Pulang</p>
+            </div>
+            <div class="icon">
+            <i class="ion ion-ios-upload-outline"></i>
+            </div>
+            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-primary">
+            <div class="inner">
+            <h3>Total Masuk</h3>
+            <p>Belum ada Rekapitulasi</p>
+            </div>
+            <div class="icon">
+            <i class="ion ion-android-checkbox-outline"></i>
+            </div>
+            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-danger">
+            <div class="inner">
+            <h3>Total Izin</h3>
+
+            <p>Belum ada Izin</p>
+            </div>
+            <div class="icon">
+            <i class="ion ion-model-s"></i>
+            </div>
+            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+        </div>
+        <!-- ./col -->
+        </div>
+        <div class="row">
         <div class="col-12">
         <div class="card">
             <div class="card-header">
-            <h3 class="card-title">Dashboard</h3>
+                <h4>Rekap Absensi Anda</h4>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                TEST Dashboard
+            <table id="table_user" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Tanggal Absen</th>
+                        <th>Foto Masuk</th>
+                        <th>Jam Masuk</th>
+                        <th>Foto Keluar</th>
+                        <th>Jam Keluar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php $no=1; ?>
+                    <tr>
+                        <td><?= $no++; ?></td>
+                        <td>29021997</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                </tbody>
+            </table>
             </div>
             <!-- /.card-body -->
         </div>
@@ -61,7 +128,6 @@
         </div>
         <!-- /.col -->
     </div>
-    <!-- /.row -->
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
