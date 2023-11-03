@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RekapController;
 use App\Http\Controllers\LaporanController;
@@ -28,7 +29,8 @@ Auth::routes([
 ]);
 
 Route::get('/home',         [HomeController::class, 'index'])->name('home');
-Route::get('/absen',        [HomeController::class, 'absen'])->name('absen');
+Route::get('/absen',        [AbsensiController::class, 'absen'])->name('absen');
+Route::post('/absenMasuk',  [AbsensiController::class, 'absenMasuk'])->name('absenMasuk');
 
 Route::get('/data_user',    [UserController::class, 'index'])->name('data_user');
 Route::post('/importUser', [UserController::class, 'importUser'])->name('importUser');
@@ -40,4 +42,3 @@ Route::get('/hapusDataUserId{id}', [UserController::class, 'hapus_data_user']);
 Route::get('/profile',      [ProfileController::class, 'index'])->name('profile');
 Route::get('/rekap',        [RekapController::class, 'index'])->name('rekap');
 Route::get('/laporan',      [LaporanController::class, 'index'])->name('laporan');
-Route::post('/absenMasuk',  [HomeController::class, 'absenMasuk'])->name('absenMasuk');
