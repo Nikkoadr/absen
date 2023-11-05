@@ -30,7 +30,8 @@
 </style>
 <style>
     #map {
-        height: 180px;
+        height: 80px;
+        border-radius: 15px;
         }
 </style>
 <!-- Ionicons -->
@@ -39,6 +40,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <!-- Font Awesome Icons -->
 <link rel="stylesheet" href=" {{ asset('assets/plugins/fontawesome-free-6.4.2/css/all.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
 </head>
 <body>
     <!-- loader -->
@@ -70,30 +72,27 @@
                     <input type="hidden" id="lokasi">
                     <div class="kamera">
                     </div>
-                        <div class="row">
-                            <div class="col">
-                                @if($cek > 0)
-                                    <button id="ambilFoto" class="btn btn-danger btn-block">
-                                    <i class="fa-solid fa-camera-retro"></i> Absen Pulang</button>
-                                    @else
-                                    <button id="ambilFoto" class="btn btn-primary btn-block">
-                                    <i class="fa-solid fa-camera-retro"></i> Absen Masuk</button>
-                                @endif
-                                
-                            </div>
-                        </div>
                     <div class="row">
                         <div class="col">
                             <div id="map">
                             </div>
                         </div>
                     </div>
+            <div class="row mt-2">
+                <div class="col">
+                    @if($cek > 0)
+                        <button id="ambilFoto" class="btn btn-danger btn-block">
+                        <i class="fa-solid fa-camera-retro"></i> Absen Pulang</button>
+                        @else
+                        <button id="ambilFoto" class="btn btn-primary btn-block">
+                        <i class="fa-solid fa-camera-retro"></i> Absen Masuk</button>
+                    @endif
+                    
                 </div>
-            <!-- /.card-body -->
             </div>
-
+                </div>
+            </div>
         </div>
-
     </div>
     <!-- * App Capsule -->
 
@@ -151,6 +150,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="{{ asset('assets/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 <script>
     Webcam.set({
         width: 320,
