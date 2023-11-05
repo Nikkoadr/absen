@@ -25,6 +25,7 @@
     width: 95% !important;
     margin: auto;
     height: auto !important;
+    max-height: 80%;
     border-radius: 15px;
 }
 
