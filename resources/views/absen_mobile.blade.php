@@ -31,7 +31,7 @@
     @media (max-width: 375px) {
     .kamera,
     .kamera video {
-        max-height: 130px;
+        max-height: 200px;
     }
 }
 </style>
