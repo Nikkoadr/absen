@@ -62,16 +62,13 @@
     <!-- App Capsule -->
     <div id="appCapsule">
         <div class="section full mt-2">
-            <div class="section-title">Title</div>
+            <div class="section-title">
+                Title
+            </div>
             <div class="wide-block pt-2 pb-2">
-                            <div class="card-body">
+                <div class="card-body">
                     <input type="hidden" id="lokasi">
                     <div class="kamera">
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div id="map"></div>
-                        </div>
                     </div>
                         <div class="row">
                             <div class="col">
@@ -85,7 +82,13 @@
                                 
                             </div>
                         </div>
-            </div>
+                    <div class="row">
+                        <div class="col">
+                            <div id="map">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             <!-- /.card-body -->
             </div>
 
