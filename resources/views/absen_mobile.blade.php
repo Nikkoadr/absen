@@ -24,10 +24,16 @@
         display: inline-block;
         width: 100% !important;
         margin: auto;
-        max-height: 100vh;
+        max-height: 60vh;
         height: auto !important;
         border-radius: 15px;
     }
+    @media (max-width: 375px) {
+    .kamera,
+    .kamera video {
+        max-height: 130px;
+    }
+}
 </style>
 <style>
     #map {
