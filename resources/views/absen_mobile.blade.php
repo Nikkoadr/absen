@@ -19,18 +19,20 @@
     <link rel="stylesheet" href="assets/mobile/fontawesome-free/css/all.min.css" />
     <link rel="stylesheet" href="assets/mobile/css/style.css" />
     <style>
+.kamera,
+.kamera video {
+    display: inline-block;
+    width: 100% !important;
+    margin: auto;
+    border-radius: 15px;
+    overflow: hidden; /* Untuk memotong gambar jika perlu */
+}
+
+/* Media query untuk iPhone SE 2 (lebar maksimum 375px) */
+@media (max-width: 375px) {
     .kamera,
     .kamera video {
-        display: inline-block;
-        width: 100% !important;
-        margin: auto;
-        height: auto !important;
-        border-radius: 15px;
-    }
-    @media (max-width: 100%) {
-    .kamera,
-    .kamera video {
-        max-height: 200px;
+        max-height: 200px; /* Atur tinggi sesuai kebutuhan Anda */
     }
 }
 </style>
