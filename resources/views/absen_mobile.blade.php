@@ -79,7 +79,6 @@
                             </div>
                         </div>
                     </div>
-                    <p><b>Kamera Anda :</b></p>
                     <div class="kamera">
                     </div>
                     <div class="row mt-2">
