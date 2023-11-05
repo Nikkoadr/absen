@@ -31,6 +31,7 @@
 </style>
 <style>
     #map {
+        margin-bottom: 10px;
         height: 120px;
         border-radius: 15px;
         }
