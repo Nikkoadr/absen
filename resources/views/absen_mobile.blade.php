@@ -24,17 +24,10 @@
     display: inline-block;
     width: 100% !important;
     margin: auto;
+    max-height: 170px;
     border-radius: 15px;
-    overflow: hidden; /* Untuk memotong gambar jika perlu */
 }
 
-/* Media query untuk iPhone SE 2 (lebar maksimum 375px) */
-@media (max-width: 375px) {
-    .kamera,
-    .kamera video {
-        max-height: 200px; /* Atur tinggi sesuai kebutuhan Anda */
-    }
-}
 </style>
 <style>
     #map {
@@ -73,7 +66,7 @@
     <div id="appCapsule">
         <div class="section full mt-2">
             <div class="section-title">
-                Title
+                Kamera Absensi
             </div>
             <div class="wide-block pt-2 pb-2">
                 <div class="card-body">
