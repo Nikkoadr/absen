@@ -24,7 +24,7 @@
         display: inline-block;
         width: 100% !important;
         margin: auto;
-        height: auto !important;
+        height: 90% !important;
         border-radius: 15px;
     }
 </style>
