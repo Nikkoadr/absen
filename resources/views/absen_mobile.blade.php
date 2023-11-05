@@ -26,6 +26,8 @@
     margin: auto;
     height: auto !important;
     border-radius: 15px;
+    max-height: 300px;
+    overflow: hidden;
 }
 
 </style>
