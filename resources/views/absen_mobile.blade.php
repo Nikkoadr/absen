@@ -26,12 +26,12 @@
 @section('content')
     <!-- App Capsule -->
     <div id="appCapsule">
-        <div class="section full mt-2 mb-5">
+        <div class="section full mt-2">
             <div class="section-title">
                 Kamera Absensi
             </div>
             <div class="wide-block pt-2 pb-2">
-                <div class="card-body">
+                <div class="card-body mb-5">
                     <input type="hidden" id="lokasi">
                     <div class="row">
                         <div class="col">
