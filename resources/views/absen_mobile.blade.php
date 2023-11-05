@@ -71,26 +71,26 @@
             <div class="wide-block pt-2 pb-2">
                 <div class="card-body">
                     <input type="hidden" id="lokasi">
-                    <div class="kamera">
-                    </div>
                     <div class="row">
                         <div class="col">
                             <div id="map">
                             </div>
                         </div>
                     </div>
-            <div class="row mt-2">
-                <div class="col">
-                    @if($cek > 0)
-                        <button id="ambilFoto" class="btn btn-danger btn-block">
-                        <i class="fa-solid fa-camera-retro"></i> Absen Pulang</button>
-                        @else
-                        <button id="ambilFoto" class="btn btn-primary btn-block">
-                        <i class="fa-solid fa-camera-retro"></i> Absen Masuk</button>
-                    @endif
-                    
-                </div>
-            </div>
+                    <div class="kamera">
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col">
+                            @if($cek > 0)
+                                <button id="ambilFoto" class="btn btn-danger btn-block">
+                                <i class="fa-solid fa-camera-retro"></i> Absen Pulang</button>
+                                @else
+                                <button id="ambilFoto" class="btn btn-primary btn-block">
+                                <i class="fa-solid fa-camera-retro"></i> Absen Masuk</button>
+                            @endif
+                            
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
