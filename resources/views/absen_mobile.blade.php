@@ -26,8 +26,6 @@
     margin: auto;
     height: auto !important;
     border-radius: 15px;
-    max-height: 300px;
-    overflow: hidden;
 }
 
 </style>
@@ -76,10 +74,12 @@
                     <input type="hidden" id="lokasi">
                     <div class="row">
                         <div class="col">
+                            <p>Lokasi Anda Saat Ini : </p>
                             <div id="map">
                             </div>
                         </div>
                     </div>
+                    <p>Kamera Anda :</p>
                     <div class="kamera">
                     </div>
                     <div class="row mt-2">
