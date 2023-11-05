@@ -24,13 +24,14 @@
         display: inline-block;
         width: 100% !important;
         margin: auto;
-        height: 90% !important;
+        max-height: 100vh;
+        height: auto !important;
         border-radius: 15px;
     }
 </style>
 <style>
     #map {
-        height: 80px;
+        height: 120px;
         border-radius: 15px;
         }
 </style>
