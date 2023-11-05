@@ -74,12 +74,12 @@
                     <input type="hidden" id="lokasi">
                     <div class="row">
                         <div class="col">
-                            <p>Lokasi Anda Saat Ini : </p>
+                            <p><b>Lokasi Anda Saat Ini : </b></p>
                             <div id="map">
                             </div>
                         </div>
                     </div>
-                    <p>Kamera Anda :</p>
+                    <p><b>Kamera Anda :</b></p>
                     <div class="kamera">
                     </div>
                     <div class="row mt-2">
