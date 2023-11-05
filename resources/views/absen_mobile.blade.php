@@ -21,20 +21,17 @@
     <style>
 .kamera,
 .kamera video {
-    display: flex;
-    width: 95% !important;
+    display: inline-block;
+    width: 100% !important;
     margin: auto;
     height: auto !important;
-    max-height: 80%;
     border-radius: 15px;
 }
 
 </style>
 <style>
     #map {
-        margin-top: 10px;
-        width: 95% !important;
-        height: 100px;
+        height: 120px;
         border-radius: 15px;
         }
 </style>
@@ -67,7 +64,7 @@
 
     <!-- App Capsule -->
     <div id="appCapsule">
-        <div class="section full mt-2">
+        <div class="section full mt-2 mb-5">
             <div class="section-title">
                 Kamera Absensi
             </div>
@@ -77,7 +74,7 @@
                     <div class="kamera">
                     </div>
                     <div class="row">
-                        <div class="col d-flex justify-content-center">
+                        <div class="col">
                             <div id="map">
                             </div>
                         </div>
