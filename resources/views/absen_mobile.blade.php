@@ -21,17 +21,19 @@
     <style>
 .kamera,
 .kamera video {
-    display: inline-block;
-    width: 100% !important;
+    display: flex;
+    width: 95% !important;
     margin: auto;
-    max-height: 170px;
+    height: auto !important;
     border-radius: 15px;
 }
 
 </style>
 <style>
     #map {
-        height: 120px;
+        margin-top: 10px;
+        width: 95% !important;
+        height: 100px;
         border-radius: 15px;
         }
 </style>
@@ -74,7 +76,7 @@
                     <div class="kamera">
                     </div>
                     <div class="row">
-                        <div class="col">
+                        <div class="col d-flex justify-content-center">
                             <div id="map">
                             </div>
                         </div>
