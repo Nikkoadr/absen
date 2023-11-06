@@ -70,11 +70,15 @@
                             <div class="card-body">
                                 <div class="presencecontent">
                                     <div class="iconpresence">
-                                        <i class="fas fa-clock"></i>
+                            @if ($absenHariIni != null )
+                                <img style="width: 60px" src="{{ asset('storage/absen_file/'. $absenHariIni->foto_masuk) }}">
+                            @else
+                                <i class="fas fa-clock"></i>
+                            @endif
                                     </div>
                                     <div class="presencedetail">
                                         <h4 class="presencetitle">Masuk</h4>
-                                        <span>07:00</span>
+                                        <span>{{ $absenHariIni != null ? $absenHariIni->jam_masuk : 'Belum Absen' }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -85,11 +89,15 @@
                             <div class="card-body">
                                 <div class="presencecontent">
                                     <div class="iconpresence">
-                                        <i class="fas fa-clock"></i>
+                            @if ($absenHariIni != null )
+                                <img style="width: 60px" src="{{ asset('storage/absen_file/'. $absenHariIni->foto_keluar) }}">
+                            @else
+                                <i class="fas fa-clock"></i>
+                            @endif
                                     </div>
                                     <div class="presencedetail">
                                         <h4 class="presencetitle">Pulang</h4>
-                                        <span>12:00</span>
+                                        <span>{{ $absenHariIni != null && $absenHariIni->jam_keluar != null ? $absenHariIni->jam_keluar : 'Belum Absen' }}</span>
                                     </div>
                                 </div>
                             </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 
 class HomeController extends Controller
@@ -25,9 +26,15 @@ class HomeController extends Controller
     public function index()
     {
         if (Auth::user()->role === 'admin') {
-            return view('home');
+            $hariIni = date("Y-m-d");
+            $userAktif = Auth::user()->id;
+            $absenHariIni = DB::table('absensi')->where('id_user', $userAktif)->where('tanggal_absen', $hariIni);
+            return view('home', compact('absenHariIni'));
         } else {
-            return view('home_mobile');
+            $hariIni = date("Y-m-d");
+            $userAktif = Auth::user()->id;
+            $absenHariIni = DB::table('absensi')->where('id_user', $userAktif)->where('tanggal_absen', $hariIni)->first();
+            return view('home_mobile', compact('absenHariIni'));
         }
     }
 }
