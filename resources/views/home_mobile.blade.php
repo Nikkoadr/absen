@@ -70,11 +70,11 @@
                             <div class="card-body">
                                 <div class="presencecontent">
                                     <div class="iconpresence">
-                            @if ($absenHariIni != null )
-                                <img style="width: 60px" src="{{ asset('storage/absen_file/'. $absenHariIni->foto_masuk) }}">
-                            @else
-                                <i class="fas fa-clock"></i>
-                            @endif
+                                        @if ($absenHariIni != null )
+                                            <img style="width: 60px" src="{{ asset('storage/absen_file/'. $absenHariIni->foto_masuk) }}">
+                                        @else
+                                            <i class="fas fa-clock"></i>
+                                        @endif
                                     </div>
                                     <div class="presencedetail">
                                         <h4 class="presencetitle">Masuk</h4>
@@ -89,11 +89,11 @@
                             <div class="card-body">
                                 <div class="presencecontent">
                                     <div class="iconpresence">
-                            @if ($absenHariIni != null && $absenHariIni->jam_keluar != null)
-                                <img style="width: 60px" src="{{ asset('storage/absen_file/'. $absenHariIni->foto_keluar) }}">
-                            @else
-                                <i class="fas fa-clock"></i>
-                            @endif
+                                        @if ($absenHariIni != null && $absenHariIni->jam_keluar != null)
+                                            <img style="width: 60px" src="{{ asset('storage/absen_file/'. $absenHariIni->foto_keluar) }}">
+                                        @else
+                                            <i class="fas fa-clock"></i>
+                                        @endif
                                     </div>
                                     <div class="presencedetail">
                                         <h4 class="presencetitle">Pulang</h4>
@@ -189,38 +189,20 @@
                 <div class="tab-content mt-2" style="margin-bottom: 100px">
                     <div class="tab-pane fade show active" id="home" role="tabpanel">
                         <ul class="listview image-listview">
-                            <li>
-                                <div class="item">
-                                    <div class="icon-box bg-primary">
-                                        <i class="fas fa-image"></i>
+                            @foreach ($historyBulanIni as $data)
+                                <li>
+                                    <div class="item">
+                                        <div class="icon-box bg-primary">
+                                            <i class="fas fa-fingerprint"></i>
+                                        </div>
+                                        <div class="in">
+                                            <div>{{ date("d-m-Y"),strtotime($data->tanggal_absen) }}</div>
+                                            <span class="badge badge-success">{{ $data->jam_masuk }}</span>
+                                            <span class="badge badge-danger">{{ $absenHariIni != null && $data->jam_keluar != null ? $data->jam_keluar : 'Belum Absen'}}</span>
+                                        </div>
                                     </div>
-                                    <div class="in">
-                                        <div>Photos</div>
-                                        <span class="badge badge-danger">10</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="item">
-                                    <div class="icon-box bg-secondary">
-                                        <i class="fas fa-photo-video"></i>
-                                    </div>
-                                    <div class="in">
-                                        <div>Videos</div>
-                                        <span class="text-muted">None</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="item">
-                                    <div class="icon-box bg-danger">
-                                        <i class="fas fa-music"></i>
-                                    </div>
-                                    <div class="in">
-                                        <div>Music</div>
-                                    </div>
-                                </div>
-                            </li>
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
                     <div class="tab-pane fade" id="profile" role="tabpanel">

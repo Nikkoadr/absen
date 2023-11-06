@@ -34,7 +34,13 @@ class HomeController extends Controller
             $hariIni = date("Y-m-d");
             $userAktif = Auth::user()->id;
             $absenHariIni = DB::table('absensi')->where('id_user', $userAktif)->where('tanggal_absen', $hariIni)->first();
-            return view('home_mobile', compact('absenHariIni'));
+            $bulanIni = date("m");
+            $tahunIni = date("Y");
+            $historyBulanIni = DB::table('absensi')->whereRaw('MONTH(tanggal_absen)="' . $bulanIni . '"')
+                ->whereRaw('YEAR(tanggal_absen)="' . $tahunIni . '"')
+                ->orderBy('tanggal_absen')
+                ->get();
+            return view('home_mobile', compact('absenHariIni', 'historyBulanIni'));
         }
     }
 }
