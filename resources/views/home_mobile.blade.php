@@ -89,7 +89,7 @@
                             <div class="card-body">
                                 <div class="presencecontent">
                                     <div class="iconpresence">
-                            @if ($absenHariIni != null )
+                            @if ($absenHariIni != null && $absenHariIni->jam_keluar != null)
                                 <img style="width: 60px" src="{{ asset('storage/absen_file/'. $absenHariIni->foto_keluar) }}">
                             @else
                                 <i class="fas fa-clock"></i>
