@@ -106,6 +106,7 @@
                 </div>
             </div>
             <div class="rekappresence mt-1">
+                <h3>Rekap Bulan {{ $namaBulan[$bulanIni] }} Tahun {{ $tahunIni }} : </h3>
                 <div class="row">
                     <div class="col-6">
                         <div class="card">
@@ -116,7 +117,7 @@
                                     </div>
                                     <div class="presencedetail">
                                         <h4 class="rekappresencetitle">Hadir</h4>
-                                        <span class="rekappresencedetail">0 Hari</span>
+                                        <span class="rekappresencedetail">{{ $rekapAbsensi->jumlahHadir }} Hari</span>
                                     </div>
                                 </div>
                             </div>
@@ -163,7 +164,7 @@
                                     </div>
                                     <div class="presencedetail">
                                         <h4 class="rekappresencetitle">Terlambat</h4>
-                                        <span class="rekappresencedetail">0 Hari</span>
+                                        <span class="rekappresencedetail">{{ $rekapAbsensi->jumlahTerlambat }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -196,9 +197,20 @@
                                             <i class="fas fa-fingerprint"></i>
                                         </div>
                                         <div class="in">
-                                            <div>{{ date("d-m-Y"),strtotime($data->tanggal_absen) }}</div>
-                                            <span class="badge badge-success">{{ $data->jam_masuk }}</span>
-                                            <span class="badge badge-danger">{{ $absenHariIni != null && $data->jam_keluar != null ? $data->jam_keluar : 'Belum Absen'}}</span>
+                                            <div>{{ Illuminate\Support\Carbon::parse($data->tanggal_absen)->format('d-M-Y'); }}</div>
+                                            <span class="badge 
+                                            @if($data->jam_masuk > "07:00")
+                                                badge-warning
+                                                @else
+                                                badge-success
+                                            @endif
+                                            ">{{ $data->jam_masuk }}</span>
+                                            <span class="badge badge-danger">
+                                                @if($data->jam_keluar == null)
+                                                    00:00:00
+                                                @else
+                                                    {{ $data->jam_keluar }}
+                                            @endif</span>
                                         </div>
                                     </div>
                                 </li>

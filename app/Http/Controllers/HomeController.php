@@ -28,19 +28,39 @@ class HomeController extends Controller
         if (Auth::user()->role === 'admin') {
             $hariIni = date("Y-m-d");
             $userAktif = Auth::user()->id;
-            $absenHariIni = DB::table('absensi')->where('id_user', $userAktif)->where('tanggal_absen', $hariIni);
-            return view('home', compact('absenHariIni'));
-        } else {
-            $hariIni = date("Y-m-d");
-            $userAktif = Auth::user()->id;
             $absenHariIni = DB::table('absensi')->where('id_user', $userAktif)->where('tanggal_absen', $hariIni)->first();
-            $bulanIni = date("m");
+            $bulanIni = date("m") * 1;
             $tahunIni = date("Y");
             $historyBulanIni = DB::table('absensi')->whereRaw('MONTH(tanggal_absen)="' . $bulanIni . '"')
                 ->whereRaw('YEAR(tanggal_absen)="' . $tahunIni . '"')
                 ->orderBy('tanggal_absen')
                 ->get();
-            return view('home_mobile', compact('absenHariIni', 'historyBulanIni'));
+            return view('home', compact('absenHariIni', 'historyBulanIni'));
+        } else {
+            $hariIni = date("Y-m-d");
+            $userAktif = Auth::user()->id;
+            $absenHariIni = DB::table('absensi')
+            ->where('id_user', $userAktif)
+            ->where('tanggal_absen', $hariIni)->first();
+            $bulanIni = date("m");
+            $tahunIni = date("Y");
+
+            $historyBulanIni = DB::table('absensi')
+                ->where('id_user', $userAktif)
+                ->whereRaw('MONTH(tanggal_absen)="' . $bulanIni . '"')
+                ->whereRaw('YEAR(tanggal_absen)="' . $tahunIni . '"')
+                ->orderBy('tanggal_absen')
+                ->get();
+
+            $rekapAbsensi = DB::table('absensi')
+            ->selectRaw('COUNT(id_user) as jumlahHadir, SUM(IF(jam_masuk > "07:00",1,0)) as jumlahTerlambat')
+            ->where('id_user', $userAktif)
+            ->whereRaw('MONTH(tanggal_absen)="' . $bulanIni . '"')
+            ->whereRaw('YEAR(tanggal_absen)="' . $tahunIni . '"')
+            ->first();
+            $namaBulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+            return view('home_mobile', compact('absenHariIni', 'historyBulanIni', 'bulanIni', 'tahunIni', 'namaBulan','rekapAbsensi'));
         }
     }
 }
