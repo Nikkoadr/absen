@@ -8,8 +8,8 @@
         </a>
         <a href="#" class="item">
             <div class="col">
-                <i class="fas fa-calendar-alt fa-3x text-dark"></i>
-                <strong>Calendar</strong>
+                <i class="fas fa-user-tie fa-3x text-dark"></i>
+                <strong>Profile</strong>
             </div>
         </a>
         <a href="/absen" class="item">
@@ -21,15 +21,20 @@
         </a>
         <a href="#" class="item">
             <div class="col">
-                <i class="fas fa-file-alt fa-3x text-dark"></i>
-                <strong>Docs</strong>
+                <i class="fas fa-calendar-alt fa-3x text-dark"></i>
+                <strong>Calendar</strong>
             </div>
         </a>
-        <a href="javascript:;" class="item">
+        <a href="{{ route('logout') }}" class="item" 
+        onclick="event.preventDefault();
+        document.getElementById('logout-form').submit();">
             <div class="col">
-                <i class="fas fa-user-tie fa-3x text-dark"></i>
-                <strong>Profile</strong>
+                <i class="fa-solid fa-right-from-bracket fa-3x text-dark"></i>
+                <strong>Log Out</strong>
             </div>
         </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+        @csrf
+        </form>
     </div>
     <!-- * App Bottom Menu -->

@@ -164,7 +164,7 @@
                                     </div>
                                     <div class="presencedetail">
                                         <h4 class="rekappresencetitle">Terlambat</h4>
-                                        <span class="rekappresencedetail">{{ $rekapAbsensi->jumlahTerlambat }}</span>
+                                        <span class="rekappresencedetail">{{ $rekapAbsensi->jumlahTerlambat }} Hari</span>
                                     </div>
                                 </div>
                             </div>
@@ -227,7 +227,7 @@
                                         <div><b>{{ $data->nama }}</b><br>
                                             <small class="text-muted">{{ $data->role }}</small>
                                         </div>
-                                        <span class="text-muted">{{ $data->jam_masuk }}</span>
+                                        <span class="text-muted">Jam Masuk : {{ $data->jam_masuk }}</span>
                                     </div>
                                 </div>
                             </li>
