@@ -224,7 +224,9 @@
                                 <div class="item">
                                     <img src="assets/mobile/img/sample/avatar/avatar1.jpg" alt="image" class="image" />
                                     <div class="in">
-                                        <div>{{ $data->nama }}</div>
+                                        <div><b>{{ $data->nama }}</b><br>
+                                            <small class="text-muted">{{ $data->role }}</small>
+                                        </div>
                                         <span class="text-muted">{{ $data->jam_masuk }}</span>
                                     </div>
                                 </div>
@@ -239,24 +241,5 @@
     <!-- * App Capsule -->
 @endsection
 @section('script')
-    <!-- Chart JS -->
-    <script src="assets/mobile/chart/dist/chart.js"></script>
-    <!-- Owl Carousel -->
-    <script src="assets/mobile/js/plugins/owl-carousel/owl.carousel.min.js"></script>
-    <!-- jQuery Circle Progress -->
-    <script src="assets/mobile/js/plugins/jquery-circle-progress/circle-progress.min.js"></script>
-    <script>
-        const ctx = document.getElementById('myChart');
-        new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    borderWidth: 1
-                }]
-            }
-        });
-    </script>
+
 @endsection
