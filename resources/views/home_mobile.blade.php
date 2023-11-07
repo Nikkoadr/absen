@@ -77,7 +77,7 @@
                                         @endif
                                     </div>
                                     <div class="presencedetail">
-                                        <h4 class="presencetitle">Masuk</h4>
+                                        <h4 class="presencetitle"><a style="color: white" href="/absen">Masuk</a></h4>
                                         <span>{{ $absenHariIni != null ? $absenHariIni->jam_masuk : 'Belum Absen' }}</span>
                                     </div>
                                 </div>
@@ -96,7 +96,7 @@
                                         @endif
                                     </div>
                                     <div class="presencedetail">
-                                        <h4 class="presencetitle">Pulang</h4>
+                                        <h4 class="presencetitle"><a style="color: white" href="/absen">Pulang</a></h4>
                                         <span>{{ $absenHariIni != null && $absenHariIni->jam_keluar != null ? $absenHariIni->jam_keluar : 'Belum Absen' }}</span>
                                     </div>
                                 </div>
@@ -219,15 +219,17 @@
                     </div>
                     <div class="tab-pane fade" id="profile" role="tabpanel">
                         <ul class="listview image-listview">
+                            @foreach ( $leaderboard as $data)
                             <li>
                                 <div class="item">
                                     <img src="assets/mobile/img/sample/avatar/avatar1.jpg" alt="image" class="image" />
                                     <div class="in">
-                                        <div>Edward Lindgren</div>
-                                        <span class="text-muted">Designer</span>
+                                        <div>{{ $data->nama }}</div>
+                                        <span class="text-muted">{{ $data->jam_masuk }}</span>
                                     </div>
                                 </div>
                             </li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>
