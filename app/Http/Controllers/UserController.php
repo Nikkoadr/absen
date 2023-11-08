@@ -11,6 +11,16 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         $this->authorize('is_admin');
@@ -32,16 +42,32 @@ class UserController extends Controller
     public function tambah_user(Request $request)
     {
         $this->validate($request, [
+            'role' => ['required', 'string'],
+            'nik' => ['nullable', 'max:13'],
+            'nuptk' => ['nullable', 'max:16'],
+            'nbm' => ['nullable', 'max:20'],
             'nama' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role' => ['required', 'string'],
+            'jabatan' => ['nullable',],
+            'jam_kerja' => ['nullable',],
+            'lokasi_lang' => ['nullable',],
+            'lokasi_long' => ['nullable',],
+            'pas_foto' => ['nullable',],
         ]);
         User::create([
+            'role'   => $request->role,
+            'nik'     => $request->nik,
+            'nuptk'     => $request->nuptk,
+            'nbm'     => $request->nbm,
             'nama'     => $request->nama,
             'email'   => $request->email,
             'password'   => Hash::make($request->password),
-            'role'   => $request->role,
+            'jabatan'   => $request->jabatan,
+            'jam_kerja'   => $request->jam_kerja,
+            'lokasi_lang'   => $request->lokasi_lang,
+            'lokasi_long'   => $request->lokasi_long,
+            'pas_foto'   => $request->pas_foto,
         ]);
         return redirect()->route('data_user')->with(['success' => 'Data Berhasil Ditambahkan!']);
     }
