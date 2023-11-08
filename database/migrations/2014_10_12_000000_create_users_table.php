@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->enum('role', ['admin', 'guru', 'siswa'])->default('siswa');
+            $table->enum('role', ['admin', 'karyawan','guru', 'siswa'])->default('siswa');
             $table->string('nik')->nullable();
             $table->string('nuptk')->nullable();
             $table->string('nbm')->nullable();

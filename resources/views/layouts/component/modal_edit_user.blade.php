@@ -16,6 +16,7 @@
                                 <div class="col-sm-7">
                                     <select type="text" class="form-control @error('role') is-invalid @enderror" name="role" id="role">
                                     <option value="admin" @if ($data->role =="admin") selected @endif>Admin</option>
+                                    <option value="karyawan" @if ($data->role =="karyawan") selected @endif>Karyawan</option>
                                     <option value="guru" @if ($data->role =="guru") selected @endif>Guru</option>
                                     <option value="siswa" @if ($data->role =="siswa") selected @endif>Siswa</option>
                                     </select>

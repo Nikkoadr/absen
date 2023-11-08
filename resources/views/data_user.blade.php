@@ -70,7 +70,6 @@
                         <th>Jam Kerja</th>
                         <th>Lokasi Langitude</th>
                         <th>Lokasi Longitude</th>
-
                         <th data-orderable="false">Menu</th>
                     </tr>
                 </thead>
@@ -89,7 +88,6 @@
                         <td>{{ $data->jam_kerja }}</td>
                         <td>{{ $data->lokasi_lang }}</td>
                         <td>{{ $data->lokasi_long }}</td>
-
                         <td width="10%" style="text-align: center">
                             <div style=style="display: inline;">
                                 <button type="button" class="btn btn-info m-1" data-toggle="modal" data-target="#modalEditUserId{{ $data->id }}"><i class="fa-regular fa-pen-to-square"></i></button>

@@ -17,6 +17,7 @@
                                     <select type="text" class="form-control @error('role') is-invalid @enderror" name="role" id="role">
                                     <option value="">Pilih Role</option>
                                     <option value="admin">Admin</option>
+                                    <option value="karyawan">Karyawan</option>
                                     <option value="guru">Guru</option>
                                     <option value="siswa">Siswa</option>
                                     </select>
