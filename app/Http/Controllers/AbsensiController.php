@@ -63,7 +63,7 @@ class AbsensiController extends Controller
                     'foto_keluar' => $nama_foto,
                     'lokasi_keluar' =>  $lokasi,
                 ];
-                $simpan = DB::table('absensi')->update($data);
+                $simpan = DB::table('absensi')->where('tanggal_absen', $tanggal_absen)->where('id_user', $id_user)->update($data);
                 if ($simpan) {
                     echo 'sukses|Anda Sudah Absen Pulang. Hati - hati Dijalan !|';
                     Storage::disk(env('STORAGE_DISK'))->put($nama_foto, $foto_base64);
