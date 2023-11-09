@@ -116,7 +116,7 @@
                             </div>
                         </div>
                                 <button style="float: right;" type="submit" class="btn btn-primary">
-                                    Tambah
+                                    Edit
                                 </button>
                     </form>
         </div>

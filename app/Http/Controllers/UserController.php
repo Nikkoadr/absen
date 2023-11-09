@@ -75,9 +75,17 @@ class UserController extends Controller
     public function edit_user($id, Request $request)
     {
         $data_valid = $request->validate([
-            'nama' => ['required', 'string'],
-            'email' => ['required', 'string'],
-            'role' => ['required', 'string'],
+            'role'      => ['required', 'string'],
+            'nik'       => ['nullable', 'max:13'],
+            'nuptk'     => ['nullable', 'max:16'],
+            'nbm'       => ['nullable', 'max:20'],
+            'nama'      => ['required', 'string', 'max:255'],
+            'email' => 'required|unique:users,email,' . $request->id,
+            'jabatan' => ['nullable',],
+            'jam_kerja' => ['nullable',],
+            'lokasi_lang' => ['nullable',],
+            'lokasi_long' => ['nullable',],
+            'pas_foto' => ['nullable',],
         ]);
         $user = User::find($id);
         $user->update($data_valid);

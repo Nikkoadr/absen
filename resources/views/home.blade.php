@@ -40,8 +40,22 @@
         <!-- small box -->
         <div class="small-box bg-success">
             <div class="inner">
-            <h3>Absen Masuk</h3>
-            <p>Belum Absen Masuk</p>
+            <h3>Seluruh Civitas</h3>
+            <p>{{ $hitungUser }}</p>
+            </div>
+            <div class="icon">
+            <i class="ion ion-android-people"></i>
+            </div>
+            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-info">
+            <div class="inner">
+            <h3>Masuk</h3>
+            <p>{{ $hitungMasukHariIni }}</p>
             </div>
             <div class="icon">
             <i class="ion ion-ios-download-outline"></i>
@@ -52,10 +66,10 @@
         <!-- ./col -->
         <div class="col-lg-3 col-6">
         <!-- small box -->
-        <div class="small-box bg-info">
+        <div class="small-box bg-primary">
             <div class="inner">
-            <h3>Absen Pulang</h3>
-            <p>Belum Absen Pulang</p>
+            <h3>Pulang</h3>
+            <p>{{ $hitungPulang }}</p>
             </div>
             <div class="icon">
             <i class="ion ion-ios-upload-outline"></i>
@@ -66,28 +80,13 @@
         <!-- ./col -->
         <div class="col-lg-3 col-6">
         <!-- small box -->
-        <div class="small-box bg-primary">
-            <div class="inner">
-            <h3>Total Masuk</h3>
-            <p>Belum ada Rekapitulasi</p>
-            </div>
-            <div class="icon">
-            <i class="ion ion-android-checkbox-outline"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-6">
-        <!-- small box -->
         <div class="small-box bg-danger">
             <div class="inner">
-            <h3>Total Izin</h3>
-
-            <p>Belum ada Izin</p>
+            <h3>Tidak Hadir</h3>
+            <p>{{ $hitungAlfa }}</p>
             </div>
             <div class="icon">
-            <i class="ion ion-model-s"></i>
+            <i class="ion ion-ios-pulse-strong"></i>
             </div>
             <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
@@ -98,7 +97,7 @@
         <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h4>Rekap Absensi Anda</h4>
+                <h4>History Absensi</h4>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -106,7 +105,7 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Tanggal Absen</th>
+                        <th>Nama User</th>
                         <th>Foto Masuk</th>
                         <th>Jam Masuk</th>
                         <th>Foto Keluar</th>
@@ -115,13 +114,29 @@
                 </thead>
                 <tbody>
                 <?php $no=1; ?>
+                @foreach ($leaderboard as $data)
+                    
+
                     <tr>
                         <td><?= $no++; ?></td>
-                        <td>29021997</td>
-                        <td>1</td>
-                        <td>1</td>
-                        <td>1</td>
-                        <td>1</td>
+                        <td>{{ $data->nama }}</td>
+                        <td><img style="width: 15%" src="{{ asset('storage/absen_file/'. $data->foto_masuk) }}" alt="image" class="image" /></td>
+                        <td>{{ $data->jam_masuk }}</td>
+                        <td>@if ($data->foto_keluar == null)
+                            <small>Belum Pulang</small>
+                        @else
+                            <img style="width: 15%" src="{{ asset('storage/absen_file/'. $data->foto_masuk) }}" alt="image" class="image" />
+                        @endif
+                        </td>
+                        <td>                        
+                        @if ($data->jam_keluar == null)
+                            <small>Belum Pulang</small>
+                        @else
+                            {{ $data->jam_keluar }}
+                        @endif
+                    </td>
+                    </tr>
+                @endforeach
                 </tbody>
             </table>
             </div>

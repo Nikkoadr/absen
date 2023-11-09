@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 
 class HomeController extends Controller
@@ -53,10 +54,23 @@ class HomeController extends Controller
             ->orderBy('jam_masuk')
             ->get();
 
+        $hitungPulang = DB::table('absensi')
+            ->join('users', 'absensi.id_user', '=', 'users.id')
+            ->where('tanggal_absen', $hariIni)
+            ->whereNotNull('jam_keluar')
+            ->count();
+
+        $hitungAlfa = DB::table('users')
+            ->leftJoin('absensi', 'users.id', '=', 'absensi.id_user')
+            ->whereNull('absensi.id')
+            ->count();
+        $hitungMasukHariIni = $leaderboard->count();
+        $hitungUser = User::count();
+
         $namaBulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
         if (Auth::user()->role === 'admin') {
-            return view('home', compact('absenHariIni', 'historyBulanIni', 'bulanIni', 'tahunIni', 'namaBulan', 'rekapAbsensi', 'leaderboard'));
+            return view('home', compact('absenHariIni', 'historyBulanIni', 'bulanIni', 'tahunIni', 'namaBulan', 'rekapAbsensi', 'leaderboard', 'hitungUser', 'hitungMasukHariIni', 'hitungPulang', 'hitungAlfa'));
         } else {
             return view('home_mobile', compact('absenHariIni', 'historyBulanIni', 'bulanIni', 'tahunIni', 'namaBulan', 'rekapAbsensi', 'leaderboard'));
         }
