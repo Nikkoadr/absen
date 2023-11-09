@@ -6,9 +6,9 @@
                 <strong>Dashboard</strong>
             </div>
         </a>
-        <a href="#" class="item">
+        <a href="/profile" class="item">
             <div class="col">
-                <i class="fas fa-user-tie fa-3x text-dark"></i>
+                <i class="fas fa-user-tie fa-3x {{ request()->is('profile') ? '' : 'text-dark' }}"></i>
                 <strong>Profile</strong>
             </div>
         </a>

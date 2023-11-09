@@ -97,7 +97,7 @@
         <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h4>History Absensi</h4>
+                <h4>History Absensi Hari Ini</h4>
             </div>
             <!-- /.card-header -->
             <div class="card-body">

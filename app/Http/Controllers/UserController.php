@@ -92,6 +92,18 @@ class UserController extends Controller
         return redirect('data_user')->with('success', 'Data Berhasil di Update');
     }
 
+    public function ubah_password($id, Request $request)
+    {
+        $data_valid = $request->validate([
+            'password'      => ['required', 'confirmed'],
+        ]);
+
+        $hash = Hash::make($data_valid['password']);
+        $user = User::find($id);
+        $user->update(['password' => $hash]);
+        return redirect('data_user')->with('success', 'Password Berhasil diganti');
+    }
+
     public function hapus_data_user($id)
     {
         $data = User::find($id);

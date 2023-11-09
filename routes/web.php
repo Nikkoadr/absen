@@ -38,6 +38,7 @@ Route::get('/exportuser', [UserController::class, 'exportuser'])->name('exportus
 Route::put('/tambah_user', [UserController::class, 'tambah_user'])->name('tambah_user');
 Route::put('/editUserId{id}', [UserController::class, 'edit_user'])->name('edit_user');
 Route::get('/hapusDataUserId{id}', [UserController::class, 'hapus_data_user']);
+Route::put('/ubah_password_id{id}', [UserController::class, 'ubah_password']);
 
 Route::get('/profile',      [ProfileController::class, 'index'])->name('profile');
 Route::get('/rekap',        [RekapController::class, 'index'])->name('rekap');

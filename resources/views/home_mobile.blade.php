@@ -12,7 +12,7 @@
                 </div>
                 <div id="user-info">
                     <h2 id="user-name">{{ Auth::user()->nama }}</h2>
-                    <span id="user-role">{{ Auth::user()->role }}</span>
+                    <span id="user-role">{{ Auth::user()->jabatan }}</span>
                 </div>
             </div>
         </div>
@@ -23,7 +23,7 @@
                     <div class="list-menu">
                         <div class="item-menu text-center">
                             <div class="menu-icon">
-                                <a href="" class="green" style="font-size: 40px"><i class="fas fa-user"></i>
+                                <a href="/profile" class="green" style="font-size: 40px"><i class="fas fa-user"></i>
                                 </a>
                             </div>
                             <div class="menu-name">
@@ -225,7 +225,7 @@
                                     <img src="assets/mobile/img/sample/avatar/avatar1.jpg" alt="image" class="image" />
                                     <div class="in">
                                         <div><b>{{ $data->nama }}</b><br>
-                                            <small class="text-muted">{{ $data->role }}</small>
+                                            <small class="text-muted">{{ $data->jabatan }}</small>
                                         </div>
                                         <span class="text-muted">Jam Masuk : {{ $data->jam_masuk }}</span>
                                     </div>

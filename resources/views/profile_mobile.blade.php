@@ -1,0 +1,10 @@
+@extends('layouts.main_mobile')
+@section('link')
+@endsection
+@section('content')
+<h1>Test</h1>
+@endsection
+@section('script')
+@endsection
+</body>
+</html>

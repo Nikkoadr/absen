@@ -115,9 +115,9 @@
                                 @enderror
                             </div>
                         </div>
-                                <button style="float: right;" type="submit" class="btn btn-primary">
-                                    Edit
-                                </button>
+                        <button style="float: right;" type="submit" class="btn btn-primary">
+                            Edit
+                        </button>
                     </form>
         </div>
         </div>

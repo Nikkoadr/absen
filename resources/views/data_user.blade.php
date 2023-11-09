@@ -92,6 +92,8 @@
                             <div style=style="display: inline;">
                                 <button type="button" class="btn btn-info m-1" data-toggle="modal" data-target="#modalEditUserId{{ $data->id }}"><i class="fa-regular fa-pen-to-square"></i></button>
                                 @include('layouts.component.modal_edit_user')
+                                <button type="button" class="btn btn-warning m-1" data-toggle="modal" data-target="#ubah_password_id{{ $data->id }}"><i class="fa-solid fa-unlock-keyhole"></i></button>
+                                @include('layouts.component.modal_ubah_password')
                                 <a href="hapusDataUserId{{ $data->id }}" class="btn btn-danger konfirmasi m-1"><i class="far fa-trash-alt"></i></a>
                             </div>
                         </td>
