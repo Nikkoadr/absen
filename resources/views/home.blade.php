@@ -125,7 +125,7 @@
                         <td>@if ($data->foto_keluar == null)
                             <small>Belum Pulang</small>
                         @else
-                            <img style="width: 15%" src="{{ asset('storage/absen_file/'. $data->foto_masuk) }}" alt="image" class="image" />
+                            <img style="width: 15%" src="{{ asset('storage/absen_file/'. $data->foto_keluar) }}" alt="image" class="image" />
                         @endif
                         </td>
                         <td>                        
