@@ -139,7 +139,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mt-1">
+                {{-- <div class="row mt-1">
                     <div class="col-6">
                         <div class="card">
                             <div class="card-body">
@@ -170,7 +170,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
             <div class="presencetab mt-2">
                 <div class="tab-pane fade show active" id="pilled" role="tabpanel">
