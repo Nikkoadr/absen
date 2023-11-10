@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -62,10 +63,10 @@ class ProfileController extends Controller
         $request->validate([
             'pas_foto' => 'required|image|mimes:jpeg,png,jpg,gif|file|max:5120',
         ]);
-        $imageName = 'pasfoto' . '_' . Auth::user()->id . '_' . Auth::user()->nama . '.' . $request->pas_foto->getClientOriginalExtension();
-        $request->pas_foto->storeAs('pasFotoAbsen', $imageName);
+        $namaFoto = 'pasfoto' . '_' . Auth::user()->id . '_' . Auth::user()->nama . '.' . $request->pas_foto->getClientOriginalExtension();
+        Storage::disk(env('STORAGE_DISK'))->put('pasFotoAbsen/' . $namaFoto, file_get_contents($request->pas_foto));
         $user = User::find($id);
-        $user->update(['pasfoto' => $imageName]);
+        $user->update(['pasfoto' => $namaFoto]);
         return redirect('profile')->with('success', 'Pas Foto Berhasil Diupload');
     }
 }

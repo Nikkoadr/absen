@@ -8,7 +8,11 @@
         <div class="section bg-primary" id="user-section">
             <div id="user-detail">
                 <div class="avatar">
+                    @if(Auth::user()->pasfoto==null)
+                    <img src="{{ asset('assets/dist/img/defaultpp.jpg') }}" alt="avatar" class="imaged w64 rounded" />
+                    @else
                     <img src="{{ asset('storage/absen_file/pasFotoAbsen/'. Auth::user()->pasfoto) }}" alt="avatar" class="imaged w64 rounded" />
+                    @endif
                 </div>
                 <div id="user-info">
                     <h2 id="user-name">{{ Auth::user()->nama }}</h2>
