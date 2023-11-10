@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->enum('role', ['admin', 'karyawan','guru', 'siswa'])->default('siswa');
+            $table->enum('role', ['admin', 'karyawan', 'guru', 'siswa'])->default('siswa');
             $table->string('nik')->nullable();
             $table->string('nuptk')->nullable();
             $table->string('nbm')->nullable();
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->time('jam_kerja')->nullable();
             $table->string('lokasi_lang')->nullable();
             $table->string('lokasi_long')->nullable();
-            $table->string('pas_foto')->nullable();
+            $table->string('pasfoto')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -125,7 +125,7 @@
                         <div class="row mb-3">
                             <label for="lokasi_lang" class="col-sm-5 col-form-label text-md-end">Lokasi Langitude</label>
                             <div class="col-sm-7">
-                                <input id="lokasi_lang" type="text" class="form-control @error('lokasi_lang') is-invalid @enderror" name="lokasi_lang" value="{{ old('lokasi_lang') }}" required autocomplete="lokasi_lang" autofocus>
+                                <input id="lokasi_lang" type="text" class="form-control @error('lokasi_lang') is-invalid @enderror" name="lokasi_lang" value="{{ old('lokasi_lang') }}" autocomplete="lokasi_lang" autofocus>
                                 @error('lokasi_lang')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -136,7 +136,7 @@
                         <div class="row mb-3">
                             <label for="lokasi_long" class="col-sm-5 col-form-label text-md-end">Lokasi Longitude</label>
                             <div class="col-sm-7">
-                                <input id="lokasi_long" type="text" class="form-control @error('lokasi_long') is-invalid @enderror" name="lokasi_long" value="{{ old('lokasi_long') }}" required autocomplete="lokasi_long" autofocus>
+                                <input id="lokasi_long" type="text" class="form-control @error('lokasi_long') is-invalid @enderror" name="lokasi_long" value="{{ old('lokasi_long') }}" autocomplete="lokasi_long" autofocus>
                                 @error('lokasi_long')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>

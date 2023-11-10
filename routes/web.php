@@ -28,18 +28,22 @@ Auth::routes([
     'reset' => false
 ]);
 
-Route::get('/home',         [HomeController::class, 'index'])->name('home');
-Route::get('/absen',        [AbsensiController::class, 'absen'])->name('absen');
-Route::post('/absenMasuk',  [AbsensiController::class, 'absenMasuk'])->name('absenMasuk');
+Route::get('/home',                     [HomeController::class, 'index'])->name('home');
+Route::get('/absen',                    [AbsensiController::class, 'absen'])->name('absen');
+Route::post('/absenMasuk',              [AbsensiController::class, 'absenMasuk'])->name('absenMasuk');
 
-Route::get('/data_user',    [UserController::class, 'index'])->name('data_user');
-Route::post('/importUser', [UserController::class, 'importUser'])->name('importUser');
-Route::get('/exportuser', [UserController::class, 'exportuser'])->name('exportuser');
-Route::put('/tambah_user', [UserController::class, 'tambah_user'])->name('tambah_user');
-Route::put('/editUserId{id}', [UserController::class, 'edit_user'])->name('edit_user');
-Route::get('/hapusDataUserId{id}', [UserController::class, 'hapus_data_user']);
-Route::put('/ubah_password_id{id}', [UserController::class, 'ubah_password']);
+Route::get('/data_user',                [UserController::class, 'index'])->name('data_user');
+Route::post('/importUser',              [UserController::class, 'importUser'])->name('importUser');
+Route::get('/exportuser',               [UserController::class, 'exportuser'])->name('exportuser');
+Route::put('/tambah_user',              [UserController::class, 'tambah_user'])->name('tambah_user');
+Route::put('/editUserId{id}',           [UserController::class, 'edit_user'])->name('edit_user');
+Route::get('/hapusDataUserId{id}',      [UserController::class, 'hapus_data_user']);
+Route::put('/ubah_password_id{id}',     [UserController::class, 'ubah_password']);
 
-Route::get('/profile',      [ProfileController::class, 'index'])->name('profile');
-Route::get('/rekap',        [RekapController::class, 'index'])->name('rekap');
-Route::get('/laporan',      [LaporanController::class, 'index'])->name('laporan');
+Route::get('/profile',                  [ProfileController::class, 'index'])->name('profile');
+Route::put('/edit/profile_id{id}',      [ProfileController::class, 'edit_user'])->name('edit_user');
+Route::put('/edit/password_user_id{id}',      [ProfileController::class, 'edit_password_user_id'])->name('edit_password_user_id');
+Route::put('upload_pasfoto_id{id}',      [ProfileController::class, 'upload_pasfoto_id'])->name('upload_pasfoto_id');
+
+Route::get('/rekap',                    [RekapController::class, 'index'])->name('rekap');
+Route::get('/laporan',                  [LaporanController::class, 'index'])->name('laporan');

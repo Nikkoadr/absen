@@ -8,7 +8,7 @@
         <div class="section bg-primary" id="user-section">
             <div id="user-detail">
                 <div class="avatar">
-                    <img src="assets/mobile/img/sample/avatar/avatar1.jpg" alt="avatar" class="imaged w64 rounded" />
+                    <img src="{{ asset('storage/absen_file/pasFotoAbsen/'. Auth::user()->pasfoto) }}" alt="avatar" class="imaged w64 rounded" />
                 </div>
                 <div id="user-info">
                     <h2 id="user-name">{{ Auth::user()->nama }}</h2>

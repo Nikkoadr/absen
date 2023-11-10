@@ -27,7 +27,7 @@
                     <div class="tab-pane fade show active" id="dataDiri" role="tabpanel">
                         <div class="section mt-3 mb-5">
                             <div class="card">
-                                <form action="edit/profile" method="POST" enctype="multipart/form-data">
+                                <form action="edit/profile_id{{ Auth::user()->id }}" method="POST">
                                     @csrf
                                     @method('put')
                                     <div class="col">
@@ -102,7 +102,7 @@
                     <div class="tab-pane fade" id="password" role="tabpanel">
                         <div class="section mt-3 mb-5">
                             <div class="card">
-                                <form action="edit/profile" method="POST" enctype="multipart/form-data">
+                                <form action="edit/password_user_id{{ Auth::user()->id }}" method="POST">
                                     @csrf
                                     @method('put')
                                     <div class="col">
@@ -148,37 +148,38 @@
                         <div class="card-header">Pas Foto</div>
                         <div class="card-body">
                             @if (Auth::user()->pasfoto)
-                            <img style="max-width: 50%;" class="rounded mx-auto d-block" src="{{ asset('storage/absen_file/'. Auth::user()->pasfoto) }}">
+                            <img style="max-width: 50%;" class="rounded mx-auto d-block" src="{{ asset('storage/absen_file/pasFotoAbsen/'. Auth::user()->pasfoto) }}">
                             @else
                             <img style="max-width: 50%;" class="rounded mx-auto d-block" src="{{ asset('assets/dist/img/logo.png') }}">
                             @endif
                         </div>
                         <div class="card-footer">
-                            <form action="upload_pasfoto/{{ Auth::user()->id }}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+                            <form action="upload_pasfoto_id{{ Auth::user()->id }}" method="POST" enctype="multipart/form-data" class="form-horizontal">
                             @csrf
+                            @method('put')
                             <div class="form-group">
                                 <div class="form-group">
-                                <label for="upload_pasfoto">Upload Pas Foto</label>
+                                <label for="pas_foto">Upload Pas Foto</label>
                                 <div class="input-group">
                                     <div class="custom-file">
-                                    <input type="file" class="custom-file-input @error('pasfoto') is-invalid @enderror" id="pasfoto" name="pasfoto">
-                                    <label class="custom-file-label" for="pasfoto">Pilih file</label>
+                                    <input type="file" class="custom-file-input @error('pasfoto') is-invalid @enderror" id="pas_foto" name="pas_foto">
+                                    <label class="custom-file-label" for="pas_foto">Pilih file</label>
                                 </div>
                                 </div>
-                                @error('pasfoto')
+                                @error('pas_foto')
                                     <span class="invalid-feedback d-block" role="alert">
                                     <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                                 </div>
-                                            <div class="form-group boxed">
-                                                <div class="input-wrapper">
-                                                    <button type="submit" class="btn btn-primary btn-block">
-                                                        <ion-icon name="refresh-outline"></ion-icon>
-                                                        Update
-                                                    </button>
-                                                </div>
-                                            </div>
+                                    <div class="form-group boxed">
+                                        <div class="input-wrapper">
+                                            <button type="submit" class="btn btn-primary btn-block">
+                                                <ion-icon name="refresh-outline"></ion-icon>
+                                                Update
+                                            </button>
+                                        </div>
+                                    </div>
                             </div>
                             </form>
                         </div>
@@ -194,6 +195,20 @@
 $(function () {
     bsCustomFileInput.init();
 });
+</script>
+<script>
+@if (session()->has('success'))
+var Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000
+});
+    Toast.fire({
+    icon: 'success',
+    title: '{{ session('success') }}'
+    })
+@endif
 </script>
 @endsection
 </body>

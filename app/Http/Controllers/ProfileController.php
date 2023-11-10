@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
@@ -28,5 +30,42 @@ class ProfileController extends Controller
             return view('profile');
         }
         return view('profile_mobile');
+    }
+
+    public function edit_user($id, Request $request)
+    {
+        $data_valid = $request->validate([
+            'nik'       => ['nullable', 'max:16'],
+            'nuptk'     => ['nullable', 'max:16'],
+            'nbm'       => ['nullable', 'max:20'],
+            'nama'      => ['required', 'string', 'max:255'],
+            'email' => 'required|unique:users,email,' . $request->id,
+        ]);
+        $user = User::find($id);
+        $user->update($data_valid);
+        return redirect('profile')->with('success', 'Data Berhasil di Update');
+    }
+
+    public function edit_password_user_id($id, Request $request)
+    {
+        $data_valid = $request->validate([
+            'password'      => ['required', 'confirmed'],
+        ]);
+
+        $hash = Hash::make($data_valid['password']);
+        $user = User::find($id);
+        $user->update(['password' => $hash]);
+        return redirect('profile')->with('success', 'Password Berhasil diganti');
+    }
+    public function upload_pasfoto_id($id, Request $request)
+    {
+        $request->validate([
+            'pas_foto' => 'required|image|mimes:jpeg,png,jpg,gif|file|max:5120',
+        ]);
+        $imageName = 'pasfoto' . '_' . Auth::user()->id . '_' . Auth::user()->nama . '.' . $request->pas_foto->getClientOriginalExtension();
+        $request->pas_foto->storeAs('pasFotoAbsen', $imageName);
+        $user = User::find($id);
+        $user->update(['pasfoto' => $imageName]);
+        return redirect('profile')->with('success', 'Pas Foto Berhasil Diupload');
     }
 }

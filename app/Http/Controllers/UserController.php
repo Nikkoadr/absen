@@ -67,7 +67,6 @@ class UserController extends Controller
             'jam_kerja'   => $request->jam_kerja,
             'lokasi_lang'   => $request->lokasi_lang,
             'lokasi_long'   => $request->lokasi_long,
-            'pas_foto'   => $request->pas_foto,
         ]);
         return redirect()->route('data_user')->with(['success' => 'Data Berhasil Ditambahkan!']);
     }
@@ -85,7 +84,6 @@ class UserController extends Controller
             'jam_kerja' => ['nullable',],
             'lokasi_lang' => ['nullable',],
             'lokasi_long' => ['nullable',],
-            'pas_foto' => ['nullable',],
         ]);
         $user = User::find($id);
         $user->update($data_valid);
