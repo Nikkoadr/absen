@@ -45,5 +45,5 @@ Route::put('/edit/profile_id{id}',      [ProfileController::class, 'edit_user'])
 Route::put('/edit/password_user_id{id}',      [ProfileController::class, 'edit_password_user_id'])->name('edit_password_user_id');
 Route::put('upload_pasfoto_id{id}',      [ProfileController::class, 'upload_pasfoto_id'])->name('upload_pasfoto_id');
 
-Route::get('/rekap',                    [RekapController::class, 'index'])->name('rekap');
-Route::get('/laporan',                  [LaporanController::class, 'index'])->name('laporan');
+Route::get('/laporanIndividu',                  [LaporanController::class, 'laporanIndividu'])->name('laporanIndividu');
+Route::get('/laporanSemua',                  [LaporanController::class, 'laporanSemua'])->name('laporanSemua');

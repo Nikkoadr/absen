@@ -21,8 +21,12 @@ class LaporanController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function laporanIndividu()
     {
-        return view('laporan');
+        return view('laporanIndividu');
+    }
+    public function laporanSemua()
+    {
+        return view('laporanSemua');
     }
 }

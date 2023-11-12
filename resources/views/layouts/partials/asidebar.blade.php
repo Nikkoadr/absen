@@ -46,27 +46,35 @@
         </a>
         </li>
                 <li class="nav-item menu-close">
-        <a href="#" class="nav-link {{ request()->is('rekap') ? 'active' : '' }} {{ request()->is('laporan') ? 'active' : '' }}">
+        <a href="#" class="nav-link {{ request()->is('laporanIndividu') ? 'active' : '' }} {{ request()->is('laporanSemua') ? 'active' : '' }}">
             <i class="nav-icon fa-solid fa-database"></i>
             <p>
-            Administrasi
+            Laporan
             <i class="right fas fa-angle-left"></i>
             </p>
         </a>
         <ul class="nav nav-treeview">
             <li class="nav-item">
-            <a href="rekap" class="nav-link {{ request()->is('rekap') ? 'active' : '' }}">
+            <a href="laporanIndividu" class="nav-link {{ request()->is('laporanIndividu') ? 'active' : '' }}">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Rekapitulasi</p>
+                <p>Individu</p>
             </a>
             </li>
             <li class="nav-item">
-            <a href="laporan" class="nav-link {{ request()->is('laporan') ? 'active' : '' }}">
+            <a href="laporanSemua" class="nav-link {{ request()->is('laporanSemua') ? 'active' : '' }}">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Laporan</p>
+                <p>Rekap</p>
             </a>
             </li>
         </ul>
+        </li>
+        <li class="nav-item">
+        <a href="/setting" class="nav-link {{ request()->is('setting') ? 'active' : '' }}">
+            <i class="nav-icon fa-solid fa-gears"></i>
+            <p>
+            Setting
+            </p>
+        </a>
         </li>
         @endcan
     </ul>

@@ -68,8 +68,6 @@
                         <th>Email</th>
                         <th>Jabatan</th>
                         <th>Jam Kerja</th>
-                        <th>Lokasi Langitude</th>
-                        <th>Lokasi Longitude</th>
                         <th data-orderable="false">Menu</th>
                     </tr>
                 </thead>
@@ -86,8 +84,6 @@
                         <td>{{ $data->email }}</td>
                         <td>{{ $data->jabatan }}</td>
                         <td>{{ $data->jam_kerja }}</td>
-                        <td>{{ $data->lokasi_lang }}</td>
-                        <td>{{ $data->lokasi_long }}</td>
                         <td width="10%" style="text-align: center">
                             <div style=style="display: inline;">
                                 <button type="button" class="btn btn-info m-1" data-toggle="modal" data-target="#modalEditUserId{{ $data->id }}"><i class="fa-regular fa-pen-to-square"></i></button>
@@ -138,7 +134,14 @@ $(function () {
 <script>
 $(function () {
 $("#table_user").DataTable({
-    "responsive": true, "lengthChange": false, "autoWidth": false,
+    "responsive": true, 
+    "lengthChange": true, 
+    "autoWidth": true, 
+    "pageLength": 50,
+    "aLengthMenu": [
+        [25, 50, 100, 200, -1],
+        [25, 50, 100, 200, "All"]
+    ],
     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
 }).buttons().container().appendTo('#table_user_wrapper .col-md-6:eq(0)');
 });

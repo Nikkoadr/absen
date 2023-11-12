@@ -24,7 +24,7 @@ class UserController extends Controller
     public function index()
     {
         $this->authorize('is_admin');
-        $data_user = User::latest()->paginate(100);
+        $data_user = User::all();
         return view('data_user', compact('data_user'));
     }
 
