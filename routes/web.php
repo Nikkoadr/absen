@@ -5,9 +5,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RekapController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SettingContoller;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -44,6 +44,9 @@ Route::get('/profile',                  [ProfileController::class, 'index'])->na
 Route::put('/edit/profile_id{id}',      [ProfileController::class, 'edit_user'])->name('edit_user');
 Route::put('/edit/password_user_id{id}',      [ProfileController::class, 'edit_password_user_id'])->name('edit_password_user_id');
 Route::put('upload_pasfoto_id{id}',      [ProfileController::class, 'upload_pasfoto_id'])->name('upload_pasfoto_id');
+Route::get('history',      [ProfileController::class, 'history'])->name('history.cari');
 
 Route::get('/laporanIndividu',                  [LaporanController::class, 'laporanIndividu'])->name('laporanIndividu');
 Route::get('/laporanSemua',                  [LaporanController::class, 'laporanSemua'])->name('laporanSemua');
+
+Route::get('/setting',                  [SettingContoller::class, 'setting'])->name('setting');

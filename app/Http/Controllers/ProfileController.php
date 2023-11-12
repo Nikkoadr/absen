@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -29,8 +30,9 @@ class ProfileController extends Controller
     {
         if (Auth::user()->role == 'admin') {
             return view('profile');
+        } else {
+            return view('profile_mobile');
         }
-        return view('profile_mobile');
     }
 
     public function edit_user($id, Request $request)
@@ -68,5 +70,18 @@ class ProfileController extends Controller
         $user = User::find($id);
         $user->update(['pasfoto' => $namaFoto]);
         return redirect('profile')->with('success', 'Pas Foto Berhasil Diupload');
+    }
+    public function history(Request $request)
+    {
+        $userAktif = Auth::user()->id;
+        $bulan = $request->input('bulan', now()->month);
+        $tahun = $request->input('tahun', now()->year);
+        $history = DB::table('absensi')
+            ->where('id_user', $userAktif)
+            ->whereRaw('MONTH(tanggal_absen)="' . $bulan . '"')
+            ->whereRaw('YEAR(tanggal_absen)="' . $tahun . '"')
+            ->orderBy('tanggal_absen')
+            ->get();
+        return view('history_mobile', compact('history', 'bulan', 'tahun'));
     }
 }

@@ -51,8 +51,6 @@ class UserController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'jabatan' => ['nullable',],
             'jam_kerja' => ['nullable',],
-            'lokasi_lang' => ['nullable',],
-            'lokasi_long' => ['nullable',],
             'pas_foto' => ['nullable',],
         ]);
         User::create([
@@ -65,8 +63,6 @@ class UserController extends Controller
             'password'   => Hash::make($request->password),
             'jabatan'   => $request->jabatan,
             'jam_kerja'   => $request->jam_kerja,
-            'lokasi_lang'   => $request->lokasi_lang,
-            'lokasi_long'   => $request->lokasi_long,
         ]);
         return redirect()->route('data_user')->with(['success' => 'Data Berhasil Ditambahkan!']);
     }
@@ -82,8 +78,6 @@ class UserController extends Controller
             'email' => 'required|unique:users,email,' . $request->id,
             'jabatan' => ['nullable',],
             'jam_kerja' => ['nullable',],
-            'lokasi_lang' => ['nullable',],
-            'lokasi_long' => ['nullable',],
         ]);
         $user = User::find($id);
         $user->update($data_valid);

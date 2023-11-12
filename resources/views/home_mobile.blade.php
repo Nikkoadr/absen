@@ -34,19 +34,10 @@
                                 <span class="text-center">Profil</span>
                             </div>
                         </div>
+
                         <div class="item-menu text-center">
                             <div class="menu-icon">
-                                <a href="" class="danger" style="font-size: 40px">
-                                    <i class="fas fa-calendar-alt"></i>
-                                </a>
-                            </div>
-                            <div class="menu-name">
-                                <span class="text-center">Cuti</span>
-                            </div>
-                        </div>
-                        <div class="item-menu text-center">
-                            <div class="menu-icon">
-                                <a href="" class="warning" style="font-size: 40px">
+                                <a href="/history" class="warning" style="font-size: 40px">
                                     <i class="fas fa-file-alt"></i>
                                 </a>
                             </div>
@@ -54,14 +45,7 @@
                                 <span class="text-center">Histori</span>
                             </div>
                         </div>
-                        <div class="item-menu text-center">
-                            <div class="menu-icon">
-                                <a href="" class="orange" style="font-size: 40px">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                </a>
-                            </div>
-                            <div class="menu-name">Lokasi</div>
-                        </div>
+
                     </div>
                 </div>
             </div>

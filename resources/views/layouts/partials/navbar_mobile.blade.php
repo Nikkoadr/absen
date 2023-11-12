@@ -19,10 +19,10 @@
                 </div>
             </div>
         </a>
-        <a href="#" class="item">
+        <a href="/history" class="item">
             <div class="col">
-                <i class="fas fa-calendar-alt fa-3x text-dark"></i>
-                <strong>Calendar</strong>
+                <i class="fas fa-file-alt fa-3x {{ request()->is('history') ? '' : 'text-dark' }}"></i>
+                <strong>History</strong>
             </div>
         </a>
         <a href="{{ route('logout') }}" class="item" 

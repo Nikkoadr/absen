@@ -35,13 +35,13 @@ class AbsensiController extends Controller
         $id_user = Auth::user()->id;
         $tanggal_absen = date("Y-m-d");
         $jam = date("H:i:s");
-        $latitideKantor = -6.363041;
+        $latitudeKantor = -6.363041;
         $longitudeKantor = 108.113627;
         $lokasi = $request->lokasi;
         $lokasiUser = explode(",", $lokasi);
         $latitudeUser = $lokasiUser[0];
         $longitudeUser = $lokasiUser[1];
-        $jarak = $this->distance($latitideKantor, $longitudeKantor, $latitudeUser, $longitudeUser);
+        $jarak = $this->distance($latitudeKantor, $longitudeKantor, $latitudeUser, $longitudeUser);
         $radius = round($jarak["meters"]);
         $foto = $request->foto;
 
