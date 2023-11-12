@@ -21,11 +21,13 @@ class UserController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $this->authorize('is_admin');
         $data_user = User::all();
-        return view('data_user', compact('data_user'));
+        $bulan = $request->input('bulan', now()->month);
+        $tahun = $request->input('tahun', now()->year);
+        return view('data_user', compact('data_user', 'bulan', 'tahun'));
     }
 
     public function importUser()

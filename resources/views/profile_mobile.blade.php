@@ -65,7 +65,7 @@
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <label for="nama" class="col-sm-3 col-form-label text-md-end">Nama : </label>
+                                            <label for="nama" class="col-sm-3 col-form-label text-md-end">Nama <span style="color: red">*</span> : </label>
                                             <div class="col-sm-9">
                                                 <input id="nama" type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" value="{{ Auth::user()->nama }}" autocomplete="nama" autofocus>
                                                 @error('nama')
@@ -76,7 +76,7 @@
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <label for="email" class="col-sm-3 col-form-label text-md-end">E-mail : </label>
+                                            <label for="email" class="col-sm-3 col-form-label text-md-end">E-mail <span style="color: red">*</span> : </label>
                                             <div class="col-sm-9">
                                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ Auth::user()->email }}" autocomplete="email">
                                                 @error('email')
@@ -159,7 +159,7 @@
                             @method('put')
                             <div class="form-group">
                                 <div class="form-group">
-                                <label for="pas_foto">Upload Pas Foto</label>
+                                <label for="pas_foto">Upload Pas Foto <br><small>Note : Gunakan Gambar yang berukuran kotak</small> </label>
                                 <div class="input-group">
                                     <div class="custom-file">
                                     <input type="file" class="custom-file-input @error('pasfoto') is-invalid @enderror" id="pas_foto" name="pas_foto">

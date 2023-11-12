@@ -46,7 +46,7 @@ Route::put('/edit/password_user_id{id}',      [ProfileController::class, 'edit_p
 Route::put('upload_pasfoto_id{id}',      [ProfileController::class, 'upload_pasfoto_id'])->name('upload_pasfoto_id');
 Route::get('history',      [ProfileController::class, 'history'])->name('history.cari');
 
-Route::get('/laporanIndividu',                  [LaporanController::class, 'laporanIndividu'])->name('laporanIndividu');
+Route::put('/printLaporanIndividu{id}',          [LaporanController::class, 'printLaporanIndividu'])->name('printLaporanIndividu');
 Route::get('/laporanSemua',                  [LaporanController::class, 'laporanSemua'])->name('laporanSemua');
 
 Route::get('/setting',                  [SettingContoller::class, 'setting'])->name('setting');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LaporanController extends Controller
 {
@@ -21,9 +22,19 @@ class LaporanController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function laporanIndividu()
+    public function printLaporanIndividu(Request $request)
     {
-        return view('laporanIndividu');
+        $id = $request->id;
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
+        $user = DB::table('users')
+            ->where('id', $id)
+            ->first();
+        $rekap = DB::table('absensi')
+            ->where('tanggal_abasen', $bulan)
+            ->where('id_user', $id)
+            ->get();
+        return view('layouts.component.cetakLaporanIndividu', compact('user', 'bulan', 'tahun'));
     }
     public function laporanSemua()
     {

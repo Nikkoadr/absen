@@ -12,7 +12,7 @@
                         @csrf
                         @method('put')
                         <div class="form-group row">
-                            <label for="role" class="col-sm-5 col-form-label">Role</label>
+                            <label for="role" class="col-sm-5 col-form-label">Role <span style="color: red">*</span></label>
                                 <div class="col-sm-7">
                                     <select type="text" class="form-control @error('role') is-invalid @enderror" name="role" id="role">
                                     <option value="admin" @if ($data->role =="admin") selected @endif>Admin</option>
@@ -61,7 +61,7 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="nama" class="col-sm-5 col-form-label text-md-end">Nama</label>
+                            <label for="nama" class="col-sm-5 col-form-label text-md-end">Nama <span style="color: red">*</span></label>
                             <div class="col-sm-7">
                                 <input id="nama" type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" value="{{ $data->nama }}" autocomplete="nama" autofocus>
                                 @error('nama')
@@ -72,7 +72,7 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="email" class="col-sm-5 col-form-label text-md-end">E-mail</label>
+                            <label for="email" class="col-sm-5 col-form-label text-md-end">E-mail <span style="color: red">*</span></label>
                             <div class="col-sm-7">
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $data->email }}" autocomplete="email">
                                 @error('email')
@@ -94,21 +94,10 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="lokasi_lang" class="col-sm-5 col-form-label text-md-end">Lokasi Langitude</label>
+                            <label for="jam_kerja" class="col-sm-5 col-form-label text-md-end">Jam Kerja</label>
                             <div class="col-sm-7">
-                                <input id="lokasi_lang" type="text" class="form-control @error('lokasi_lang') is-invalid @enderror" name="lokasi_lang" value="{{ $data->lokasi_lang }}" autocomplete="lokasi_lang" autofocus>
-                                @error('lokasi_lang')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label for="lokasi_long" class="col-sm-5 col-form-label text-md-end">Lokasi Longitude</label>
-                            <div class="col-sm-7">
-                                <input id="lokasi_long" type="text" class="form-control @error('lokasi_long') is-invalid @enderror" name="lokasi_long" value="{{ $data->lokasi_long }}" autocomplete="lokasi_long" autofocus>
-                                @error('lokasi_long')
+                                <input id="jam_kerja" type="time" class="form-control @error('jam_kerja') is-invalid @enderror" name="jam_kerja" value="{{ $data->jam_kerja }}" required autocomplete="jam_kerja" autofocus>
+                                @error('jam_kerja')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
