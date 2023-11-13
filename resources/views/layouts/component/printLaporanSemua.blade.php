@@ -3,7 +3,7 @@
 
 <head>
 <meta charset="utf-8">
-<title>A4</title>
+<title>Rekap Absensi Bulanan</title>
 
 <!-- Normalize or reset CSS with your favorite library -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
@@ -14,6 +14,33 @@
 <!-- Set page size here: A5, A4 or A3 -->
 <!-- Set also "landscape" if you need -->
 <style>@page { size: A4 }</style>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h2, h3 {
+            text-align: left;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+            font-size: 10px; /* Sesuaikan ukuran font sesuai kebutuhan */
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 
 <!-- Set "A5", "A4" or "A3" for class name -->
@@ -50,10 +77,57 @@
         </table>
         <div style="height:5px;border-bottom:solid 2px black;border-top:solid 1px black;margin:10px 0"></div>
         <div style="text-align:center; margin:10px">
-            <b style="font-size:20pt !important;">REKAPITULASI ABSENSI</b>
+            <b style="font-size:20pt !important;">Laporan Bulanan</b>
         </div>
+<h3>Periode : {{ \Carbon\Carbon::create()->month($bulan)->format('F') }} {{ $tahun }}</h3>
 
-</section>
+<table style="border: 1px solid black;">
+    <thead>
+        <tr>
+            <th style="border: 1px solid black;" rowspan="2">Nama</th>
+            <th style="border: 1px solid black;" colspan="31">tanggal</th>
+            <th style="border: 1px solid black;" rowspan="2">Jumlah</th>
+        </tr>
+        <tr>
+            @for ($hari = 1; $hari <= 31; $hari++)
+                <th style="border: 1px solid black;">{{ $hari }}</th>
+            @endfor
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($rekap as $data)
+            <tr>
+                <td style="border: 1px solid black;">{{ $data->nama }}</td>
+                @php
+                    $total = 0;
+                @endphp
+                @for ($hari = 1; $hari <= 31; $hari++)
+                        <td style="border: 1px solid black;">
+                    @if ($data->{'tgl_'.$hari})
+                        @php
+                            // Pemisahan jam masuk dan jam keluar
+                            list($jamMasuk, $jamKeluar) = explode('-', $data->{'tgl_'.$hari});
+                        @endphp
+                        @if($jamMasuk > "07:01")
+                            T
+                            @else
+                            H
+                        @endif
+                        {{-- <strong>Jam Masuk:</strong> {{ $jamMasuk }} <br>
+                        <strong>Jam Keluar:</strong> {{ $jamKeluar }} --}}
+                        @php
+                            // Tambahkan nilai ke total jika ada data
+                            $total++;
+                        @endphp
+                    @endif
+                        </td>
+                @endfor
+                <td style="border: 1px solid black;">{{ $total }}</td>
+            </tr>
+        @endforeach
+    </tbody>
+
+</table></section>
 
 </body>
 
