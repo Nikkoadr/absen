@@ -73,7 +73,7 @@ class UserController extends Controller
     {
         $data_valid = $request->validate([
             'role'      => ['required', 'string'],
-            'nik'       => ['nullable', 'max:13'],
+            'nik'       => ['nullable', 'max:16'],
             'nuptk'     => ['nullable', 'max:16'],
             'nbm'       => ['nullable', 'max:20'],
             'nama'      => ['required', 'string', 'max:255'],

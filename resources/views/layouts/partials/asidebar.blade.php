@@ -55,15 +55,9 @@
         </a>
         <ul class="nav nav-treeview">
             <li class="nav-item">
-            <a href="laporanIndividu" class="nav-link {{ request()->is('laporanIndividu') ? 'active' : '' }}">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Individu</p>
-            </a>
-            </li>
-            <li class="nav-item">
             <a href="laporanSemua" class="nav-link {{ request()->is('laporanSemua') ? 'active' : '' }}">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Rekap</p>
+                <p>Rekap Bulanan</p>
             </a>
             </li>
         </ul>

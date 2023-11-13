@@ -31,10 +31,13 @@ class LaporanController extends Controller
             ->where('id', $id)
             ->first();
         $rekap = DB::table('absensi')
-            ->where('tanggal_abasen', $bulan)
-            ->where('id_user', $id)
+            ->where('id_user', $user->id)
+            ->whereMonth('tanggal_absen', $bulan)
+            ->whereYear('tanggal_absen', $tahun)
+            ->orderBy('tanggal_absen')
             ->get();
-        return view('layouts.component.cetakLaporanIndividu', compact('user', 'bulan', 'tahun'));
+
+        return view('layouts.component.printLaporanIndividu', compact('user', 'bulan', 'tahun', 'rekap'));
     }
     public function laporanSemua()
     {
