@@ -33,19 +33,18 @@ class HomeController extends Controller
             ->where('tanggal_absen', $hariIni)->first();
         $bulanIni = date("m");
         $tahunIni = date("Y");
-
         $historyBulanIni = DB::table('absensi')
             ->where('id_user', $userAktif)
-            ->whereRaw('MONTH(tanggal_absen)="' . $bulanIni . '"')
-            ->whereRaw('YEAR(tanggal_absen)="' . $tahunIni . '"')
+            ->whereMonth('tanggal_absen', $bulanIni)
+            ->whereYear('tanggal_absen', $tahunIni)
             ->orderBy('tanggal_absen')
             ->get();
 
         $rekapAbsensi = DB::table('absensi')
             ->selectRaw('COUNT(id_user) as jumlahHadir, SUM(IF(jam_masuk > "07:00",1,0)) as jumlahTerlambat')
             ->where('id_user', $userAktif)
-            ->whereRaw('MONTH(tanggal_absen)="' . $bulanIni . '"')
-            ->whereRaw('YEAR(tanggal_absen)="' . $tahunIni . '"')
+            ->whereMonth('tanggal_absen', $bulanIni)
+            ->whereYear('tanggal_absen', $tahunIni)
             ->first();
 
         $leaderboard = DB::table('absensi')

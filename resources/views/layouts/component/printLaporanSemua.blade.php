@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<title>A4</title>
+
+<!-- Normalize or reset CSS with your favorite library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
+
+<!-- Load paper.css for happy printing -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.css">
+
+<!-- Set page size here: A5, A4 or A3 -->
+<!-- Set also "landscape" if you need -->
+<style>@page { size: A4 }</style>
+</head>
+
+<!-- Set "A5", "A4" or "A3" for class name -->
+<!-- Set also "landscape" if you need -->
+<body class="A4 landscape">
+
+<!-- Each sheet element should have the class "sheet" -->
+<!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
+<section class="sheet padding-10mm">
+
+        <table width="100%">
+            <tr>
+                <td width="100px" align="center" valign="middle">
+                    <img src="{{asset('assets/dist/img/dikdasmenmuh.png')}}" width="100%">
+                </td>
+                <td align="center" valign="middle">
+                    <b style="color:#007bff;font-size:15pt !important;">MAJELIS PENDIDIKAN DASAR DAN MENENGAH</b><br>
+                    <b style="color:#007bff;font-size:15pt !important;">PIMPINAN WILAYAH MUHAMMADIYAH JAWA BARAT</b><br>
+                    <b style="color:#007bff;font-size:17pt !important;">SMK MUHAMMADIYAH KANDANGHAUR</b><br>
+                    <b style="color:#007bff;;font-size:17pt !important;">SMK PUSAT KEUNGGULAN (PK)</b><br>
+                    <b>Terakreditasi "A" (Unggul)</b><br>
+                    <b>Nomor : 02.00/375/BAP-SM/XI/2008</b>
+                </td>
+                <td width="100px" align="center" valign="middle">
+                    <img src="{{asset('assets/dist/img/logo.png')}}" width="80%">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" align="center">
+                    {{-- <small style="font-size:8pt !important;">Program Keahlian : Teknik Kendaraan Ringan Otomotif(TKRO),Teknik Dan Bisnis Sepeda Motor(TBSM), Teknik Pengelasan dan Fabrikasi Logam(TPFL), Teknik Elektronika(TE), Teknik Jaringan Komputer dan Telekomunikasi(TJKT), Teknologi Farmasi(TF)</small><br> --}}
+                    <small style="font-size:8pt !important;">Jl. Raya Karanganyar No. 28/A Kec. Kandanghaur Kab. Indramayu 45254 Telp. (0234) 507239, email : smkmuhkandanghaur@gmail.com website : smkmuhkandanghaur.sch.id</small>
+                </td>
+            </tr>
+        </table>
+        <div style="height:5px;border-bottom:solid 2px black;border-top:solid 1px black;margin:10px 0"></div>
+        <div style="text-align:center; margin:10px">
+            <b style="font-size:20pt !important;">REKAPITULASI ABSENSI</b>
+        </div>
+
+</section>
+
+</body>
+
+</html>

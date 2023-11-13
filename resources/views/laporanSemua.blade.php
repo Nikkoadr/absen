@@ -32,11 +32,37 @@
         <div class="col-12">
         <div class="card">
             <div class="card-header">
-            <h3 class="card-title">Data Absensi</h3>
+            <h3 class="card-title">Pilih Bulan</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-            
+            <form method="POST" action="/printLaporanSemua" target="_blank">
+                        @csrf
+                        @method('put')
+                        <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="bulan">Bulan:</label>
+                                        <select class="form-control" id="bulan" name="bulan">
+                                            @for ($i = 1; $i <= 12; $i++)
+                                                <option value="{{ $i }}" {{ $i == $bulan ? 'selected' : '' }}>
+                                                {{ Carbon\Carbon::create()->month($i)->isoFormat('MMMM') }}
+                                                </option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="tahun">Tahun:</label>
+                                        <input type="text" class="form-control" id="tahun" name="tahun" placeholder="Masukkan tahun" value="{{ $tahun }}" readonly>
+                                    </div>
+                                </div>
+                        </div>
+                        <button style="float: right;" type="submit" class="btn btn-primary">
+                            Cetak Rekapitulasi
+                        </button>
+                    </form>
             </div>
             <!-- /.card-body -->
         </div>

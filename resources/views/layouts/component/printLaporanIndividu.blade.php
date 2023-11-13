@@ -155,7 +155,7 @@
         </div>
         <table width="100%" class="it-grid">
             <tr style="background:#fbff00">
-                <td style="padding:10px" colspan="7" align="center"><b style="font-size:16pt !important;"> Rekap Bulan {{  Carbon::create()->month($bulan)->isoFormat('MMMM') }}</b></td>
+                <td style="padding:10px" colspan="8" align="center"><b style="font-size:16pt !important;"> Rekap Bulan {{  Carbon::create()->month($bulan)->isoFormat('MMMM') }}</b></td>
             </tr>
             <tr>
                 <td width="100px" align="center"><b style="font-size: 12px">NO</b></td>
@@ -164,6 +164,7 @@
                 <td align="center"><b style="font-size: 12px">JAM MASUK</b></td>
                 <td align="center"><b style="font-size: 12px">FOTO PULANG</b></td>
                 <td align="center"><b style="font-size: 12px">JAM PULANG</b></td>
+                <td align="center"><b style="font-size: 12px">JUMALH JAM</b></td>
                 <td align="center"><b style="font-size: 12px">KETERANGAN</b></td>
             </tr>
             @foreach ($rekap as $data)
@@ -172,7 +173,7 @@
                 <td align="center" width="250px">{{ Carbon::parse($data->tanggal_absen ?? $bulan . '-01')->format('d F Y') }}</td>
                 <td align="center" width="250px"><img style="width: 60px" src="{{ asset('storage/absen_file/'. $data->foto_masuk) }}" alt="fotoMasuk"></td>
                 <td align="center" width="250px">
-                    <span @if($data->jam_masuk > "07:00")
+                    <span @if($data->jam_masuk > "07:01")
                         style="background: yellow"
                         @else
                         style="background: #00FF00"
@@ -192,6 +193,13 @@
                     @endif
                 </td>
                 <td align="center" width="250px">
+                    @if($data->jam_keluar != null)
+                    {{ selisih($data->jam_keluar, $data->jam_masuk) }}
+                    @else
+                    0
+                    @endif
+                </td>
+                <td align="center" width="250px">
                     @if($data->jam_masuk > "07:00")
                     Terlambat {{ selisih($data->jam_masuk, "07:00:00") }}
                     @else
@@ -201,7 +209,7 @@
             </tr>
             @endforeach
         </table>
-        <b style="font-size: 20px; float: right;">Total Absen Selam Satu Bulan: {{ count($rekap) }}</b>
+        <b style="font-size: 20px; float: right; margin-top :10px">Total Absen Selam Satu Bulan: {{ count($rekap) }}</b>
     </div>
     <script> window.print(); </script>
 </body>

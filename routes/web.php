@@ -48,5 +48,6 @@ Route::get('history',      [ProfileController::class, 'history'])->name('history
 
 Route::put('/printLaporanIndividu{id}',          [LaporanController::class, 'printLaporanIndividu'])->name('printLaporanIndividu');
 Route::get('/laporanSemua',                  [LaporanController::class, 'laporanSemua'])->name('laporanSemua');
+Route::put('/printLaporanSemua',                  [LaporanController::class, 'printLaporanSemua'])->name('printLaporanSemua');
 
 Route::get('/setting',                  [SettingContoller::class, 'setting'])->name('setting');
