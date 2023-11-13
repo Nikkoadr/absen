@@ -1,5 +1,23 @@
 @php
-    use Illuminate\Support\Carbon; 
+    use Illuminate\Support\Carbon;
+
+    function selisih($jam_masuk, $jam_batas)
+    {
+        list($h_masuk, $m_masuk, $s_masuk) = explode(":", $jam_masuk);
+        $dtAwal = mktime($h_masuk, $m_masuk, $s_masuk, 1, 1, 1);
+
+        list($h_batas, $m_batas, $s_batas) = explode(":", $jam_batas);
+        $dtBatas = mktime($h_batas, $m_batas, $s_batas, 1, 1, 1);
+
+        $dtSelisih = $dtAwal - $dtBatas;
+
+        $totalmenit = $dtSelisih / 60;
+        $jam = explode(".", $totalmenit / 60);
+        $sisamenit = ($totalmenit / 60) - $jam[0];
+        $sisamenit2 = $sisamenit * 60;
+
+        return $jam[0] . ":" . round($sisamenit2);
+    }
 @endphp
 <!DOCTYPE html>
 <html lang="en">
@@ -15,7 +33,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Print Absen Individu SMK Muhammadiyah Kandanghaur</title>
 </head>
-<body>
         <div class="page">
         <table width="100%">
             <tr>
@@ -134,8 +151,7 @@
                     </td>
                 </tr>
             </table>
-                        <br>
-            <span style="font-size:14pt !important;"> </span>
+                <br>
         </div>
         <table width="100%" class="it-grid">
             <tr style="background:#fbff00">
@@ -176,11 +192,14 @@
                     @endif
                 </td>
                 <td align="center" width="250px">
-                    
+                    @if($data->jam_masuk > "07:00")
+                    Terlambat {{ selisih($data->jam_masuk, "07:00:00") }}
+                    @else
+                    Tepat Waktu
+                    @endif
                 </td>
             </tr>
             @endforeach
-
         </table>
         <b style="font-size: 20px; float: right;">Total Absen Selam Satu Bulan: {{ count($rekap) }}</b>
     </div>
