@@ -29,6 +29,7 @@ Auth::routes([
 ]);
 
 Route::get('/home',                     [HomeController::class, 'index'])->name('home');
+// Route::post('/GetDataLeaderboard',                     [HomeController::class, 'GetDataLeaderboard'])->name('GetDataLeaderboard');
 Route::get('/absen',                    [AbsensiController::class, 'absen'])->name('absen');
 Route::post('/absenMasuk',              [AbsensiController::class, 'absenMasuk'])->name('absenMasuk');
 
@@ -44,7 +45,7 @@ Route::get('/profile',                  [ProfileController::class, 'index'])->na
 Route::put('/edit/profile_id{id}',      [ProfileController::class, 'edit_user'])->name('edit_user');
 Route::put('/edit/password_user_id{id}',      [ProfileController::class, 'edit_password_user_id'])->name('edit_password_user_id');
 Route::put('upload_pasfoto_id{id}',      [ProfileController::class, 'upload_pasfoto_id'])->name('upload_pasfoto_id');
-Route::get('history',      [ProfileController::class, 'history'])->name('history.cari');
+Route::get('history',                               [ProfileController::class, 'history'])->name('history.cari');
 
 Route::put('/printLaporanIndividu{id}',          [LaporanController::class, 'printLaporanIndividu'])->name('printLaporanIndividu');
 Route::get('/laporanSemua',                  [LaporanController::class, 'laporanSemua'])->name('laporanSemua');

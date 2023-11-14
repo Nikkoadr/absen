@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
-
+use DataTables;
 
 class HomeController extends Controller
 {
@@ -47,17 +47,17 @@ class HomeController extends Controller
             ->whereYear('tanggal_absen', $tahunIni)
             ->first();
 
-        $leaderboard = DB::table('absensi')
-            ->join('users', 'absensi.id_user',  '=', 'users.id')
-            ->where('tanggal_absen', $hariIni)
-            ->orderBy('jam_masuk')
-            ->get();
-
         $hitungPulang = DB::table('absensi')
             ->join('users', 'absensi.id_user', '=', 'users.id')
             ->where('tanggal_absen', $hariIni)
             ->whereNotNull('jam_keluar')
             ->count();
+
+        $leaderboard = DB::table('absensi')
+            ->join('users', 'absensi.id_user',  '=', 'users.id')
+            ->where('tanggal_absen', $hariIni)
+            ->orderBy('jam_masuk')
+            ->get();
 
         $hitungAlfa = DB::table('users')
             ->leftJoin('absensi', 'users.id', '=', 'absensi.id_user')
@@ -74,4 +74,20 @@ class HomeController extends Controller
             return view('home_mobile', compact('absenHariIni', 'historyBulanIni', 'bulanIni', 'tahunIni', 'namaBulan', 'rekapAbsensi', 'leaderboard'));
         }
     }
+    // public function getDataLeaderboard()
+    // {
+    //     $hariIni = now()->toDateString();
+
+    //     $leaderboard = DB::table('absensi')
+    //         ->join('users', 'absensi.id_user', '=', 'users.id')
+    //         ->where('tanggal_absen', $hariIni)
+    //         ->orderBy('jam_masuk')
+    //         ->select(['users.nama', 'absensi.foto_masuk', 'absensi.jam_masuk', 'absensi.foto_keluar', 'absensi.jam_keluar'])
+    //         ->get();
+    //     $index = 1;
+    //     foreach ($leaderboard as $row) {
+    //         $row->DT_RowIndex = $index++;
+    //     }
+    //     return response()->json(['data' => $leaderboard]);
+    // }
 }

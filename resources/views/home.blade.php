@@ -94,64 +94,57 @@
         <!-- ./col -->
         </div>
         <div class="row">
-        <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h4>History Absensi Hari Ini</h4>
+            <div class="col-12">
+                <div class="card">
+                        <div class="card-header">
+                            <h4>History Absensi Hari Ini</h4>
+                        </div>
+                    <!-- /.card-header -->
+                        <div class="card-body">
+                        <table id="table_rekap" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama User</th>
+                                    <th>Foto Masuk</th>
+                                    <th>Jam Masuk</th>
+                                    <th>Foto Keluar</th>
+                                    <th>Jam Keluar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php $no = 1; ?>
+                            @foreach ($leaderboard as $data)
+                            <tr>
+                                <td><?= $no++; ?></td>
+                                <td>{{ $data->nama }}</td>
+                                <td><img style="width: 15%" src="{{ asset('storage/absen_file/'. $data->foto_masuk) }}" alt="image" class="image" /></td>
+                                <td><span class="badge 
+                                        @if($data->jam_masuk > " 07:00") badge-warning @else badge-success @endif ">{{ $data->jam_masuk }}</span></td>
+                                    <td>@if ($data->foto_keluar == null)
+                                        <small>Belum Pulang</small>
+                                    @else
+                                        <img style=" width: 15%" src="{{ asset('storage/absen_file/'. $data->foto_keluar) }}" alt="image" class="image" />
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($data->jam_keluar == null)
+                                    <small>Belum Pulang</small>
+                                    @else
+                                    {{ $data->jam_keluar }}
+                                    @endif
+                                </td>
+                            </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                        </div>
+                    <!-- /.card-body -->
+                </div>
+            <!-- /.card -->
             </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-            <table id="table_rekap" class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Nama User</th>
-                        <th>Foto Masuk</th>
-                        <th>Jam Masuk</th>
-                        <th>Foto Keluar</th>
-                        <th>Jam Keluar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php $no=1; ?>
-                @foreach ($leaderboard as $data)
-                    
-
-                    <tr>
-                        <td><?= $no++; ?></td>
-                        <td>{{ $data->nama }}</td>
-                        <td><img style="width: 15%" src="{{ asset('storage/absen_file/'. $data->foto_masuk) }}" alt="image" class="image" /></td>
-                        <td><span class="badge 
-                            @if($data->jam_masuk > "07:00")
-                                badge-warning
-                                @else
-                                badge-success
-                            @endif
-                            ">{{ $data->jam_masuk }}</span></td>
-                        <td>@if ($data->foto_keluar == null)
-                            <small>Belum Pulang</small>
-                        @else
-                            <img style="width: 15%" src="{{ asset('storage/absen_file/'. $data->foto_keluar) }}" alt="image" class="image" />
-                        @endif
-                        </td>
-                        <td>                        
-                        @if ($data->jam_keluar == null)
-                            <small>Belum Pulang</small>
-                        @else
-                            {{ $data->jam_keluar }}
-                        @endif
-                    </td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
-            </div>
-            <!-- /.card-body -->
-        </div>
-        <!-- /.card -->
-        </div>
         <!-- /.col -->
-    </div>
+        </div>
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
@@ -173,12 +166,16 @@
 <script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+
 <script>
-$(function () {
-$("#table_rekap").DataTable({
-    "responsive": true, "lengthChange": false, "autoWidth": false,
-    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-}).buttons().container().appendTo('#table_rekap_wrapper .col-md-6:eq(0)');
-});
+    $(function() {
+        $("#table_rekap").DataTable({
+            "responsive": true,
+            "lengthChange": true,
+            "autoWidth": true,
+            // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#table_rekap_wrapper .col-md-6:eq(0)');
+    });
 </script>
+
 @endsection
