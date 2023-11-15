@@ -75,27 +75,27 @@
 
     var lokasi = document.getElementById('lokasi');
     if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(berhasil, gagal)
+        navigator.geolocation.getCurrentPosition(berhasil)
     }
     function berhasil(position){
         lokasi.value = position.coords.latitude + "," + position.coords.longitude;
         var map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 16);
+        var lokasi_absen_latitude = "{{ $setting->latitude }}"
+        var lokasi_absen_longitude = "{{ $setting->longitude }}"
+        var lokasi_absen_radius = "{{ $setting->radius }}"
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
         var marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
-        var circle = L.circle([-6.363041, 108.113627], {
+        var circle = L.circle([lokasi_absen_latitude, lokasi_absen_longitude], {
         color: 'red',
         fillColor: '#f03',
         fillOpacity: 0.3,
-        radius: 70
+        radius: lokasi_absen_radius
     }).addTo(map);
     }
 
-    function gagal(){
-    
-    }
     $("#ambilFoto").click(function(e){
         Webcam.snap(function(url){
             foto = url;

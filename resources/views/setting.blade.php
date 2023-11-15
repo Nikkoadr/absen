@@ -1,11 +1,6 @@
 @extends('layouts.main')
 @section('link')
-<!-- DataTables -->
-<link rel="stylesheet" href="assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-<link rel="stylesheet" href="assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-<link rel="stylesheet" href="assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 <link rel="stylesheet" href="assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
-
 @endsection
 @section('content')
 <div class="content-wrapper">
@@ -36,7 +31,30 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-            
+                <form action="/editSetting" method="POST">
+                    @csrf
+                    @method('put')
+                    <input type="hidden" name="id" value="{{ $setting->id }}">
+                    <div class="form-group">
+                        <label for="namaLokasi">Nama Lokasi:</label>
+                        <input type="text" class="form-control" id="namaLokasi" name="namaLokasi" value="{{ $setting->namaLokasi }}">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="latitude">Latitude:</label>
+                            <input type="text" class="form-control" id="latitude" name="latitude" value="{{ $setting->latitude }}">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="longitude">Longitude:</label>
+                            <input type="text" class="form-control" id="longitude" name="longitude" value="{{ $setting->longitude }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="radius">Radius:</label>
+                        <input type="text" class="form-control" id="radius" name="radius" value="{{ $setting->radius }}">
+                    </div>
+                    <button style="float: right" type="submit" class="btn btn-primary">Edit</button>
+                </form>
             </div>
             <!-- /.card-body -->
         </div>
@@ -52,28 +70,19 @@
 </div>
 @endsection
 @section('script')
-<!-- DataTables  & Plugins -->
-<script src="assets/plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script src="assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-<script src="assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-<script src="assets/plugins/jszip/jszip.min.js"></script>
-<script src="assets/plugins/pdfmake/pdfmake.min.js"></script>
-<script src="assets/plugins/pdfmake/vfs_fonts.js"></script>
-<script src="assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <script src="assets/plugins/sweetalert2/sweetalert2.all.min.js"></script>
-<!-- Page specific script -->
 <script>
-$(function () {
-$("#table_ppdb").DataTable({
-    "responsive": true, 
-    "lengthChange": true, 
-    "autoWidth": true,
-    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-}).buttons().container().appendTo('#table_ppdb_wrapper .col-md-6:eq(0)');
+@if (session()->has('success'))
+var Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000
 });
+    Toast.fire({
+    icon: 'success',
+    title: '{{ session('success') }}'
+    })
+@endif
 </script>
+@endsection

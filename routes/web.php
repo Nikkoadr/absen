@@ -52,3 +52,4 @@ Route::get('/laporanSemua',                  [LaporanController::class, 'laporan
 Route::put('/printLaporanSemua',                  [LaporanController::class, 'printLaporanSemua'])->name('printLaporanSemua');
 
 Route::get('/setting',                  [SettingContoller::class, 'setting'])->name('setting');
+Route::put('/editSetting',                  [SettingContoller::class, 'editSetting'])->name('editSetting');

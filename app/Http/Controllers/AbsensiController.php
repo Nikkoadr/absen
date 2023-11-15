@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -21,12 +22,14 @@ class AbsensiController extends Controller
             $harini = date("Y-m-d");
             $id = Auth::user()->id;
             $cek = DB::table('absensi')->where('tanggal_absen', $harini)->where('id_user', $id)->count();
-            return view('absen', compact('cek'));
+            $setting = Setting::first();
+            return view('absen', compact('cek', 'setting'));
         } else {
             $harini = date("Y-m-d");
             $id = Auth::user()->id;
             $cek = DB::table('absensi')->where('tanggal_absen', $harini)->where('id_user', $id)->count();
-            return view('absen_mobile', compact('cek'));
+            $setting = Setting::first();
+            return view('absen_mobile', compact('cek', 'setting'));
         }
     }
 
@@ -35,8 +38,9 @@ class AbsensiController extends Controller
         $id_user = Auth::user()->id;
         $tanggal_absen = date("Y-m-d");
         $jam = date("H:i:s");
-        $latitudeKantor = -6.363041;
-        $longitudeKantor = 108.113627;
+        $setting = Setting::first();
+        $latitudeKantor = $setting->latitude;
+        $longitudeKantor = $setting->longitude;
         $lokasi = $request->lokasi;
         $lokasiUser = explode(",", $lokasi);
         $latitudeUser = $lokasiUser[0];
@@ -46,8 +50,8 @@ class AbsensiController extends Controller
         $foto = $request->foto;
 
         $cek = DB::table('absensi')->where('tanggal_absen', $tanggal_absen)->where('id_user', $id_user)->count();
-        if ($radius > 70) {
-            echo "error|Maaf, Jarak Anda " . $radius . " Meter Dari SMK Muhammadiyah Kandanghaur";
+        if ($radius > $setting->radius) {
+            echo "error|Maaf, Jarak Anda " . $radius . " M dari " . $setting->namaLokasi;
         } else {
             if ($cek) {
                 $keterangan = "keluar";

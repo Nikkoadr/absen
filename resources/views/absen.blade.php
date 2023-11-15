@@ -42,48 +42,50 @@
 </div>
 <!-- /.content-header -->
 
-<!-- Main content -->
 <div class="content">
     <div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-            <h3 class="card-title">Absen Masuk</h3>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-                    <input type="hidden" id="lokasi">
-                    <div class="kamera">
+        <div class="row">
+            <!-- Bagian Kamera dan Tombol Absen -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Kamera Anda</h3>
                     </div>
-                    <div class="row">
-                        <div class="col">
-                            <div id="map"></div>
+                    <div class="card-body">
+                        <input type="hidden" id="lokasi">
+                        <div class="kamera">
+                            <!-- Isi dengan elemen kamera jika ada -->
                         </div>
-                    </div>
-                        <div class="row">
+                        <div class="row mt-3">
                             <div class="col">
                                 @if($cek > 0)
                                     <button id="ambilFoto" class="btn btn-danger btn-block">
                                     <i class="fa-solid fa-camera-retro"></i> Absen Pulang</button>
-                                    @else
+                                @else
                                     <button id="ambilFoto" class="btn btn-primary btn-block">
                                     <i class="fa-solid fa-camera-retro"></i> Absen Masuk</button>
                                 @endif
-                                
                             </div>
                         </div>
+                    </div>
+                </div>
             </div>
-            <!-- /.card-body -->
+
+            <!-- Bagian Peta -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Peta Lokasi</h3>
+                    </div>
+                    <div class="card-body">
+                        <section id="map"></section>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- /.card -->
-        </div>
-        <!-- /.col -->
-    </div>
-    <!-- /.row -->
     </div><!-- /.container-fluid -->
 </div>
-<!-- /.content -->
+
 </div>
 <!-- /.content-wrapper -->
 @endsection
@@ -102,27 +104,27 @@
 
     var lokasi = document.getElementById('lokasi');
     if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(berhasil, gagal)
+        navigator.geolocation.getCurrentPosition(berhasil)
     }
     function berhasil(position){
         lokasi.value = position.coords.latitude + "," + position.coords.longitude;
         var map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 16);
+        var lokasi_absen_latitude = "{{ $setting->latitude }}"
+        var lokasi_absen_longitude = "{{ $setting->longitude }}"
+        var lokasi_absen_radius = "{{ $setting->radius }}"
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
         var marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
-        var circle = L.circle([-6.363041, 108.113627], {
+        var circle = L.circle([lokasi_absen_latitude, lokasi_absen_longitude], {
         color: 'red',
         fillColor: '#f03',
         fillOpacity: 0.3,
-        radius: 70
+        radius: lokasi_absen_radius
     }).addTo(map);
     }
 
-    function gagal(){
-    
-    }
     $("#ambilFoto").click(function(e){
         Webcam.snap(function(url){
             foto = url;

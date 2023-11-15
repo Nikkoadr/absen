@@ -25,6 +25,7 @@ class UsersImport implements ToModel, WithHeadingRow
             'email'    => $row['email'],
             'password' => Hash::make($row['password']),
             'jabatan' => $row['jabatan'],
+            'jam_kerja' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['jam_kerja'])
         ]);
     }
 }
