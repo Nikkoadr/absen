@@ -19,17 +19,17 @@ class AbsensiController extends Controller
     public function absen()
     {
         if (Auth::user()->role === 'admin') {
-            $harini = date("Y-m-d");
+            $hariIni = date("Y-m-d");
             $id = Auth::user()->id;
-            $cek = DB::table('absensi')->where('tanggal_absen', $harini)->where('id_user', $id)->count();
+            $cek = DB::table('absensi')->where('tanggal_absen', $hariIni)->where('id_user', $id)->count();
             $setting = Setting::first();
-            return view('absen', compact('cek', 'setting'));
+            return view('absen', compact('cek', 'setting', 'hariIni'));
         } else {
-            $harini = date("Y-m-d");
+            $hariIni = date("Y-m-d");
             $id = Auth::user()->id;
-            $cek = DB::table('absensi')->where('tanggal_absen', $harini)->where('id_user', $id)->count();
+            $cek = DB::table('absensi')->where('tanggal_absen', $hariIni)->where('id_user', $id)->count();
             $setting = Setting::first();
-            return view('absen_mobile', compact('cek', 'setting'));
+            return view('absen_mobile', compact('cek', 'setting', 'harini'));
         }
     }
 

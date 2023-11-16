@@ -105,7 +105,6 @@
                         <td style="border: 1px solid black;">
                     @if ($data->{'tgl_'.$hari})
                         @php
-                            // Pemisahan jam masuk dan jam keluar
                             list($jamMasuk, $jamKeluar) = explode('-', $data->{'tgl_'.$hari});
                         @endphp
                         @if($jamMasuk > $data->jam_kerja)
