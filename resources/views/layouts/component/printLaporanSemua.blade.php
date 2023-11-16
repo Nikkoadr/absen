@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <title>Rekap Absensi Bulanan</title>
-<style></style>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -28,10 +29,13 @@
         th {
             background-color: #f2f2f2;
         }
+        @media print{@page {size: landscape}}
     </style>
+        <link rel="stylesheet" href="{{ asset('css/cetak.min.css') }}">
 </head>
 <body>
 <section>
+    <div class="page-landscape">
         <table width="100%">
             <tr>
                 <td width="100px" align="center" valign="middle">
@@ -106,6 +110,7 @@
         @endforeach
     </tbody>
 </table>
+</div>
 </section>
 </body>
     <script> window.print(); </script>
