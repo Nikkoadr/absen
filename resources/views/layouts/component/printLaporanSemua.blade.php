@@ -13,10 +13,15 @@
 
 <!-- Set page size here: A5, A4 or A3 -->
 <!-- Set also "landscape" if you need -->
-<style>@page { size: A4 }</style>
     <style>
+        @page {
+            size: A4;
+            margin: 0; /* Set margin to zero */
+        }
+
         body {
             font-family: Arial, sans-serif;
+            margin: 20px; /* Add margin to body */
         }
 
         h2, h3 {
@@ -29,8 +34,6 @@
             margin-top: 20px;
         }
 
-
-
         th, td {
             padding: 8px;
             text-align: center;
@@ -40,14 +43,15 @@
         th {
             background-color: #f2f2f2;
         }
+
         @media print {
-    section.sheet {
-        page-break-inside: avoid;
-    }
-    body {
-        page-break-before: always;
-    }
-}
+            section.sheet {
+                page-break-inside: avoid;
+            }
+            body {
+                page-break-before: always;
+            }
+        }
     </style>
 </head>
 
