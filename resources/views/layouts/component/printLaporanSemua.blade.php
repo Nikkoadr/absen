@@ -40,6 +40,14 @@
         th {
             background-color: #f2f2f2;
         }
+        @media print {
+    section.sheet {
+        page-break-inside: avoid;
+    }
+    body {
+        page-break-before: always;
+    }
+}
     </style>
 </head>
 
