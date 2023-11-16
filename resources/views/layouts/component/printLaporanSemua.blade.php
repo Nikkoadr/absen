@@ -1,14 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="utf-8">
 <title>Rekap Absensi Bulanan</title>
-
-
-
-<!-- Set page size here: A5, A4 or A3 -->
-<!-- Set also "landscape" if you need -->
 <style></style>
     <style>
         body {
@@ -36,14 +30,8 @@
         }
     </style>
 </head>
-
-<!-- Set "A5", "A4" or "A3" for class name -->
-<!-- Set also "landscape" if you need -->
-<body class="">
-
-<!-- Each sheet element should have the class "sheet" -->
-<!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
-<section class="">
+<body>
+<section>
         <table width="100%">
             <tr>
                 <td width="100px" align="center" valign="middle">
@@ -63,7 +51,7 @@
             </tr>
             <tr>
                 <td colspan="3" align="center">
-                    {{-- <small style="font-size:8pt !important;">Program Keahlian : Teknik Kendaraan Ringan Otomotif(TKRO),Teknik Dan Bisnis Sepeda Motor(TBSM), Teknik Pengelasan dan Fabrikasi Logam(TPFL), Teknik Elektronika(TE), Teknik Jaringan Komputer dan Telekomunikasi(TJKT), Teknologi Farmasi(TF)</small><br> --}}
+                    <small style="font-size:8pt !important;">Program Keahlian : Teknik Kendaraan Ringan Otomotif(TKRO),Teknik Dan Bisnis Sepeda Motor(TBSM), Teknik Pengelasan dan Fabrikasi Logam(TPFL), Teknik Elektronika(TE), Teknik Jaringan Komputer dan Telekomunikasi(TJKT), Teknologi Farmasi(TF)</small><br>
                     <small style="font-size:8pt !important;">Jl. Raya Karanganyar No. 28/A Kec. Kandanghaur Kab. Indramayu 45254 Telp. (0234) 507239, email : smkmuhkdh@gmail.com website : https://www.smkmuhkandanghaur.sch.id</small>
                 </td>
             </tr>
