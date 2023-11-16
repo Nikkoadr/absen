@@ -2,51 +2,56 @@
 <html lang="en">
 
 <head>
-<meta charset="utf-8">
-<title>Rekap Absensi Bulanan</title>
+  <meta charset="utf-8">
+  <title>Rekap Absensi Bulanan</title>
 
-<!-- Normalize or reset CSS with your favorite library -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
+  <!-- Normalize or reset CSS with your favorite library -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
 
-<!-- Load paper.css for happy printing -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.css">
+  <!-- Load paper.css for happy printing -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.css">
 
-<!-- Set page size here: A5, A4 or A3 -->
-<!-- Set also "landscape" if you need -->
-<style>@page { size: A4 }</style>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
+  <!-- Set page size here: A5, A4 or A3 -->
+  <!-- Set also "landscape" if you need -->
+  <style>
+    @page {
+      size: A4;
+    }
 
-        h2, h3 {
-            text-align: left;
-        }
+    body {
+      margin: 1cm;
+      font-family: Arial, sans-serif;
+    }
 
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-top: 20px;
-        }
+    h2,
+    h3 {
+      text-align: left;
+    }
 
-        th, td {
-            padding: 8px;
-            text-align: center;
-            font-size: 10px;
-        }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+      overflow: auto; /* Tambahkan overflow untuk menangani scrollbar jika tabel melebihi ukuran kertas */
+    }
 
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
+    th,
+    td {
+      padding: 8px;
+      text-align: center;
+      font-size: 10px;
+      border: 1px solid black; /* Tambahkan garis batas pada sel tabel */
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
 </head>
 
 <!-- Set "A5", "A4" or "A3" for class name -->
 <!-- Set also "landscape" if you need -->
 <body class="A4 landscape">
-
-<!-- Each sheet element should have the class "sheet" -->
-<!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
 <section class="sheet padding-10mm">
         <table width="100%">
             <tr>
@@ -125,5 +130,4 @@
 </table>
 </section>
 </body>
-
 </html>
