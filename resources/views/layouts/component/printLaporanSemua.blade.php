@@ -13,15 +13,10 @@
 
 <!-- Set page size here: A5, A4 or A3 -->
 <!-- Set also "landscape" if you need -->
+<style>@page { size: A4 }</style>
     <style>
-        @page {
-            size: A4;
-            margin: 0; /* Set margin to zero */
-        }
-
         body {
             font-family: Arial, sans-serif;
-            margin: 20px; /* Add margin to body */
         }
 
         h2, h3 {
@@ -37,20 +32,11 @@
         th, td {
             padding: 8px;
             text-align: center;
-            font-size: 10px; /* Sesuaikan ukuran font sesuai kebutuhan */
+            font-size: 10px;
         }
 
         th {
             background-color: #f2f2f2;
-        }
-
-        @media print {
-            section.sheet {
-                page-break-inside: avoid;
-            }
-            body {
-                page-break-before: always;
-            }
         }
     </style>
 </head>
@@ -92,7 +78,7 @@
             <b style="font-size:20pt !important;">Laporan Bulanan</b>
         </div>
 <h3>Periode : {{ \Carbon\Carbon::create()->month($bulan)->format('F') }} {{ $tahun }}</h3>
-
+<div id="content">
 <table style="border: 1px solid black;">
     <thead>
         <tr>
@@ -138,8 +124,31 @@
         @endforeach
     </tbody>
 
-</table></section>
+</table>
+</div>
+</section>
+<script>
+// Fungsi untuk memeriksa apakah halaman A4 sudah penuh
+function checkPageOverflow() {
+    const content = document.getElementById('content');
+    const lastPage = content.lastChild;
+    const lastPageBottom = lastPage.offsetTop + lastPage.offsetHeight;
 
+    if (lastPageBottom >= 29.7 * 37.8) { // 29.7 cm x 37.8 cm adalah ukuran kertas A4
+    createNewPage();
+    }
+}
+
+// Fungsi untuk membuat halaman baru
+function createNewPage() {
+    const newPage = document.createElement('div');
+    newPage.style.pageBreakBefore = 'always';
+    document.getElementById('content').appendChild(newPage);
+}
+
+// Panggil fungsi checkPageOverflow setiap kali konten diubah
+document.getElementById('content').addEventListener('input', checkPageOverflow);
+</script>
 </body>
 
 </html>
