@@ -4,15 +4,11 @@
 <head>
 <meta charset="utf-8">
 <title>Rekap Absensi Bulanan</title>
-
-
-
-<!-- Set page size here: A5, A4 or A3 -->
-<!-- Set also "landscape" if you need -->
-<style></style>
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
         h2, h3 {
@@ -29,11 +25,24 @@
             padding: 8px;
             text-align: center;
             font-size: 10px;
+            border: 1px solid black;
         }
 
         th {
             background-color: #f2f2f2;
         }
+
+        /* Set A4 size */
+        @page {
+            size: A4;
+            margin: 20mm;
+        }
+
+        /* Set landscape orientation if needed */
+        /* @page {
+            size: A4 landscape;
+            margin: 20mm;
+        } */
     </style>
 </head>
 
