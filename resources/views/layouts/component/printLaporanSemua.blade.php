@@ -13,32 +13,28 @@
 
 <!-- Set page size here: A5, A4 or A3 -->
 <!-- Set also "landscape" if you need -->
-<style>@page { size: A4 }</style>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
+<style>
+@page {
+    size: A4;
+    margin: 1cm;
+}
 
-        h2, h3 {
-            text-align: left;
-        }
+body {
+    font-family: Arial, sans-serif;
+}
 
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-top: 20px;
-        }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
 
-        th, td {
-            padding: 8px;
-            text-align: center;
-            font-size: 10px;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+</style>
 </head>
 
 <!-- Set "A5", "A4" or "A3" for class name -->
