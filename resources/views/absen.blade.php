@@ -59,11 +59,22 @@
                         <div class="row mt-3">
                             <div class="col">
                                 @if($cek > 0)
-                                    <button id="ambilFoto" class="btn btn-danger btn-block">
-                                    <i class="fa-solid fa-camera-retro"></i> Absen Pulang</button>
+                                    @if($jam > Auth::user()->jam_pulang)
+                                        <button id="ambilFoto" class="btn btn-danger btn-block">
+                                            <i class="fa-solid fa-camera-retro"></i> Absen Pulang
+                                            <span id="countdown"></span>
+                                        </button>
+                                    @else
+                                        @if($jam < Auth::user()->jam_pulang)
+                                            <button id="tombolpulang" class="btn btn-danger btn-block disabled">
+                                                <i class="fa-solid fa-camera-retro"></i> Absen Pulang
+                                            </button>
+                                        @endif
+                                    @endif
                                 @else
                                     <button id="ambilFoto" class="btn btn-primary btn-block">
-                                    <i class="fa-solid fa-camera-retro"></i> Absen Masuk</button>
+                                        <i class="fa-solid fa-camera-retro"></i> Absen Masuk
+                                    </button>
                                 @endif
                             </div>
                         </div>
@@ -169,5 +180,14 @@
             }
         });
     })
+</script>
+<script>
+$("#tombolpulang").click(function() {
+    var Toast = Swal.fire({
+        title: "Opss..!!!",
+        text: "Maaf Belum Waktunya Pulang ya...!!!",
+        icon: "error"
+    });
+});
 </script>
 @endsection

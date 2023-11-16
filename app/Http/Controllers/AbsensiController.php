@@ -23,13 +23,15 @@ class AbsensiController extends Controller
             $id = Auth::user()->id;
             $cek = DB::table('absensi')->where('tanggal_absen', $hariIni)->where('id_user', $id)->count();
             $setting = Setting::first();
-            return view('absen', compact('cek', 'setting', 'hariIni'));
+            $jam = date("H:i:s");
+            return view('absen', compact('cek', 'setting', 'hariIni', 'jam'));
         } else {
             $hariIni = date("Y-m-d");
             $id = Auth::user()->id;
             $cek = DB::table('absensi')->where('tanggal_absen', $hariIni)->where('id_user', $id)->count();
             $setting = Setting::first();
-            return view('absen_mobile', compact('cek', 'setting', 'hariIni'));
+            $jam = date("H:i:s");
+            return view('absen_mobile', compact('cek', 'setting', 'hariIni', 'jam'));
         }
     }
 

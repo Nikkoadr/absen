@@ -28,30 +28,39 @@
     <div id="appCapsule">
         <div class="section full mt-2">
             <div class="section-title">
-                Kamera Absensi
+                <span>Menu Absensi</span>
             </div>
             <div class="wide-block pt-2 pb-2">
-                <div class="card-body mb-5">
-                    <input type="hidden" id="lokasi">
-                    <div class="row">
-                        <div class="col">
-                            <p><b>Lokasi Anda Saat Ini : </b></p>
-                            <div id="map">
-                            </div>
-                        </div>
-                    </div>
+                    <h5 class="text-center mb-3">Kamera Anda</h5>
                     <div class="kamera">
                     </div>
                     <div class="row mt-2">
                         <div class="col">
                             @if($cek > 0)
-                                <button id="ambilFoto" class="btn btn-danger btn-block">
-                                <i class="fa-solid fa-camera-retro"></i> Absen Pulang</button>
+                                @if($jam > Auth::user()->jam_pulang)
+                                    <button id="ambilFoto" class="btn btn-danger btn-block">
+                                        <i class="fa-solid fa-camera-retro"></i> Absen Pulang
+                                    </button>
                                 @else
+                                    @if($jam < Auth::user()->jam_pulang)
+                                        <button id="tombolpulang" class="btn btn-danger btn-block disabled">
+                                            <i class="fa-solid fa-camera-retro"></i> Absen Pulang
+                                        </button>
+                                    @endif
+                                @endif
+                            @else
                                 <button id="ambilFoto" class="btn btn-primary btn-block">
-                                <i class="fa-solid fa-camera-retro"></i> Absen Masuk</button>
+                                    <i class="fa-solid fa-camera-retro"></i> Absen Masuk
+                                </button>
                             @endif
-                            
+                        </div>
+                    </div>
+                <div class="card-body mb-5">
+                    <input type="hidden" id="lokasi">
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="text-center mb-3">Lokasi Anda</h5>
+                            <div id="map"></div>
                         </div>
                     </div>
                 </div>
@@ -122,7 +131,7 @@
                 } else {
                         var Toast = Swal.fire({
                             title: "Opss..!!!",
-                            text: "Hubungi Developer",
+                            text: status[1],
                             icon: "error"
                             });
                 }
@@ -130,6 +139,15 @@
             }
         });
     })
+</script>
+<script>
+$("#tombolpulang").click(function() {
+    var Toast = Swal.fire({
+        title: "Opss..!!!",
+        text: "Maaf Belum Waktunya Pulang ya...!!!",
+        icon: "error"
+    });
+});
 </script>
 @endsection
 </body>
