@@ -109,7 +109,7 @@
                             list($jamMasuk, $jamKeluar) = explode('-', $data->{'tgl_'.$hari});
                         @endphp
                         @if($jamMasuk > $data->jam_kerja)
-                            T
+                            <span style="color: red"></span>T
                             @else
                             H
                         @endif
