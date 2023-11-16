@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('jabatan')->nullable();
             $table->time('jam_kerja')->nullable();
+            $table->time('jam_pulang')->nullable();
             $table->string('pasfoto')->nullable();
             $table->rememberToken();
             $table->timestamps();

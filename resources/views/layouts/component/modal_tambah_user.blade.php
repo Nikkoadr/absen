@@ -122,6 +122,17 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="row mb-3">
+                            <label for="jam_pulang" class="col-sm-5 col-form-label text-md-end">Jam Pulang</label>
+                            <div class="col-sm-7">
+                                <input id="jam_pulang" type="time" class="form-control @error('jam_pulang') is-invalid @enderror" name="jam_pulang" value="{{ old('jam_pulang') }}" required autocomplete="jam_pulang" autofocus>
+                                @error('jam_pulang')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
                                 <button style="float: right;" type="submit" class="btn btn-primary">
                                     Tambah
                                 </button>

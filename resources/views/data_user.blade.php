@@ -68,6 +68,7 @@
                         <th>Email</th>
                         <th>Jabatan</th>
                         <th>Jam Kerja</th>
+                        <th>Jam Pulang</th>
                         <th data-orderable="false">Menu</th>
                     </tr>
                 </thead>
@@ -84,6 +85,7 @@
                         <td>{{ $data->email }}</td>
                         <td>{{ $data->jabatan }}</td>
                         <td>{{ $data->jam_kerja }}</td>
+                        <td>{{ $data->jam_pulang }}</td>
                         <td width="10%" style="text-align: center">
                             <div style=style="display: inline;">
                                 <button type="button" class="btn btn-info m-1" data-toggle="modal" data-target="#modalEditUserId{{ $data->id }}"><i class="fa-regular fa-pen-to-square"></i></button>
