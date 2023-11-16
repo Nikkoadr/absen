@@ -13,7 +13,32 @@
 
 <!-- Set page size here: A5, A4 or A3 -->
 <!-- Set also "landscape" if you need -->
+<style>@page { size: A4 }</style>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
 
+        h2, h3 {
+            text-align: left;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+            font-size: 10px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 
 <!-- Set "A5", "A4" or "A3" for class name -->
