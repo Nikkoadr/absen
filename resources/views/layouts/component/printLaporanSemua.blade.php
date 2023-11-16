@@ -62,7 +62,7 @@
                     <b style="color:#007bff;font-size:17pt !important;">SMK MUHAMMADIYAH KANDANGHAUR</b><br>
                     <b style="color:#007bff;;font-size:17pt !important;">SMK PUSAT KEUNGGULAN (PK)</b><br>
                     <b>Terakreditasi "A" (Unggul)</b><br>
-                    <b>Nomor : 02.00/375/BAP-SM/XI/2008</b>
+                    <b>Nomor : 18572022/BAN-SM/SK/2022</b>
                 </td>
                 <td width="100px" align="center" valign="middle">
                     <img src="{{asset('assets/dist/img/logo.png')}}" width="80%">
@@ -71,7 +71,7 @@
             <tr>
                 <td colspan="3" align="center">
                     {{-- <small style="font-size:8pt !important;">Program Keahlian : Teknik Kendaraan Ringan Otomotif(TKRO),Teknik Dan Bisnis Sepeda Motor(TBSM), Teknik Pengelasan dan Fabrikasi Logam(TPFL), Teknik Elektronika(TE), Teknik Jaringan Komputer dan Telekomunikasi(TJKT), Teknologi Farmasi(TF)</small><br> --}}
-                    <small style="font-size:8pt !important;">Jl. Raya Karanganyar No. 28/A Kec. Kandanghaur Kab. Indramayu 45254 Telp. (0234) 507239, email : smkmuhkandanghaur@gmail.com website : smkmuhkandanghaur.sch.id</small>
+                    <small style="font-size:8pt !important;">Jl. Raya Karanganyar No. 28/A Kec. Kandanghaur Kab. Indramayu 45254 Telp. (0234) 507239, email : smkmuhkdh@gmail.com website : https://www.smkmuhkandanghaur.sch.id</small>
                 </td>
             </tr>
         </table>
