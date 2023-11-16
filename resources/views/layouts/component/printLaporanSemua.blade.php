@@ -108,7 +108,7 @@
                             // Pemisahan jam masuk dan jam keluar
                             list($jamMasuk, $jamKeluar) = explode('-', $data->{'tgl_'.$hari});
                         @endphp
-                        @if($jamMasuk > "07:01")
+                        @if($jamMasuk > $data->jam_kerja)
                             T
                             @else
                             H

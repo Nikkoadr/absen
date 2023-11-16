@@ -55,7 +55,7 @@
                         <div class="in">
                             <div>{{ Illuminate\Support\Carbon::parse($data->tanggal_absen)->format('d-M-Y'); }}</div>
                             <span class="badge 
-                            @if($data->jam_masuk > "07:00")
+                            @if($data->jam_masuk > $set_jam_kerja)
                                 badge-warning
                                 @else
                                 badge-success

@@ -31,6 +31,7 @@ class LaporanController extends Controller
             ->where('id', $id)
             ->first();
         $rekap = DB::table('absensi')
+            ->join('users', 'absensi.id_user', '=', 'users.id')
             ->where('id_user', $user->id)
             ->whereMonth('tanggal_absen', $bulan)
             ->whereYear('tanggal_absen', $tahun)
@@ -52,15 +53,15 @@ class LaporanController extends Controller
 
         $selectStatements = [];
         for ($hari = 1; $hari <= 31; $hari++) {
-            $selectStatements[] = "MAX(IF(DAY(tanggal_absen) = $hari, CONCAT(jam_masuk, '-', IFNULL(jam_keluar, '00:00:00')), '')) as tgl_$hari";
+            $selectStatements[] = "MAX(CASE WHEN DAY(tanggal_absen) = $hari THEN CONCAT(jam_masuk, '-', IFNULL(jam_keluar, '00:00:00')) ELSE '' END) as tgl_$hari";
         }
 
         $rekap = DB::table('absensi')
-            ->selectRaw('absensi.id_user, nama, ' . implode(', ', $selectStatements))
-            ->join('users', 'absensi.id_user', '=', 'users.id')
+            ->selectRaw('absensi.id_user, users.jam_kerja, nama, ' . implode(', ', $selectStatements))
+            ->leftJoin('users', 'absensi.id_user', '=', 'users.id')
             ->whereMonth('tanggal_absen', $bulan)
             ->whereYear('tanggal_absen', $tahun)
-            ->groupByRaw('absensi.id_user, nama')
+            ->groupByRaw('absensi.id_user, users.jam_kerja, nama')
             ->orderBy('nama')
             ->get();
 

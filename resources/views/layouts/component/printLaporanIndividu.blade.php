@@ -173,7 +173,7 @@
                 <td align="center" width="250px">{{ Carbon::parse($data->tanggal_absen ?? $bulan . '-01')->format('d F Y') }}</td>
                 <td align="center" width="250px"><img style="width: 60px" src="{{ asset('storage/absen_file/'. $data->foto_masuk) }}" alt="fotoMasuk"></td>
                 <td align="center" width="250px">
-                    <span @if($data->jam_masuk > "07:01")
+                    <span @if($data->jam_masuk > $data->jam_kerja)
                         style="background: yellow"
                         @else
                         style="background: #00FF00"
@@ -200,8 +200,8 @@
                     @endif
                 </td>
                 <td align="center" width="250px">
-                    @if($data->jam_masuk > "07:00")
-                    Terlambat {{ selisih($data->jam_masuk, "07:00:00") }}
+                    @if($data->jam_masuk > $data->jam_kerja)
+                    Terlambat {{ selisih($data->jam_masuk, $data->jam_kerja) }}
                     @else
                     Tepat Waktu
                     @endif

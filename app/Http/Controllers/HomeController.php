@@ -33,6 +33,7 @@ class HomeController extends Controller
             ->where('tanggal_absen', $hariIni)->first();
         $bulanIni = date("m");
         $tahunIni = date("Y");
+        $set_jam_kerja = Auth::user()->jam_kerja;
         $historyBulanIni = DB::table('absensi')
             ->where('id_user', $userAktif)
             ->whereMonth('tanggal_absen', $bulanIni)
@@ -41,7 +42,7 @@ class HomeController extends Controller
             ->get();
 
         $rekapAbsensi = DB::table('absensi')
-            ->selectRaw('COUNT(id_user) as jumlahHadir, SUM(IF(jam_masuk > "07:00",1,0)) as jumlahTerlambat')
+            ->selectRaw('COUNT(id_user) as jumlahHadir, SUM(IF(jam_masuk > ?,1,0)) as jumlahTerlambat', [$set_jam_kerja])
             ->where('id_user', $userAktif)
             ->whereMonth('tanggal_absen', $bulanIni)
             ->whereYear('tanggal_absen', $tahunIni)
@@ -59,19 +60,25 @@ class HomeController extends Controller
             ->orderBy('jam_masuk')
             ->get();
 
+        $leaderboard_mobile = DB::table('absensi')
+            ->join('users', 'absensi.id_user',  '=', 'users.id')
+            ->where('tanggal_absen', $hariIni)
+            ->orderBy('jam_masuk')
+            ->take(10)
+            ->get();
+
         $hitungAlfa = DB::table('users')
             ->leftJoin('absensi', 'users.id', '=', 'absensi.id_user')
             ->whereNull('absensi.id')
             ->count();
         $hitungMasukHariIni = $leaderboard->count();
         $hitungUser = User::count();
-
         $namaBulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
         if (Auth::user()->role === 'admin') {
-            return view('home', compact('absenHariIni', 'historyBulanIni', 'bulanIni', 'tahunIni', 'namaBulan', 'rekapAbsensi', 'leaderboard', 'hitungUser', 'hitungMasukHariIni', 'hitungPulang', 'hitungAlfa'));
+            return view('home', compact('absenHariIni', 'historyBulanIni', 'bulanIni', 'tahunIni', 'namaBulan', 'leaderboard', 'hitungUser', 'hitungMasukHariIni', 'hitungPulang', 'hitungAlfa'));
         } else {
-            return view('home_mobile', compact('absenHariIni', 'historyBulanIni', 'bulanIni', 'tahunIni', 'namaBulan', 'rekapAbsensi', 'leaderboard'));
+            return view('home_mobile', compact('absenHariIni', 'historyBulanIni', 'bulanIni', 'tahunIni', 'namaBulan', 'rekapAbsensi', 'leaderboard_mobile', 'set_jam_kerja'));
         }
     }
     // public function getDataLeaderboard()

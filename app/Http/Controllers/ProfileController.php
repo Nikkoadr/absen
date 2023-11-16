@@ -76,12 +76,13 @@ class ProfileController extends Controller
         $userAktif = Auth::user()->id;
         $bulan = $request->input('bulan', now()->month);
         $tahun = $request->input('tahun', now()->year);
+        $set_jam_kerja = Auth::user()->jam_kerja;
         $history = DB::table('absensi')
             ->where('id_user', $userAktif)
             ->whereRaw('MONTH(tanggal_absen)="' . $bulan . '"')
             ->whereRaw('YEAR(tanggal_absen)="' . $tahun . '"')
             ->orderBy('tanggal_absen')
             ->get();
-        return view('history_mobile', compact('history', 'bulan', 'tahun'));
+        return view('history_mobile', compact('history', 'bulan', 'tahun', 'set_jam_kerja'));
     }
 }

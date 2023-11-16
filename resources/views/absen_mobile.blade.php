@@ -113,28 +113,18 @@
             success: function(respond){
                 var status = respond.split("|");
                 if(status[0]=="sukses"){
-                        var Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 3000
-                        });
-                            Toast.fire({
-                            icon: 'success',
-                            title: status[1]
-                            })
+                        var Toast = Swal.fire({
+                            title: "Terimakasih",
+                            text: status[1],
+                            icon: "success"
+                            });
                             setTimeout("location.href='/home'", 3000);
                 } else {
-                        var Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 3000
-                        });
-                            Toast.fire({
-                            icon: 'error',
-                            title: status[1]
-                            })
+                        var Toast = Swal.fire({
+                            title: "Opss..!!!",
+                            text: "Hubungi Developer",
+                            icon: "error"
+                            });
                 }
 
             }

@@ -120,7 +120,7 @@
                                 <td>{{ $data->nama }}</td>
                                 <td><img style="width: 15%" src="{{ asset('storage/absen_file/'. $data->foto_masuk) }}" alt="image" class="image" /></td>
                                 <td><span class="badge 
-                                        @if($data->jam_masuk > "07:00") badge-warning @else badge-success @endif ">{{ $data->jam_masuk }}</span></td>
+                                        @if($data->jam_masuk > $data->jam_kerja) badge-warning @else badge-success @endif ">{{ $data->jam_masuk }}</span></td>
                                     <td>@if ($data->foto_keluar == null)
                                         <small>Belum Pulang</small>
                                     @else

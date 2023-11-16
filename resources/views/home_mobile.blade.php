@@ -187,7 +187,7 @@
                                         <div class="in">
                                             <div>{{ Illuminate\Support\Carbon::parse($data->tanggal_absen)->format('d-M-Y'); }}</div>
                                             <span class="badge 
-                                            @if($data->jam_masuk > "07:00")
+                                            @if($data->jam_masuk > $set_jam_kerja)
                                                 badge-warning
                                                 @else
                                                 badge-success
@@ -207,10 +207,14 @@
                     </div>
                     <div class="tab-pane fade" id="profile" role="tabpanel">
                         <ul class="listview image-listview">
-                            @foreach ( $leaderboard as $data)
+                            @foreach ( $leaderboard_mobile as $data)
                             <li>
                                 <div class="item">
+                                    @if($data->pasfoto == null)
                                     <img src="assets/mobile/img/sample/avatar/avatar1.jpg" alt="image" class="image" />
+                                    @else
+                                    <img src="{{ asset('storage/absen_file/pasFotoAbsen/'. $data->pasfoto) }}" alt="image" class="image" />
+                                    @endif
                                     <div class="in">
                                         <div><b>{{ $data->nama }}</b><br>
                                             <small class="text-muted">{{ $data->jabatan }}</small>

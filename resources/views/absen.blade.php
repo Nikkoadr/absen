@@ -17,7 +17,7 @@
 </style>
 <style>
     #map {
-        height: 180px;
+        height: 620px;
         }
 </style>
 @endsection
