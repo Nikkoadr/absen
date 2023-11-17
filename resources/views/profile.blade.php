@@ -196,7 +196,7 @@
 
                 <div class="tab-pane" id="dokumen">
                 <div class="row">
-                    <div class="col-md-3 mt-2">
+                    <div class="col-md-6 mt-2">
                     <div class="card h-100">
                         <div class="card-header">Pas Foto</div>
                         <div class="card-body">
