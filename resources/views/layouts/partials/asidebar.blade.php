@@ -10,7 +10,12 @@
     <!-- Sidebar user panel (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
     <div class="image">
+        @if(Auth::user()->pasfoto == null)
         <img src="{{ asset('assets/dist/img/defaultpp.jpg') }}" class="img-circle elevation-2" alt="garmbar user">
+        @else
+        <img src="{{ asset('storage/absen_file/pasFotoAbsen/'. Auth::user()->pasfoto) }}" class="img-circle elevation-2" alt="garmbar user">
+        @endif
+        
     </div>
     <div class="info">
         <a href="/profile" class="d-block">{{ Auth::user()->nama }}</a>

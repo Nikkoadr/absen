@@ -106,7 +106,6 @@
                                     @csrf
                                     @method('put')
                                     <div class="col">
-
                                         <div class="row mb-3">
                                             <label for="email" class="col-sm-3 col-form-label text-md-end">Password : </label>
                                             <div class="col-sm-9">
