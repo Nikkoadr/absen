@@ -122,8 +122,8 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ( $historyBulanIni as $data )
                             <tr>
-                                @foreach ( $historyBulanIni as $data )
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ Illuminate\Support\Carbon::parse($data->tanggal_absen)->format('d-M-Y'); }}</td>
                                 <td><img style="width: 60px" src="{{ asset('storage/absen_file/'. $data->foto_masuk) }}"></td>
@@ -146,8 +146,8 @@
                                     </span>
                                 </td>
                                     @endif
-                                @endforeach
                             </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
