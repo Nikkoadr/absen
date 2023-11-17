@@ -36,7 +36,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-            <form method="POST" action="/printLaporanSemua" target="_blank">
+            <form method="POST" action="/printLaporanBulanan" target="_blank">
                         @csrf
                         @method('put')
                         <div class="row">
