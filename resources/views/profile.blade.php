@@ -93,74 +93,74 @@
             </div><!-- /.card-header -->
             <div class="card-body">
             <div class="tab-content">
-                <div class="active tab-pane" id="data_diri">
+                <div class="tab-pane active" id="data_diri">
                     <form action="edit/profile_id{{ Auth::user()->id }}" method="POST">
-                                    @csrf
-                                    @method('put')
-                                    <div class="col">
-                                        <div class="row mb-3">
-                                            <label for="nik" class="col-sm-3 col-form-label text-md-end">NIK : </label>
-                                            <div class="col-sm-9">
-                                                <input id="nik" type="number" class="form-control @error('nik') is-invalid @enderror" name="nik" value="{{ Auth::user()->nik }}" autocomplete="nik" autofocus>
-                                                @error('nik')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <label for="nuptk" class="col-sm-3 col-form-label text-md-end">NUPTK : </label>
-                                            <div class="col-sm-9">
-                                                <input id="nuptk" type="number" class="form-control @error('nuptk') is-invalid @enderror" name="nuptk" value="{{ Auth::user()->nuptk }}" autocomplete="nuptk" autofocus>
-                                                @error('nuptk')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <label for="nbm" class="col-sm-3 col-form-label text-md-end">NBM : </label>
-                                            <div class="col-sm-9">
-                                                <input id="nbm" type="number" class="form-control @error('nbm') is-invalid @enderror" name="nbm" value="{{ Auth::user()->nbm }}" autocomplete="nbm" autofocus>
-                                                @error('nbm')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <label for="nama" class="col-sm-3 col-form-label text-md-end">Nama <span style="color: red">*</span> : </label>
-                                            <div class="col-sm-9">
-                                                <input id="nama" type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" value="{{ Auth::user()->nama }}" autocomplete="nama" autofocus>
-                                                @error('nama')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <label for="email" class="col-sm-3 col-form-label text-md-end">E-mail <span style="color: red">*</span> : </label>
-                                            <div class="col-sm-9">
-                                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ Auth::user()->email }}" autocomplete="email">
-                                                @error('email')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary float-right">
-                                            Update
-                                        </button>
+                        @csrf
+                        @method('put')
+                        <div class="col">
+                            <div class="row mb-3">
+                                <label for="nik" class="col-sm-3 col-form-label text-md-end">NIK : </label>
+                                <div class="col-sm-9">
+                                    <input id="nik" type="number" class="form-control @error('nik') is-invalid @enderror" name="nik" value="{{ Auth::user()->nik }}" autocomplete="nik" autofocus>
+                                    @error('nik')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="nuptk" class="col-sm-3 col-form-label text-md-end">NUPTK : </label>
+                                <div class="col-sm-9">
+                                    <input id="nuptk" type="number" class="form-control @error('nuptk') is-invalid @enderror" name="nuptk" value="{{ Auth::user()->nuptk }}" autocomplete="nuptk" autofocus>
+                                    @error('nuptk')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="nbm" class="col-sm-3 col-form-label text-md-end">NBM : </label>
+                                <div class="col-sm-9">
+                                    <input id="nbm" type="number" class="form-control @error('nbm') is-invalid @enderror" name="nbm" value="{{ Auth::user()->nbm }}" autocomplete="nbm" autofocus>
+                                    @error('nbm')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="nama" class="col-sm-3 col-form-label text-md-end">Nama <span style="color: red">*</span> : </label>
+                                <div class="col-sm-9">
+                                    <input id="nama" type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" value="{{ Auth::user()->nama }}" autocomplete="nama" autofocus>
+                                    @error('nama')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="email" class="col-sm-3 col-form-label text-md-end">E-mail <span style="color: red">*</span> : </label>
+                                <div class="col-sm-9">
+                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ Auth::user()->email }}" autocomplete="email">
+                                    @error('email')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary float-right">
+                                Update
+                            </button>
                         </div>
                     </form>
                 </div>
-                
-                <div class="active tab-pane" id="password">
+
+                <div class="tab-pane" id="password">
                     <form action="edit/password_user_id{{ Auth::user()->id }}" method="POST">
                         @csrf
                         @method('put')
@@ -193,7 +193,7 @@
                         </div>
                     </form>
                 </div>
-                
+
                 <div class="tab-pane" id="dokumen">
                 <div class="row">
                     <div class="col-md-3 mt-2">

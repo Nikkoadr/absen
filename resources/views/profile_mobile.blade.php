@@ -131,7 +131,6 @@
                                             <div class="form-group boxed">
                                                 <div class="input-wrapper">
                                                     <button type="submit" class="btn btn-primary btn-block">
-                                                        <ion-icon name="refresh-outline"></ion-icon>
                                                         Update
                                                     </button>
                                                 </div>
