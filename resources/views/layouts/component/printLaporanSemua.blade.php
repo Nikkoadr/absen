@@ -34,25 +34,25 @@
 <body>
 <section>
     <div class="page-landscape">
-        <table width="100%">
+        <table>
             <tr>
-                <td width="100px" align="center" valign="middle">
+                <td style="padding: 1px" width="100px" align="center" valign="middle">
                     <img src="{{asset('assets/dist/img/dikdasmenmuh.png')}}" width="100%">
                 </td>
-                <td align="center" valign="middle">
-                    <b style="color:#007bff;font-size:15pt !important;">MAJELIS PENDIDIKAN DASAR DAN MENENGAH</b><br>
-                    <b style="color:#007bff;font-size:15pt !important;">PIMPINAN WILAYAH MUHAMMADIYAH JAWA BARAT</b><br>
-                    <b style="color:#007bff;font-size:17pt !important;">SMK MUHAMMADIYAH KANDANGHAUR</b><br>
-                    <b style="color:#007bff;;font-size:17pt !important;">SMK PUSAT KEUNGGULAN (PK)</b><br>
+                <td style="padding: 1px" align="center" valign="middle">
+                    <b style="color:#007bff;font-size:13pt !important;">MAJELIS PENDIDIKAN DASAR DAN MENENGAH</b><br>
+                    <b style="color:#007bff;font-size:13pt !important;">PIMPINAN WILAYAH MUHAMMADIYAH JAWA BARAT</b><br>
+                    <b style="color:#007bff;font-size:15pt !important;">SMK MUHAMMADIYAH KANDANGHAUR</b><br>
+                    <b style="color:#007bff;;font-size:15pt !important;">SMK PUSAT KEUNGGULAN (PK)</b><br>
                     <b>Terakreditasi "A" (Unggul)</b><br>
                     <b>Nomor : 18572022/BAN-SM/SK/2022</b>
                 </td>
-                <td width="100px" align="center" valign="middle">
-                    <img src="{{asset('assets/dist/img/logo.png')}}" width="80%">
+                <td style="padding: 1px" width="100px" align="center" valign="middle">
+                    <img src="{{asset('assets/dist/img/logo.png')}}" width="70%">
                 </td>
             </tr>
             <tr>
-                <td colspan="3" align="center">
+                <td style="padding: 1px" colspan="3" align="center">
                     <small style="font-size:8pt !important;">Program Keahlian : Teknik Kendaraan Ringan Otomotif(TKRO),Teknik Dan Bisnis Sepeda Motor(TBSM), Teknik Pengelasan dan Fabrikasi Logam(TPFL), Teknik Elektronika(TE), Teknik Jaringan Komputer dan Telekomunikasi(TJKT), Teknologi Farmasi(TF)</small><br>
                     <small style="font-size:8pt !important;">Jl. Raya Karanganyar No. 28/A Kec. Kandanghaur Kab. Indramayu 45254 Telp. (0234) 507239, email : smkmuhkdh@gmail.com website : https://www.smkmuhkandanghaur.sch.id</small>
                 </td>
