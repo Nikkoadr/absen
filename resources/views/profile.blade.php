@@ -35,12 +35,10 @@
             <div class="text-center">
                 @if (Auth::user()->pasfoto)
                 <img class="profile-user-img img-fluid"
-                    src="{{ asset('storage/absen_file/pasFotoAbsen/'. Auth::user()->pasfoto) }}"
-                    alt="User profile picture">
+                    src="{{ asset('storage/absen_file/pasFotoAbsen/'. Auth::user()->pasfoto) }}" alt="User profile picture">
                 @else
                 <img class="profile-user-img img-fluid img-circle"
-                    src="{{ asset('assets/dist/img/defaultpp.jpg') }}"
-                    alt="User profile picture">
+                    src="{{ asset('assets/dist/img/defaultpp.jpg') }}" alt="User profile picture">
                 @endif
             </div>
             <h3 class="profile-username text-center">{{ Auth::user()->nama }}</h3>
@@ -56,33 +54,30 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-            <strong><i class="fa-solid fa-image mr-1"></i></i>Foto Masuk :</strong>
+            <strong><i class="fa-solid fa-image mr-1"></i></i>Foto Masuk : 
             @if ($absenHariIni != null )
                 <img style="width: 60px" src="{{ asset('storage/absen_file/'. $absenHariIni->foto_masuk) }}">
             @else
                 <p class="text-muted">
-                    Belum Ada Foto Pulang
+                    Belum Ada Foto
                 </p>
-            @endif
+            @endif</strong>
             <hr>
-            <strong><i class="fa-solid fa-clock mr-1"></i></i>Jam Masuk</strong>
+            <strong><i class="fa-solid fa-clock mr-1"></i></i>Jam Masuk : {{ $absenHariIni != null ? $absenHariIni->jam_masuk : '00:00:00' }}</strong>
             <p class="text-muted">
-                {{ $absenHariIni != null ? $absenHariIni->jam_masuk : '00:00:00' }}
+                
             </p>
             <hr>
-            <strong><i class="fa-solid fa-image mr-1"></i></i> Foto Pulang :</strong>
+            <strong><i class="fa-solid fa-image mr-1"></i></i> Foto Pulang :
             @if ($absenHariIni != null && $absenHariIni->jam_keluar != null)
                 <img style="width: 60px" src="{{ asset('storage/absen_file/'. $absenHariIni->foto_keluar) }}">
             @else
                 <p class="text-muted">
                     Belum Ada Foto Pulang
                 </p>
-            @endif
+            @endif</strong>
             <hr>
-            <strong><i class="fa-solid fa-clock mr-1"></i></i> Jam Pulang</strong>
-            <p class="text-muted">
-                {{ $absenHariIni != null && $absenHariIni->jam_keluar != null ? $absenHariIni->jam_keluar : '00:00:00' }}
-            </p>
+            <strong><i class="fa-solid fa-clock mr-1"></i></i> Jam Pulang : {{ $absenHariIni != null && $absenHariIni->jam_keluar != null ? $absenHariIni->jam_keluar : '00:00:00' }}</strong>
             </div>
             <!-- /.card-body -->
         </div>
@@ -135,16 +130,21 @@
                                 <td><span class="badge 
                                     @if($data->jam_masuk > Auth::user()->jam_kerja) badge-warning @else badge-success @endif ">{{ $data->jam_masuk }}</span>
                                 </td>
-                                <td>@if ($data->foto_keluar == null)
+                                <td>
+                                    @if ($data->foto_keluar == null)
                                         <small>Belum Foto Pulang</small>
                                     @else
-                                        <img style=" width: 15%" src="{{ asset('storage/absen_file/'. $data->foto_keluar) }}" alt="image" class="image" />
-                                    @endif</td>
+                                        <img style=" width: 60px" src="{{ asset('storage/absen_file/'. $data->foto_keluar) }}" alt="image" class="image" />
+                                    @endif
+                                </td>
                                 <td>
+                                    <span>
                                     @if($data->jam_keluar == null)
                                     00:00:00
                                     @else
-                                    {{ $data->jam_keluar }}</td>
+                                    {{ $data->jam_keluar }}
+                                    </span>
+                                </td>
                                     @endif
                                 @endforeach
                             </tr>
