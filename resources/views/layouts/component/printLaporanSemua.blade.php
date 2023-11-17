@@ -29,9 +29,7 @@
         th {
             background-color: #f2f2f2;
         }
-        @media print{@page {size: landscape}}
     </style>
-        <link rel="stylesheet" href="{{ asset('css/cetak.min.css') }}">
 </head>
 <body>
 <section>
