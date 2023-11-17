@@ -44,7 +44,7 @@
                 @endif
             </div>
             <h3 class="profile-username text-center">{{ Auth::user()->nama }}</h3>
-            <p class="text-muted text-center">{{ Auth::user()->email }}</p>
+            <p class="text-muted text-center">{{ Auth::user()->jabatan }}</p>
             </div>
             <!-- /.card-body -->
         </div>
@@ -56,24 +56,32 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-            <strong><i class="fa-solid fa-image mr-1"></i></i>Foto Masuk</strong>
-            <p class="text-muted">
-                {{ Auth::user()->verifikasi }}
-            </p>
+            <strong><i class="fa-solid fa-image mr-1"></i></i>Foto Masuk :</strong>
+            @if ($absenHariIni != null )
+                <img style="width: 60px" src="{{ asset('storage/absen_file/'. $absenHariIni->foto_masuk) }}">
+            @else
+                <p class="text-muted">
+                    Belum Ada Foto Pulang
+                </p>
+            @endif
             <hr>
             <strong><i class="fa-solid fa-clock mr-1"></i></i>Jam Masuk</strong>
             <p class="text-muted">
-                {{ Auth::user()->daftar_ulang }}
+                {{ $absenHariIni != null ? $absenHariIni->jam_masuk : '00:00:00' }}
             </p>
             <hr>
-            <strong><i class="fa-solid fa-image mr-1"></i></i> Foto Pulang</strong>
-            <p class="text-muted">
-                {{ Auth::user()->status_mpls }}
-            </p>
+            <strong><i class="fa-solid fa-image mr-1"></i></i> Foto Pulang :</strong>
+            @if ($absenHariIni != null && $absenHariIni->jam_keluar != null)
+                <img style="width: 60px" src="{{ asset('storage/absen_file/'. $absenHariIni->foto_keluar) }}">
+            @else
+                <p class="text-muted">
+                    Belum Ada Foto Pulang
+                </p>
+            @endif
             <hr>
             <strong><i class="fa-solid fa-clock mr-1"></i></i> Jam Pulang</strong>
             <p class="text-muted">
-                {{ Auth::user()->status_mpls }}
+                {{ $absenHariIni != null && $absenHariIni->jam_keluar != null ? $absenHariIni->jam_keluar : '00:00:00' }}
             </p>
             </div>
             <!-- /.card-body -->
@@ -85,7 +93,8 @@
         <div class="card">
             <div class="card-header p-2">
             <ul class="nav nav-pills">
-                <li class="nav-item"><a class="nav-link active" href="#data_diri" data-toggle="tab">Data diri</a></li>
+                <li class="nav-item"><a class="nav-link active" href="#historyBulanIni" data-toggle="tab">History Bulan Ini</a></li>
+                <li class="nav-item"><a class="nav-link" href="#data_diri" data-toggle="tab">Data diri</a></li>
                 <li class="nav-item"><a class="nav-link" href="#password" data-toggle="tab">Password</a></li>
                 <li class="nav-item"><a class="nav-link" href="#dokumen" data-toggle="tab">Dokumen</a></li>
                 
@@ -93,7 +102,56 @@
             </div><!-- /.card-header -->
             <div class="card-body">
             <div class="tab-content">
-                <div class="tab-pane active" id="data_diri">
+                <div class="tab-pane active" id="historyBulanIni">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    No
+                                </th>
+                                <th>
+                                    Tanggal Absen
+                                </th>
+                                <th>
+                                    Foto Masuk
+                                </th>
+                                <th>
+                                    jam Masuk
+                                </th>
+                                <th>
+                                    Foto Pulang
+                                </th>
+                                <th>
+                                    jam Pulang
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                @foreach ( $historyBulanIni as $data )
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ Illuminate\Support\Carbon::parse($data->tanggal_absen)->format('d-M-Y'); }}</td>
+                                <td><img style="width: 60px" src="{{ asset('storage/absen_file/'. $data->foto_masuk) }}"></td>
+                                <td><span class="badge 
+                                    @if($data->jam_masuk > Auth::user()->jam_kerja) badge-warning @else badge-success @endif ">{{ $data->jam_masuk }}</span>
+                                </td>
+                                <td>@if ($data->foto_keluar == null)
+                                        <small>Belum Foto Pulang</small>
+                                    @else
+                                        <img style=" width: 15%" src="{{ asset('storage/absen_file/'. $data->foto_keluar) }}" alt="image" class="image" />
+                                    @endif</td>
+                                <td>
+                                    @if($data->jam_keluar == null)
+                                    00:00:00
+                                    @else
+                                    {{ $data->jam_keluar }}</td>
+                                    @endif
+                                @endforeach
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane" id="data_diri">
                     <form action="edit/profile_id{{ Auth::user()->id }}" method="POST">
                         @csrf
                         @method('put')

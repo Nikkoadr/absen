@@ -29,7 +29,21 @@ class ProfileController extends Controller
     public function index()
     {
         if (Auth::user()->role == 'admin') {
-            return view('profile');
+            $hariIni = date("Y-m-d");
+            $userAktif = Auth::user()->id;
+            $bulanIni = date("m");
+            $tahunIni = date("Y");
+            $set_jam_kerja = Auth::user()->jam_kerja;
+            $historyBulanIni = DB::table('absensi')
+                ->where('id_user', $userAktif)
+                ->whereMonth('tanggal_absen', $bulanIni)
+                ->whereYear('tanggal_absen', $tahunIni)
+                ->orderBy('tanggal_absen')
+                ->get();
+            $absenHariIni = DB::table('absensi')
+                ->where('id_user', $userAktif)
+                ->where('tanggal_absen', $hariIni)->first();
+            return view('profile', compact('historyBulanIni', 'absenHariIni', 'set_jam_kerja'));
         } else {
             return view('profile_mobile');
         }

@@ -66,7 +66,7 @@ class HomeController extends Controller
             ->orderBy('jam_masuk')
             ->take(10)
             ->get();
-
+            
         $hitungAlfa = DB::table('users')
             ->leftJoin('absensi', 'users.id', '=', 'absensi.id_user')
             ->whereNull('absensi.id')
