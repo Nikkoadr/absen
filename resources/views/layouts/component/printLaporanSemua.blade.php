@@ -4,7 +4,8 @@
 <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<title>Rekap Absensi Bulan {{ \Carbon\Carbon::create()->month($bulan)->format('F') }}</title>
+<title>Rekap Absensi Bulan {{ \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal)->translatedFormat('d F Y') }} - {{ \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAkhir)->translatedFormat('d F Y') }}</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -28,6 +29,11 @@
 
         th {
             background-color: #f2f2f2;
+        }
+        td.saturday,
+        td.sunday {
+            background-color: red;
+            color: white;
         }
     </style>
 </head>
@@ -62,51 +68,62 @@
         <div style="text-align:center; margin:10px">
             <b style="font-size:20pt !important;">Laporan Bulanan</b>
         </div>
-<h3>Periode : {{ \Carbon\Carbon::create()->month($bulan)->format('F') }} {{ $tahun }}</h3>
+<h3>Periode : {{ \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal)->translatedFormat('d F Y') }} - {{ \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAkhir)->translatedFormat('d F Y') }}</h3>
 <table style="border: 1px solid black;">
     <thead>
-        <tr>
-            <th style="border: 1px solid black;" rowspan="2">Nama</th>
-            <th style="border: 1px solid black;" colspan="31">tanggal</th>
-            <th style="border: 1px solid black;" rowspan="2">Jumlah</th>
-        </tr>
-        <tr>
-            @for ($hari = 1; $hari <= 31; $hari++)
-                <th style="border: 1px solid black;">{{ $hari }}</th>
-            @endfor
-        </tr>
+<tr>
+    <th style="border: 1px solid black;" rowspan="2">Nama</th>
+    <th style="border: 1px solid black;" colspan="{{ \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAkhir)->diffInDays(\Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal)) + 1 }}">tanggal</th>
+    <th style="border: 1px solid black;" rowspan="2">Jumlah</th>
+</tr>
+<tr>
+    @php
+        $start = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal);
+        $end = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAkhir);
+    @endphp
+    @while ($start <= $end)
+        <th style="border: 1px solid black;">{{ $start->day }}</th>
+        @php
+            $start->addDay();
+        @endphp
+    @endwhile
+</tr>
     </thead>
     <tbody>
-        @foreach ($rekap as $data)
-            <tr>
-                <td style="border: 1px solid black;">{{ $data->nama }}</td>
-                @php
-                    $total = 0;
-                @endphp
-                @for ($hari = 1; $hari <= 31; $hari++)
-                        <td style="border: 1px solid black;">
-                    @if ($data->{'tgl_'.$hari})
+    @foreach ($rekap as $data)
+        <tr>
+            <td style="border: 1px solid black;">{{ $data->nama }}</td>
+            @php
+                $start = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal);
+                $end = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAkhir);
+                $total = 0;
+            @endphp
+            @while ($start <= $end)
+                <td style="border: 1px solid black;">
+                    @if ($data->{'tgl_'.$start->day})
                         @php
-                            list($jamMasuk, $jamKeluar) = explode('-', $data->{'tgl_'.$hari});
+                            list($jamMasuk, $jamKeluar) = explode('-', $data->{'tgl_'.$start->day});
                         @endphp
                         @if($jamMasuk > $data->jam_kerja)
                             <span style="color: red">T</span>
-                            @else
+                        @else
                             H
                         @endif
-                        {{-- <strong>Jam Masuk:</strong> {{ $jamMasuk }} <br>
-                        <strong>Jam Keluar:</strong> {{ $jamKeluar }} --}}
                         @php
-                            // Tambahkan nilai ke total jika ada data
                             $total++;
                         @endphp
+                        {{-- <strong>Jam Masuk:</strong> {{ $jamMasuk }} <br>
+                        <strong>Jam Keluar:</strong> {{ $jamKeluar }} --}}
                     @endif
-                        </td>
-                @endfor
-                <td style="border: 1px solid black;">{{ $total }}</td>
-            </tr>
-        @endforeach
-    </tbody>
+                </td>
+                @php
+                    $start->addDay();
+                @endphp
+            @endwhile
+            <td style="border: 1px solid black;">{{ $total }}</td>
+        </tr>
+    @endforeach
+</tbody>
 </table>
 </div>
 </section>

@@ -29,7 +29,7 @@ Auth::routes([
 ]);
 
 Route::get('/home',                     [HomeController::class, 'index'])->name('home');
-// Route::post('/GetDataLeaderboard',                     [HomeController::class, 'GetDataLeaderboard'])->name('GetDataLeaderboard');
+// Route::post('/GetDataLeaderboard',                     [HomeController::class, 'GetDataLeaderboard'])->name('GetDataLeaderboard'); ini untuk server side
 Route::get('/absen',                    [AbsensiController::class, 'absen'])->name('absen');
 Route::post('/absenMasuk',              [AbsensiController::class, 'absenMasuk'])->name('absenMasuk');
 
@@ -49,7 +49,7 @@ Route::get('history',                               [ProfileController::class, '
 
 Route::put('/printLaporanIndividu{id}',          [LaporanController::class, 'printLaporanIndividu'])->name('printLaporanIndividu');
 Route::get('/laporanSemua',                  [LaporanController::class, 'laporanSemua'])->name('laporanSemua');
-Route::put('/printLaporanBulanan',                  [LaporanController::class, 'printLaporanSemua'])->name('printLaporanSemua');
+Route::put('/printLaporanBulanan',                  [LaporanController::class, 'printSemuaLaporan'])->name('printSemuaLaporan');
 
 Route::get('/setting',                  [SettingContoller::class, 'setting'])->name('setting');
 Route::put('/editSetting',                  [SettingContoller::class, 'editSetting'])->name('editSetting');

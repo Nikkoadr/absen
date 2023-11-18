@@ -28,52 +28,56 @@
     <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-            <h3 class="card-title">Pilih Bulan</h3>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-            <form method="POST" action="/printLaporanBulanan" target="_blank">
-                        @csrf
-                        @method('put')
-                        <div class="row">
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label for="bulan">Bulan:</label>
-                                        <select class="form-control" id="bulan" name="bulan">
-                                            @for ($i = 1; $i <= 12; $i++)
-                                                <option value="{{ $i }}" {{ $i == $bulan ? 'selected' : '' }}>
-                                                {{ Carbon\Carbon::create()->month($i)->isoFormat('MMMM') }}
-                                                </option>
-                                            @endfor
-                                        </select>
-                                    </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Pilih Bulan ( 25 Bulan Lalu - 24 bulan Sekarang )</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <form method="POST" action="printLaporanBulanan" target="_blank">
+                            @csrf
+                            @method('put')
+                            <div class="form-row">
+                                <div class="form-group col-6">
+                                    <label for="tanggal_awal" class="col-form-label">Tanggal Awal</label>
+                                    <input id="tanggal_awal" type="date" class="form-control @error('tanggal_awal') is-invalid @enderror" name="tanggal_awal" required autofocus>
+                                    @error('tanggal_awal')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
                                 </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label for="tahun">Tahun:</label>
-                                        <input type="text" class="form-control" id="tahun" name="tahun" placeholder="Masukkan tahun" value="{{ $tahun }}" readonly>
-                                    </div>
+
+                                <div class="form-group col-6">
+                                    <label for="tanggal_akhir" class="col-form-label">Tanggal Akhir</label>
+                                    <input id="tanggal_akhir" type="date" class="form-control @error('tanggal_akhir') is-invalid @enderror" name="tanggal_akhir" required>
+                                    @error('tanggal_akhir')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
                                 </div>
-                        </div>
-                        <button style="float: right;" type="submit" class="btn btn-primary">
-                            Cetak Rekapitulasi
-                        </button>
-                    </form>
+                            </div>
+
+                            <!-- Tombol "Print Laporan" ditempatkan di bawah form-row -->
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary float-right">Print Laporan</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
             </div>
-            <!-- /.card-body -->
+            <!-- /.col -->
         </div>
-        <!-- /.card -->
-        </div>
-        <!-- /.col -->
-    </div>
-    <!-- /.row -->
+        <!-- /.row -->
     </div>
     <!-- /.container-fluid -->
 </section>
+
 <!-- /.content -->
 </div>
 @endsection
