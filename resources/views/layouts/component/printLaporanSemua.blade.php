@@ -1,3 +1,22 @@
+@php
+    function selisih($jam_masuk, $jam_batas)
+    {
+        list($h_masuk, $m_masuk, $s_masuk) = explode(":", $jam_masuk);
+        $dtAwal = mktime($h_masuk, $m_masuk, $s_masuk, 1, 1, 1);
+
+        list($h_batas, $m_batas, $s_batas) = explode(":", $jam_batas);
+        $dtBatas = mktime($h_batas, $m_batas, $s_batas, 1, 1, 1);
+
+        $dtSelisih = $dtAwal - $dtBatas;
+
+        $totalmenit = $dtSelisih / 60;
+        $jam = explode(".", $totalmenit / 60);
+        $sisamenit = ($totalmenit / 60) - $jam[0];
+        $sisamenit2 = $sisamenit * 60;
+
+        return $jam[0] . ":" . round($sisamenit2);
+    }
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -75,6 +94,7 @@
     <th style="border: 1px solid black;" rowspan="2">Nama</th>
     <th style="border: 1px solid black;" colspan="{{ \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAkhir)->diffInDays(\Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal)) + 1 }}">tanggal</th>
     <th style="border: 1px solid black;" rowspan="2">Jumlah</th>
+    <th style="border: 1px solid black;" rowspan="2">Keterangan</th>
 </tr>
 <tr>
     @php
@@ -97,12 +117,14 @@
                 $start = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal);
                 $end = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAkhir);
                 $total = 0;
+                $totalTerlambat = 0;
             @endphp
             @while ($start <= $end)
                 <td style="border: 1px solid black;">
                     @if ($data->{'tgl_'.$start->day})
                         @php
                             list($jamMasuk, $jamKeluar) = explode('-', $data->{'tgl_'.$start->day});
+                            $terlambat_harian = selisih($jamMasuk, $data->jam_kerja);
                         @endphp
                         @if($jamMasuk > $data->jam_kerja)
                             <span style="color: red">T</span>
@@ -113,7 +135,8 @@
                             $total++;
                         @endphp
                         {{-- <strong>Jam Masuk:</strong> {{ $jamMasuk }} <br>
-                        <strong>Jam Keluar:</strong> {{ $jamKeluar }} --}}
+                        <strong>Jam Keluar:</strong> {{ $jamKeluar }} <br>
+                        <strong> Terlambat : {{ $terlambat_harian }}</strong> --}}
                     @endif
                 </td>
                 @php
@@ -121,7 +144,9 @@
                 @endphp
             @endwhile
             <td style="border: 1px solid black;">{{ $total }}</td>
-        </tr>
+        <td style="border: 1px solid black;">
+            Terlambat Dalam 1 Bulan : {{ $data->total_jam_terlambat * 60}} Menit<br>
+        </td>
     @endforeach
 </tbody>
 </table>

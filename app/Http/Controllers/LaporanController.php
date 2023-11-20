@@ -71,6 +71,23 @@ class LaporanController extends Controller
             ->orderBy('nama')
             ->get();
 
+        // Hitung total jam terlambat untuk setiap pengguna
+        foreach ($rekap as $data) {
+            $totalJamTerlambat = 0;
+            for ($i = 1; $i <= 31; $i++) {
+                $key = "tgl_$i";
+                $jamMasuk = substr($data->$key, 0, 5); // Ambil bagian 'HH:mm'
+                $jamKerja = $data->jam_kerja;
+
+                // Bandingkan waktu mulai aktual dengan waktu mulai kerja yang diharapkan
+                if ($jamMasuk > $jamKerja) {
+                    $terlambat = Carbon::parse($jamMasuk)->diffInMinutes(Carbon::parse($jamKerja));
+                    $totalJamTerlambat += $terlambat / 60; // Konversi menit ke jam
+                }
+            }
+            $data->total_jam_terlambat = $totalJamTerlambat;
+        }
+
         return view('layouts.component.printLaporanSemua', compact('tanggalAwal', 'tanggalAkhir', 'rekap', 'tanggalAwal', 'tanggalAkhir'));
     }
 }
