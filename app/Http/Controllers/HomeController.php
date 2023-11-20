@@ -66,10 +66,11 @@ class HomeController extends Controller
             ->orderBy('jam_masuk')
             ->take(10)
             ->get();
-            
+
         $hitungAlfa = DB::table('users')
             ->leftJoin('absensi', 'users.id', '=', 'absensi.id_user')
             ->whereNull('absensi.id')
+            ->whereDate('absensi.tanggal_absen', '!=', now()->toDateString())
             ->count();
         $hitungMasukHariIni = $leaderboard->count();
         $hitungUser = User::count();
