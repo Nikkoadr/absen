@@ -67,15 +67,10 @@ class HomeController extends Controller
             ->take(10)
             ->get();
 
-        $hitungAlfa = DB::table('users')
-            ->leftJoin('absensi', 'users.id', '=', 'absensi.id_user')
-            ->whereNull('absensi.id')
-            ->whereDate('absensi.tanggal_absen', '!=', now()->toDateString())
-            ->count();
-        $hitungMasukHariIni = $leaderboard->count();
         $hitungUser = User::count();
+        $hitungMasukHariIni = $leaderboard->count();
+        $hitungAlfa = $hitungUser - $hitungMasukHariIni;
         $namaBulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-
         if (Auth::user()->role === 'admin') {
             return view('home', compact('absenHariIni', 'historyBulanIni', 'bulanIni', 'tahunIni', 'namaBulan', 'leaderboard', 'hitungUser', 'hitungMasukHariIni', 'hitungPulang', 'hitungAlfa'));
         } else {
