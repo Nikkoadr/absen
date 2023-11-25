@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
-use GuzzleHttp\Client;
-
 
 class AbsensiController extends Controller
 {
@@ -75,16 +73,6 @@ class AbsensiController extends Controller
                 if ($simpan) {
                     echo 'sukses|Anda Sudah Absen Pulang. Hati - hati Dijalan !|';
                     Storage::disk(env('STORAGE_DISK'))->put($nama_foto, $foto_base64);
-                    $client = new Client();
-
-                    $response = $client->post('https://wa.smkmuhkandanghaur.sch.id/send-message', [
-                        'form_params' => [
-                            'message' => 'oke',
-                            'number' => '081290020004',
-                        ],
-                    ]);
-
-                    return $response->getBody()->getContents();
                 } else {
                     echo 'error|maaf masih dalam proses pengembangan hehehe';
                 }
