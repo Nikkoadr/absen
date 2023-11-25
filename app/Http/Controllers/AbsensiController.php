@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use PHPUnit\TextUI\Configuration\Php;
 
 class AbsensiController extends Controller
 {
@@ -87,6 +88,28 @@ class AbsensiController extends Controller
                 $simpan = DB::table('absensi')->insert($data);
                 if ($simpan) {
                     echo 'sukses|Terimakasih anda sudah melakukan absen masuk';
+
+
+                    $curl = curl_init();
+
+                    curl_setopt_array(
+                        $curl,
+                        array(
+                            CURLOPT_URL => 'https://wa.smkmuhkandanghaur.sch.id/send-message',
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_ENCODING => '',
+                            CURLOPT_MAXREDIRS => 10,
+                            CURLOPT_TIMEOUT => 0,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => 'POST',
+                            CURLOPT_POSTFIELDS => array('message' => 'Tes Absensi', 'number' => '081290020004', 'file_dikirim' => '')
+                        ),
+                    );
+                    $response = curl_exec($curl);
+                    curl_close($curl);
+                    echo $response;
+
                     Storage::disk(env('STORAGE_DISK'))->put($nama_foto, $foto_base64);
                 } else {
                     echo 'error|maaf masih dalam proses pengembangan hehehe';
