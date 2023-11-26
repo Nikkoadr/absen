@@ -98,7 +98,7 @@ class AbsensiController extends Controller
                     echo 'sukses|Terimakasih anda sudah melakukan absen masuk';
                     Storage::disk(env('STORAGE_DISK'))->put($nama_foto, $foto_base64);
                     Http::withOptions(['verify' => false])->post(
-                        'https://wa.smkmuhkandanghaur.sch.id/send-message',
+                        'wa.smkmuhkandanghaur.sch.id/send-message',
                         [
                             'message' => 'Terimakasih Anda Sudah absen Masuk di jam ' . $jam . ' Selamat Bekerja. dan Jangan Lupa Masuk Kelas',
                             'number' => $nomor_hp,
