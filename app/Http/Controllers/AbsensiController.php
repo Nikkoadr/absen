@@ -74,14 +74,14 @@ class AbsensiController extends Controller
                 if ($simpan) {
                     echo 'sukses|Anda Sudah Absen Pulang. Hati - hati Dijalan !|';
                     Storage::disk(env('STORAGE_DISK'))->put($nama_foto, $foto_base64);
-                    Http::withOptions(['verify' => false])->post(
-                        'https://wa.smkmuhkandanghaur.sch.id/send-message',
-                        [
-                            'message' => 'Terimakasih Anda Sudah absen pulang di jam ' . $jam . 'Hati - Hati di Jalan',
-                            'number' => $nomor_hp,
-                            'file_dikirim' => ''
-                        ]
-                    );
+                    // Http::withOptions(['verify' => false])->post(
+                    //     'https://wa.smkmuhkandanghaur.sch.id/send-message',
+                    //     [
+                    //         'message' => 'Terimakasih Anda Sudah absen pulang di jam ' . $jam . 'Hati - Hati di Jalan',
+                    //         'number' => $nomor_hp,
+                    //         'file_dikirim' => ''
+                    //     ]
+                    // );
                 } else {
                     echo 'error|maaf masih dalam proses pengembangan hehehe';
                 }
@@ -97,14 +97,14 @@ class AbsensiController extends Controller
                 if ($simpan) {
                     echo 'sukses|Terimakasih anda sudah melakukan absen masuk';
                     Storage::disk(env('STORAGE_DISK'))->put($nama_foto, $foto_base64);
-                    Http::withOptions(['verify' => false])->post(
-                        'wa.smkmuhkandanghaur.sch.id/send-message',
-                        [
-                            'message' => 'Terimakasih Anda Sudah absen Masuk di jam ' . $jam . ' Selamat Bekerja. dan Jangan Lupa Masuk Kelas',
-                            'number' => $nomor_hp,
-                            'file_dikirim' => ''
-                        ]
-                    );
+                    // Http::withOptions(['verify' => false])->post(
+                    //     'https://wa.smkmuhkandanghaur.sch.id/send-message',
+                    //     [
+                    //         'message' => 'Terimakasih Anda Sudah absen Masuk di jam ' . $jam . ' Selamat Bekerja. dan Jangan Lupa Masuk Kelas',
+                    //         'number' => $nomor_hp,
+                    //         'file_dikirim' => ''
+                    //     ]
+                    // );
                 } else {
                     echo 'error|maaf masih dalam proses pengembangan hehehe';
                 }
