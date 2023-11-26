@@ -57,26 +57,32 @@
                             <!-- Isi dengan elemen kamera jika ada -->
                         </div>
                         <div class="row mt-3">
-                            <div class="col">
-                                @if($cek > 0)
-                                    @if($jam > Auth::user()->jam_pulang)
-                                        <button id="ambilFoto" class="btn btn-danger btn-block">
-                                            <i class="fa-solid fa-camera-retro"></i> Absen Pulang
-                                            <span id="countdown"></span>
-                                        </button>
-                                    @else
-                                        @if($jam < Auth::user()->jam_pulang)
-                                            <button id="tombolpulang" class="btn btn-danger btn-block disabled">
-                                                <i class="fa-solid fa-camera-retro"></i> Absen Pulang
-                                            </button>
-                                        @endif
-                                    @endif
-                                @else
-                                    <button id="ambilFoto" class="btn btn-primary btn-block">
-                                        <i class="fa-solid fa-camera-retro"></i> Absen Masuk
+                        <div class="col">
+                            @if($cek > 0)
+                                @if($jam > Auth::user()->jam_pulang)
+                                    <button id="ambilFoto" class="btn btn-danger btn-block">
+                                        <i class="fa-solid fa-camera-retro"></i> Absen Pulang
                                     </button>
+                                @else
+                                    @if($jam < Auth::user()->jam_pulang)
+                                        <button id="tombolpulang" class="btn btn-danger btn-block disabled">
+                                            <i class="fa-solid fa-camera-retro"></i> Absen Pulang
+                                        </button>
+                                    @endif
                                 @endif
-                            </div>
+                            @else
+                            @if($jam > "13:00:00")
+                                <button id="tombolmasuk" class="btn btn-primary btn-block disabled">
+                                    <i class="fa-solid fa-camera-retro"></i> Absen Masuk
+                                </button>
+                                @else
+                                <button id="ambilFoto" class="btn btn-primary btn-block">
+                                    <i class="fa-solid fa-camera-retro"></i> Absen Masuk
+                                </button>
+                            @endif
+
+                            @endif
+                        </div>
                         </div>
                     </div>
                 </div>
