@@ -196,4 +196,13 @@ $("#tombolpulang").click(function() {
     });
 });
 </script>
+<script>
+$("#tombolmasuk").click(function() {
+    var Toast = Swal.fire({
+        title: "Waduh..!!!",
+        text: "Wis Lewat Absene gah balik bae langsung",
+        icon: "error"
+    });
+});
+</script>
 @endsection
