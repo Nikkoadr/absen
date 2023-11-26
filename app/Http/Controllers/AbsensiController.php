@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class AbsensiController extends Controller
 {
@@ -73,6 +74,14 @@ class AbsensiController extends Controller
                 if ($simpan) {
                     echo 'sukses|Anda Sudah Absen Pulang. Hati - hati Dijalan !|';
                     Storage::disk(env('STORAGE_DISK'))->put($nama_foto, $foto_base64);
+                    Http::withOptions(['verify' => false])->post(
+                        'https://wa.smkmuhkandanghaur.sch.id/send-message',
+                        [
+                            'message' => 'absen Pulang',
+                            'number' => '081290020004',
+                            'file_dikirim' => ''
+                        ]
+                    );
                 } else {
                     echo 'error|maaf masih dalam proses pengembangan hehehe';
                 }
@@ -88,6 +97,15 @@ class AbsensiController extends Controller
                 if ($simpan) {
                     echo 'sukses|Terimakasih anda sudah melakukan absen masuk';
                     Storage::disk(env('STORAGE_DISK'))->put($nama_foto, $foto_base64);
+
+                    Http::withOptions(['verify' => false])->post(
+                        'https://wa.smkmuhkandanghaur.sch.id/send-message',
+                        [
+                            'message' => 'absen masuk',
+                            'number' => '081290020004',
+                            'file_dikirim' => ''
+                        ]
+                    );
                 } else {
                     echo 'error|maaf masih dalam proses pengembangan hehehe';
                 }
