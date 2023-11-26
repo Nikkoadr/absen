@@ -56,6 +56,7 @@ class ProfileController extends Controller
             'nuptk'     => ['nullable', 'max:16'],
             'nbm'       => ['nullable', 'max:20'],
             'nama'      => ['required', 'string', 'max:255'],
+            'nomor_hp'  => ['nullable', 'max:13'],
             'email' => 'required|unique:users,email,' . $request->id,
         ]);
         $user = User::find($id);

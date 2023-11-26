@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('nuptk')->nullable();
             $table->string('nbm')->nullable();
             $table->string('nama');
+            $table->string('nomor_hp')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

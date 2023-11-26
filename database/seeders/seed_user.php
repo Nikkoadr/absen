@@ -20,6 +20,7 @@ class seed_user extends Seeder
             'email' => 'admin@smkmuhkandanghaur.sch.id',
             'password' => Hash::make('P4ssw0rd'),
             'nama' => 'Administrator',
+            'nomor_hp' => '081290020004',
             'role' => 'admin',
 
         ]);

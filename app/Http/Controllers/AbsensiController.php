@@ -39,6 +39,7 @@ class AbsensiController extends Controller
     public function absenMasuk(Request $request)
     {
         $id_user = Auth::user()->id;
+        $nomor_hp = Auth::user()->nomor_hp;
         $tanggal_absen = date("Y-m-d");
         $jam = date("H:i:s");
         $setting = Setting::first();
@@ -51,7 +52,6 @@ class AbsensiController extends Controller
         $jarak = $this->distance($latitudeKantor, $longitudeKantor, $latitudeUser, $longitudeUser);
         $radius = round($jarak["meters"]);
         $foto = $request->foto;
-
         $cek = DB::table('absensi')->where('tanggal_absen', $tanggal_absen)->where('id_user', $id_user)->count();
         if ($radius > $setting->radius) {
             echo "error|Maaf, Jarak Anda " . $radius . " M dari " . $setting->namaLokasi;
@@ -77,8 +77,8 @@ class AbsensiController extends Controller
                     Http::withOptions(['verify' => false])->post(
                         'https://wa.smkmuhkandanghaur.sch.id/send-message',
                         [
-                            'message' => 'absen Pulang',
-                            'number' => '081290020004',
+                            'message' => 'Terimakasih Anda Sudah absen pulang di jam ' . $jam . 'Hati - Hati di Jalan',
+                            'number' => $nomor_hp,
                             'file_dikirim' => ''
                         ]
                     );
@@ -97,12 +97,11 @@ class AbsensiController extends Controller
                 if ($simpan) {
                     echo 'sukses|Terimakasih anda sudah melakukan absen masuk';
                     Storage::disk(env('STORAGE_DISK'))->put($nama_foto, $foto_base64);
-
                     Http::withOptions(['verify' => false])->post(
                         'https://wa.smkmuhkandanghaur.sch.id/send-message',
                         [
-                            'message' => 'absen masuk',
-                            'number' => '081290020004',
+                            'message' => 'Terimakasih Anda Sudah absen Masuk di jam ' . $jam . ' Selamat Bekerja. dan Jangan Lupa Masuk Kelas',
+                            'number' => $nomor_hp,
                             'file_dikirim' => ''
                         ]
                     );

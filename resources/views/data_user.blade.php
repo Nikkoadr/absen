@@ -65,6 +65,7 @@
                         <th>NUPTK</th>
                         <th>NBM</th>
                         <th>Nama</th>
+                        <th>Nomor HP</th>
                         <th>Email</th>
                         <th>Jabatan</th>
                         <th>Jam Kerja</th>
@@ -82,6 +83,7 @@
                         <td>{{ $data->nuptk }}</td>
                         <td>{{ $data->nbm }}</td>
                         <td>{{ $data->nama }}</td>
+                        <td>{{ $data->nomor_hp }}</td>
                         <td>{{ $data->email }}</td>
                         <td>{{ $data->jabatan }}</td>
                         <td>{{ $data->jam_kerja }}</td>

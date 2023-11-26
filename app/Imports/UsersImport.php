@@ -22,6 +22,7 @@ class UsersImport implements ToModel, WithHeadingRow
             'nuptk'     => $row['nuptk'],
             'nbm'     => $row['nbm'],
             'nama'     => $row['nama'],
+            'nomor_hp'     => $row['nomor_hp'],
             'email'    => $row['email'],
             'password' => Hash::make($row['password']),
             'jabatan' => $row['jabatan'],
