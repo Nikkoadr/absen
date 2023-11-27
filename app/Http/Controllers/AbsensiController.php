@@ -40,6 +40,7 @@ class AbsensiController extends Controller
     {
         $id_user = Auth::user()->id;
         $nomor_hp = Auth::user()->nomor_hp;
+        $nama = Auth::user()->nama;
         $tanggal_absen = date("Y-m-d");
         $jam = date("H:i:s");
         $setting = Setting::first();
@@ -77,7 +78,7 @@ class AbsensiController extends Controller
                     Http::withOptions(['verify' => false])->post(
                         'https://wa.smkmuhkandanghaur.sch.id/send-message',
                         [
-                            'message' => 'Terimakasih Anda Sudah absen pulang di jam ' . $jam . 'Hati - Hati di Jalan',
+                            'message' => 'Terima kasih ' . $nama . ', Anda Sudah absen pulang di jam ' . $jam . ' Wib. Hati - Hati di Jalan',
                             'number' => $nomor_hp,
                             'file_dikirim' => ''
                         ]
@@ -100,7 +101,7 @@ class AbsensiController extends Controller
                     Http::withOptions(['verify' => false])->post(
                         'https://wa.smkmuhkandanghaur.sch.id/send-message',
                         [
-                            'message' => 'Terimakasih Anda Sudah absen Masuk di jam ' . $jam . ' Selamat Bekerja. dan Jangan Lupa Masuk Kelas',
+                            'message' => 'Terima kasih ' . $nama . ', Anda Sudah absen Masuk di jam ' . $jam . ' Wib. Jangan Lupa Masuk Kelas',
                             'number' => $nomor_hp,
                             'file_dikirim' => ''
                         ]
