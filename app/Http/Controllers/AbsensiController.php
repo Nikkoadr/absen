@@ -84,7 +84,7 @@ class AbsensiController extends Controller
                     //     ]
                     // );
                 } else {
-                    echo 'error|maaf masih dalam proses pengembangan hehehe';
+                    echo 'error|Maaf, Masih Dalam Proses Pengembangan Oleh ICT SMK';
                 }
             } else {
                 $data = [
@@ -107,7 +107,7 @@ class AbsensiController extends Controller
                     //     ]
                     // );
                 } else {
-                    echo 'error|maaf masih dalam proses pengembangan hehehe';
+                    echo 'error|Maaf, Masih Dalam Proses Pengembangan Oleh ICT SMK';
                 }
             }
         }
