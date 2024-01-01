@@ -31,7 +31,7 @@ class HomeController extends Controller
         $absenHariIni = DB::table('absensi')
             ->where('id_user', $userAktif)
             ->where('tanggal_absen', $hariIni)->first();
-        $bulanIni = date("m");
+        $bulanIni = date("n");
         $tahunIni = date("Y");
         $set_jam_kerja = Auth::user()->jam_kerja;
         $historyBulanIni = DB::table('absensi')
