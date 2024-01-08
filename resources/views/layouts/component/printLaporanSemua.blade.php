@@ -92,7 +92,7 @@
     <thead>
 <tr>
     <th style="border: 1px solid black;" rowspan="2">Nama</th>
-    <th style="border: 1px solid black;" colspan="{{ \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAkhir)->diffInDays(\Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal)) + 1 }}">tanggal</th>
+    <th style="border: 1px solid black;" colspan="{{ \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAkhir)->diffInDays(\Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal)) + 1 }}">Tanggal</th>
     <th style="border: 1px solid black;" rowspan="2">Jumlah</th>
     <th style="border: 1px solid black;" rowspan="2">Keterangan</th>
 </tr>
