@@ -1,22 +1,3 @@
-@php
-    function selisih($jam_masuk, $jam_batas)
-    {
-        list($h_masuk, $m_masuk, $s_masuk) = explode(":", $jam_masuk);
-        $dtAwal = mktime($h_masuk, $m_masuk, $s_masuk, 1, 1, 1);
-
-        list($h_batas, $m_batas, $s_batas) = explode(":", $jam_batas);
-        $dtBatas = mktime($h_batas, $m_batas, $s_batas, 1, 1, 1);
-
-        $dtSelisih = $dtAwal - $dtBatas;
-
-        $totalmenit = $dtSelisih / 60;
-        $jam = explode(".", $totalmenit / 60);
-        $sisamenit = ($totalmenit / 60) - $jam[0];
-        $sisamenit2 = $sisamenit * 60;
-
-        return $jam[0] . ":" . round($sisamenit2);
-    }
-@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,6 +38,25 @@
     </style>
 </head>
 <body>
+    @php
+    function selisih($jam_masuk, $jam_batas)
+    {
+        list($h_masuk, $m_masuk, $s_masuk) = explode(":", $jam_masuk);
+        $dtAwal = mktime($h_masuk, $m_masuk, $s_masuk, 1, 1, 1);
+
+        list($h_batas, $m_batas, $s_batas) = explode(":", $jam_batas);
+        $dtBatas = mktime($h_batas, $m_batas, $s_batas, 1, 1, 1);
+
+        $dtSelisih = $dtAwal - $dtBatas;
+
+        $totalmenit = $dtSelisih / 60;
+        $jam = explode(".", $totalmenit / 60);
+        $sisamenit = ($totalmenit / 60) - $jam[0];
+        $sisamenit2 = $sisamenit * 60;
+
+        return $jam[0] . ":" . round($sisamenit2);
+    }
+@endphp
 <section>
     <div class="page-landscape">
         <table>
