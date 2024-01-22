@@ -73,6 +73,7 @@
 <table style="border: 1px solid black;">
     <thead>
 <tr>
+    <th style="border: 1px solid black;" rowspan="2">ID</th>
     <th style="border: 1px solid black;" rowspan="2">Nama</th>
     <th style="border: 1px solid black;" colspan="{{ \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAkhir)->diffInDays(\Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal)) + 1 }}">Tanggal</th>
     <th style="border: 1px solid black;" rowspan="2">Jumlah</th>
@@ -94,6 +95,7 @@
     <tbody>
     @foreach ($rekap as $data)
         <tr>
+            <td style="border: 1px solid black;">{{ $data->id }}</td>
             <td style="border: 1px solid black;">{{ $data->nama }}</td>
             @php
                 $start = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal);
