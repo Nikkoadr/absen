@@ -106,7 +106,7 @@
                     @if ($data->{'tgl_'.$start->day})
                         @php
                             list($jamMasuk, $jamKeluar) = explode('-', $data->{'tgl_'.$start->day});
-                            $terlambat_harian = selisih($jamMasuk, $data->jam_kerja);
+                            //$terlambat_harian = selisih($jamMasuk, $data->jam_kerja);
                         @endphp
                         @if($jamMasuk > $data->jam_kerja)
                             <span style="color: red">T</span>
