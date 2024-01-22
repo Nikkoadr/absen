@@ -88,6 +88,6 @@ class LaporanController extends Controller
             $data->total_jam_terlambat = $totalJamTerlambat;
         }
 
-        return view('layouts.component.printLaporanSemua', compact('tanggalAwal', 'tanggalAkhir', 'rekap', 'tanggalAwal', 'tanggalAkhir'));
+        return view('layouts.component.printLaporanSemua', compact('tanggalAwal', 'tanggalAkhir', 'rekap',));
     }
 }
