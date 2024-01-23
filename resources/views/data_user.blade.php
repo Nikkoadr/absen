@@ -60,6 +60,7 @@
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th>ID</th>
                         <th>Role</th>
                         <th>NIK</th>
                         <th>NUPTK</th>
@@ -78,6 +79,7 @@
                 @foreach ( $data_user as $data )
                     <tr>
                         <td><?= $no++; ?></td>
+                        <td>{{ $data->id }}</td>
                         <td>{{ $data->role }}</td>
                         <td>{{ $data->nik }}</td>
                         <td>{{ $data->nuptk }}</td>
