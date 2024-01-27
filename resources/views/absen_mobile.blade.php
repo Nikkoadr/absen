@@ -49,7 +49,7 @@
                                     @endif
                                 @endif
                             @else
-                            @if($jam > "13:00:00")
+                            @if($jam > "22:00:00")
                                 <button id="tombolmasuk" class="btn btn-primary btn-block disabled">
                                     <i class="fa-solid fa-camera-retro"></i> Absen Masuk
                                 </button>
@@ -90,12 +90,9 @@
     Webcam.attach( '.kamera' );
 
     var lokasi = document.getElementById('lokasi');
-    if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(berhasil)
-    }
-    function berhasil(position){
-        lokasi.value = position.coords.latitude + "," + position.coords.longitude;
-        var map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 16);
+    function initMap(latitude, longitude) {
+    lokasi.value = latitude + "," + longitude;
+        var map = L.map('map').setView([latitude, longitude], 16);
         var lokasi_absen_latitude = "{{ $setting->latitude }}"
         var lokasi_absen_longitude = "{{ $setting->longitude }}"
         var lokasi_absen_radius = "{{ $setting->radius }}"
@@ -103,7 +100,7 @@
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
-        var marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
+        var marker = L.marker([latitude, longitude]).addTo(map);
         var circle = L.circle([lokasi_absen_latitude, lokasi_absen_longitude], {
         color: 'red',
         fillColor: '#f03',
@@ -112,46 +109,63 @@
     }).addTo(map);
     }
 
-    $("#ambilFoto").click(function(e){
-        Webcam.snap(function(url){
-            foto = url;
-        });
-        var lokasi = $("#lokasi").val();
-        $.ajax({
-            type:'POST',
-            url:'/absenMasuk',
-            data: {
-                _token: "{{ csrf_token() }}",
-                foto: foto,
-                lokasi: lokasi
-            },
-            cache: false,
-            success: function(respond){
-                var status = respond.split("|");
-                if(status[0]=="sukses"){
-                        var Toast = Swal.fire({
-                            title: "Terimakasih",
-                            text: status[1],
-                            icon: "success"
-                            });
-                            setTimeout("location.href='/home'", 3000);
-                } else {
-                        var Toast = Swal.fire({
-                            title: "Opss..!!!",
-                            text: status[1],
-                            icon: "error"
-                            });
-                }
+    if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+        function (position) {
+            initMap(position.coords.latitude, position.coords.longitude);
+        },
+        function (error) {
+            console.error('Error getting geolocation:', error);
+        },
+        { timeout: 10000 } // timeout set to 10 seconds
+    );
+}
 
+    $("#ambilFoto").click(function (e) {
+    Webcam.snap(function (url) {
+        foto = url;
+        sendAbsenRequest();
+    });
+});
+
+function sendAbsenRequest() {
+    var lokasi = $("#lokasi").val();
+    $.ajax({
+        type: 'POST',
+        url: '/absenMasuk',
+        data: {
+            _token: "{{ csrf_token() }}",
+            foto: foto,
+            lokasi: lokasi
+        },
+        cache: false,
+        success: function (respond) {
+            var status = respond.split("|");
+            if (status[0] == "sukses") {
+                var Toast = Swal.fire({
+                    title: "Terimakasih",
+                    text: status[1],
+                    icon: "success"
+                });
+                setTimeout(function () {
+                    location.href = '/home';
+                }, 2000);
+            } else {
+                var Toast = Swal.fire({
+                    title: "Opss..!!!",
+                    text: status[1],
+                    icon: "error"
+                });
             }
-        });
-    })
+        }
+    });
+}
 </script>
 <script>
 $("#tombolpulang").click(function() {
     var Toast = Swal.fire({
         title: "Opss..!!!",
-        text: "Maaf Belum Waktunya Pulang !",
+        text: "Maaf Belum Waktunya Pulang ya...!!!",
         icon: "error"
     });
 });
@@ -159,8 +173,8 @@ $("#tombolpulang").click(function() {
 <script>
 $("#tombolmasuk").click(function() {
     var Toast = Swal.fire({
-        title: "Maaf !",
-        text: "Absen masuknya sudak tidak bisa karena terlalu siang",
+        title: "Waduh..!!!",
+        text: "masih dalam proses pengen bangan ICT SMK",
         icon: "error"
     });
 });
