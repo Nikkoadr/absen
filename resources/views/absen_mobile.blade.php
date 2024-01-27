@@ -110,56 +110,56 @@
     }
 
     if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-        function (position) {
-            initMap(position.coords.latitude, position.coords.longitude);
-        },
-        function (error) {
-            console.error('Error getting geolocation:', error);
-        },
-        { timeout: 10000 } // timeout set to 10 seconds
-    );
-}
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                initMap(position.coords.latitude, position.coords.longitude);
+            },
+            function (error) {
+                console.error('Error getting geolocation:', error);
+            },
+            { timeout: 10000 } // timeout set to 10 seconds
+        );
+    }
 
     $("#ambilFoto").click(function (e) {
-    Webcam.snap(function (url) {
-        foto = url;
-        sendAbsenRequest();
+        Webcam.snap(function (url) {
+            foto = url;
+            sendAbsenRequest();
+        });
     });
-});
 
-function sendAbsenRequest() {
-    var lokasi = $("#lokasi").val();
-    $.ajax({
-        type: 'POST',
-        url: '/absenMasuk',
-        data: {
-            _token: "{{ csrf_token() }}",
-            foto: foto,
-            lokasi: lokasi
-        },
-        cache: false,
-        success: function (respond) {
-            var status = respond.split("|");
-            if (status[0] == "sukses") {
-                var Toast = Swal.fire({
-                    title: "Terimakasih",
-                    text: status[1],
-                    icon: "success"
-                });
-                setTimeout(function () {
-                    location.href = '/home';
-                }, 2000);
-            } else {
-                var Toast = Swal.fire({
-                    title: "Opss..!!!",
-                    text: status[1],
-                    icon: "error"
-                });
+    function sendAbsenRequest() {
+        var lokasi = $("#lokasi").val();
+        $.ajax({
+            type: 'POST',
+            url: '/absenMasuk',
+            data: {
+                _token: "{{ csrf_token() }}",
+                foto: foto,
+                lokasi: lokasi
+            },
+            cache: false,
+            success: function (respond) {
+                var status = respond.split("|");
+                if (status[0] == "sukses") {
+                    var Toast = Swal.fire({
+                        title: "Terimakasih",
+                        text: status[1],
+                        icon: "success"
+                    });
+                    setTimeout(function () {
+                        location.href = '/home';
+                    }, 2000);
+                } else {
+                    var Toast = Swal.fire({
+                        title: "Opss..!!!",
+                        text: status[1],
+                        icon: "error"
+                    });
+                }
             }
-        }
-    });
-}
+        });
+    }
 </script>
 <script>
 $("#tombolpulang").click(function() {
