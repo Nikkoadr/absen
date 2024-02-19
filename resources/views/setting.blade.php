@@ -53,6 +53,10 @@
                         <label for="radius">Radius:</label>
                         <input type="text" class="form-control" id="radius" name="radius" value="{{ $setting->radius }}">
                     </div>
+                    <div class="form-group">
+                        <label for="radius">Limit Absen Harian</label>
+                        <input type="time" class="form-control" id="limit_absen" name="limit_absen" value="{{ $setting->limit_absen }}">
+                    </div>
                     <button style="float: right" type="submit" class="btn btn-primary">Edit</button>
                 </form>
             </div>

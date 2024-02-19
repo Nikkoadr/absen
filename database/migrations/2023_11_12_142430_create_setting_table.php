@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('latitude');
             $table->string('longitude');
             $table->string('radius');
+            $table->time('limit_absen');
             $table->timestamps();
         });
     }

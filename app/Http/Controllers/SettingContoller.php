@@ -38,6 +38,7 @@ class SettingContoller extends Controller
             'latitude' => ['required'],
             'longitude' => ['required'],
             'radius' => ['required'],
+            'limit_absen' => ['required'],
         ]);
         $setting = Setting::find($request->id);
         $setting->update($data_valid);

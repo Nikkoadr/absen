@@ -71,7 +71,7 @@
                                     @endif
                                 @endif
                             @else
-                            @if($jam > "13:00:00")
+                            @if($jam > $limit_absen)
                                 <button id="tombolmasuk" class="btn btn-primary btn-block disabled">
                                     <i class="fa-solid fa-camera-retro"></i> Absen Masuk
                                 </button>
