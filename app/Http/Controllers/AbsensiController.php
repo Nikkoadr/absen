@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
-// use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Http;
 
 class AbsensiController extends Controller
 {
@@ -77,14 +77,13 @@ class AbsensiController extends Controller
                 if ($simpan) {
                     echo 'sukses|Anda Sudah Absen Pulang. Hati - hati Dijalan !|';
                     Storage::disk(env('STORAGE_DISK'))->put($nama_foto, $foto_base64);
-                    // Http::withOptions(['verify' => false])->post(
-                    //     'https://wa.smkmuhkandanghaur.sch.id/send-message',
-                    //     [
-                    //         'message' => 'Terima kasih ' . $nama . ', Anda Sudah absen pulang di jam ' . $jam . ' Wib. Hati - Hati di Jalan',
-                    //         'number' => $nomor_hp,
-                    //         'file_dikirim' => ''
-                    //     ]
-                    // );
+                    Http::withOptions(['verify' => true])->post(
+                        'http://127.0.0.1:3000/send-message',
+                        [
+                            'nomor' => $nomor_hp,
+                            'pesan' => 'Terima kasih ' . $nama . ', Anda Sudah absen Pulang di jam ' . $jam . ' Wib. Hati - Hati Dijalan',
+                        ]
+                    );
                 } else {
                     echo 'error|Maaf, Masih Dalam Proses Pengembangan Oleh ICT SMK';
                 }
@@ -100,14 +99,13 @@ class AbsensiController extends Controller
                 if ($simpan) {
                     echo 'sukses|Terimakasih anda sudah melakukan absen masuk';
                     Storage::disk(env('STORAGE_DISK'))->put($nama_foto, $foto_base64);
-                    // Http::withOptions(['verify' => false])->post(
-                    //     'https://wa.smkmuhkandanghaur.sch.id/send-message',
-                    //     [
-                    //         'message' => 'Terima kasih ' . $nama . ', Anda Sudah absen Masuk di jam ' . $jam . ' Wib. Jangan Lupa Masuk Kelas',
-                    //         'number' => $nomor_hp,
-                    //         'file_dikirim' => ''
-                    //     ]
-                    // );
+                    Http::withOptions(['verify' => true])->post(
+                        '127.0.0.1:3000/send-message',
+                        [
+                            'nomor' => $nomor_hp,
+                            'pesan' => 'Terima kasih ' . $nama . ', Anda Sudah absen Masuk di jam ' . $jam . ' Wib. Jangan Lupa Masuk Kelas',
+                        ]
+                    );
                 } else {
                     echo 'error|Maaf, Masih Dalam Proses Pengembangan Oleh ICT SMK';
                 }
