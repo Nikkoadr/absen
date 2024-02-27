@@ -78,7 +78,7 @@ class AbsensiController extends Controller
                     echo 'sukses|Anda Sudah Absen Pulang. Hati - hati Dijalan !|';
                     Storage::disk(env('STORAGE_DISK'))->put($nama_foto, $foto_base64);
                     Http::withOptions(['verify' => true])->post(
-                        'http://127.0.0.1:3000/send-message',
+                        '10.20.30.9:3000/send-message',
                         [
                             'nomor' => $nomor_hp,
                             'pesan' => 'Terima kasih ' . $nama . ', Anda Sudah absen Pulang di jam ' . $jam . ' Wib. Hati - Hati Dijalan',
@@ -100,7 +100,7 @@ class AbsensiController extends Controller
                     echo 'sukses|Terimakasih anda sudah melakukan absen masuk';
                     Storage::disk(env('STORAGE_DISK'))->put($nama_foto, $foto_base64);
                     Http::withOptions(['verify' => true])->post(
-                        '127.0.0.1:3000/send-message',
+                        '10.20.30.9:3000/send-message',
                         [
                             'nomor' => $nomor_hp,
                             'pesan' => 'Terima kasih ' . $nama . ', Anda Sudah absen Masuk di jam ' . $jam . ' Wib. Jangan Lupa Masuk Kelas',
