@@ -232,5 +232,5 @@
     </div>
     <!-- * App Capsule -->
 @endsection
-
+@section('script')
 @endsection
