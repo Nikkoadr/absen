@@ -78,8 +78,8 @@ class AbsensiController extends Controller
                     echo 'sukses|Anda Sudah Absen Pulang. Hati - hati Dijalan !|';
                     Storage::disk(env('STORAGE_DISK'))->put($nama_foto, $foto_base64);
                     if ($nomor_hp != null) {
-                        Http::withOptions(['verify' => true])->post(
-                            '10.20.30.9:8000/send-message',
+                        Http::withOptions(['verify' => false])->post(
+                            '10.20.30.9:3000/send-message',
                             [
                                 'number' => $nomor_hp,
                                 'message' => 'Terima kasih ' . $nama . ', Anda Sudah absen Pulang di jam ' . $jam . ' Wib. Hati - Hati Dijalan',
@@ -102,8 +102,8 @@ class AbsensiController extends Controller
                     echo 'sukses|Terimakasih anda sudah melakukan absen masuk';
                     Storage::disk(env('STORAGE_DISK'))->put($nama_foto, $foto_base64);
                     if ($nomor_hp != null) {
-                        Http::withOptions(['verify' => true])->post(
-                            '10.20.30.9:8000/send-message',
+                        Http::withOptions(['verify' => false])->post(
+                            '10.20.30.9:3000/send-message',
                             [
                                 'number' => $nomor_hp,
                                 'message' => 'Terima kasih ' . $nama . ', Anda Sudah absen Masuk di jam ' . $jam . ' Wib. Jangan Lupa Masuk Kelas',
