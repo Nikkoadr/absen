@@ -50,6 +50,7 @@ Route::get('history',                               [ProfileController::class, '
 Route::put('/printLaporanIndividu{id}',          [LaporanController::class, 'printLaporanIndividu'])->name('printLaporanIndividu');
 Route::get('/laporanSemua',                  [LaporanController::class, 'laporanSemua'])->name('laporanSemua');
 Route::put('/printLaporanBulanan',                  [LaporanController::class, 'printSemuaLaporan'])->name('printSemuaLaporan');
+Route::put('/downloadLaporanBulanan',                  [LaporanController::class, 'downloadLaporanBulanan'])->name('downloadLaporanBulanan');
 
 Route::get('/setting',                  [SettingContoller::class, 'setting'])->name('setting');
 Route::put('/editSetting',                  [SettingContoller::class, 'editSetting'])->name('editSetting');
