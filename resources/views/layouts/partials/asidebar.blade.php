@@ -50,6 +50,14 @@
             </p>
         </a>
         </li>
+        <li class="nav-item">
+        <a href="/attendance" class="nav-link {{ request()->is('attendance') ? 'active' : '' }}">
+            <i class="nav-icon fa-solid fa-clipboard-user"></i>
+            <p>
+            Attendance
+            </p>
+        </a>
+        </li>
                 <li class="nav-item menu-close">
         <a href="#" class="nav-link {{ request()->is('laporanIndividu') ? 'active' : '' }} {{ request()->is('laporanSemua') ? 'active' : '' }}">
             <i class="nav-icon fa-solid fa-database"></i>

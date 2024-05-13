@@ -32,6 +32,7 @@ Route::get('/home',                     [HomeController::class, 'index'])->name(
 // Route::post('/GetDataLeaderboard',                     [HomeController::class, 'GetDataLeaderboard'])->name('GetDataLeaderboard'); ini untuk server side
 Route::get('/absen',                    [AbsensiController::class, 'absen'])->name('absen');
 Route::post('/absenMasuk',              [AbsensiController::class, 'absenMasuk'])->name('absenMasuk');
+Route::get('/attendance',              [AbsensiController::class, 'attendance'])->name('attendance');
 
 Route::get('/data_user',                [UserController::class, 'index'])->name('data_user');
 Route::post('/importUser',              [UserController::class, 'importUser'])->name('importUser');

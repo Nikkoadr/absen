@@ -130,4 +130,14 @@ class AbsensiController extends Controller
         $meters = $kilometers * 1000;
         return compact('meters');
     }
+
+    public function attendance(){
+        $hariIni = date("Y-m-d");
+        $attendance = DB::table('absensi')
+            ->join('users', 'absensi.id_user',  '=', 'users.id')
+            ->where('tanggal_absen', $hariIni)
+            ->orderBy('jam_masuk')
+            ->get();
+        return view('attendance',compact('attendance'));
+    }
 }
