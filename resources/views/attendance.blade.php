@@ -89,7 +89,7 @@
                 <tr>
                     <td><?= $no++ ?></td>
                     <td>{{ $data -> nama }}</td>
-                    <td>{{ $data -> tanggal_absen }}</td>
+                    <td>{{ Illuminate\Support\Carbon::parse($data->tanggal_absen)->format('d-M-Y'); }}</td>
                     <td>{{ $data -> jam_masuk }}</td>
                     <td>{{ $data -> jam_keluar }}</td>
                     <td>
