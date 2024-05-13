@@ -91,7 +91,7 @@
                     <td>{{ $data -> nama }}</td>
                     <td>{{ $data -> tanggal_absen }}</td>
                     <td>{{ $data -> jam_masuk }}</td>
-                    <td>{{ $data -> jam_pulang }}</td>
+                    <td>{{ $data -> jam_keluar }}</td>
                     <td>
                         <a target="_blank" href="edit_absen_{{ $data -> id }}" class="btn btn-info"  ><i class="fa-solid fa-circle-info"></i></i></a>
                         <a href="hapus_absen_{{ $data->id }}" class="btn btn-danger konfirmasi m-1"><i class="far fa-trash-alt"></i></a>
