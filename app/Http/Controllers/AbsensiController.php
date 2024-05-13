@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 
 class AbsensiController extends Controller
 {
@@ -131,13 +132,17 @@ class AbsensiController extends Controller
         return compact('meters');
     }
 
-    public function attendance(){
-        $hariIni = date("Y-m-d");
+    public function attendance(Request $request){
+        $hari = $request->input('hari', now()->day);
+        $bulan = $request->input('bulan', now()->month);
+        $tahun = $request->input('tahun', now()->year);
         $attendance = DB::table('absensi')
             ->join('users', 'absensi.id_user',  '=', 'users.id')
-            ->where('tanggal_absen', $hariIni)
+            ->whereRaw('DAY(tanggal_absen)="' . $hari . '"')
+            ->whereRaw('MONTH(tanggal_absen)="' . $bulan . '"')
+            ->whereRaw('YEAR(tanggal_absen)="' . $tahun . '"')
             ->orderBy('jam_masuk')
             ->get();
-        return view('attendance',compact('attendance'));
+        return view('attendance',compact('attendance','bulan','tahun', 'hari'));
     }
 }
