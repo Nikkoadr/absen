@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Absensi;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -132,17 +133,40 @@ class AbsensiController extends Controller
         return compact('meters');
     }
 
-    public function attendance(Request $request){
-        $hari = $request->input('hari', now()->day);
-        $bulan = $request->input('bulan', now()->month);
-        $tahun = $request->input('tahun', now()->year);
-        $attendance = DB::table('absensi')
-            ->join('users', 'absensi.id_user',  '=', 'users.id')
-            ->whereRaw('DAY(tanggal_absen)="' . $hari . '"')
-            ->whereRaw('MONTH(tanggal_absen)="' . $bulan . '"')
-            ->whereRaw('YEAR(tanggal_absen)="' . $tahun . '"')
-            ->orderBy('jam_masuk')
-            ->get();
-        return view('attendance',compact('attendance','bulan','tahun', 'hari'));
+public function attendance(Request $request){
+    $hari = $request->input('hari', now()->day);
+    $bulan = $request->input('bulan', now()->month);
+    $tahun = $request->input('tahun', now()->year);
+
+    $attendance = DB::table('absensi')
+        ->join('users', 'absensi.id_user', '=', 'users.id')
+        ->whereDay('tanggal_absen', $hari)
+        ->whereMonth('tanggal_absen', $bulan)
+        ->whereYear('tanggal_absen', $tahun)
+        ->select('absensi.*', 'users.nama as nama')
+        ->orderBy('jam_masuk')
+        ->get();
+
+    return view('attendance', compact('attendance', 'hari', 'bulan', 'tahun'));
+}
+
+
+public function edit_absen($id, Request $request){
+    $data = Absensi::with('user:id,nama')->find($id);
+    dd($data);
+
+    return view('layouts.component.edit_absen', compact('data'));
+}
+
+    public function update_absen($id, Request $request)
+    {
+        $data_valid = $request->validate([
+                'tanggal_absen' => ['nullable'],
+                'jam_masuk'         => ['nullable'],
+                'Jam_keluar'           => ['nullable']
+                ]);
+        $user = Absensi::find($id);
+        $user->update($data_valid);
+        return redirect('attendance')->with('success', 'Data Berhasil di Update');
     }
 }

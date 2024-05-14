@@ -9,4 +9,9 @@ class Absensi extends Model
 {
     protected $guarded = [];
     protected $table = 'absensi';
+    
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user');
+    }
 }
