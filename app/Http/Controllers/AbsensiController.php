@@ -164,7 +164,6 @@ public function edit_absen($id, Request $request){
                 'jam_masuk'     => ['required',],
                 'jam_keluar'    => ['nullable']
                 ]);
-        @dd($data_valid);
         $user = Absensi::find($id);
         $user->timestamps = false;
         $user->update($data_valid);
