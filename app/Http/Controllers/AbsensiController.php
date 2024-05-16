@@ -153,7 +153,6 @@ public function attendance(Request $request){
 
 public function edit_absen($id, Request $request){
     $data = Absensi::with('user:id,nama')->find($id);
-    dd($data);
 
     return view('layouts.component.edit_absen', compact('data'));
 }
@@ -161,12 +160,20 @@ public function edit_absen($id, Request $request){
     public function update_absen($id, Request $request)
     {
         $data_valid = $request->validate([
-                'tanggal_absen' => ['nullable'],
-                'jam_masuk'         => ['nullable'],
-                'Jam_keluar'           => ['nullable']
+                'tanggal_absen' => ['required','date'],
+                'jam_masuk'     => ['required',],
+                'Jam_keluar'    => ['nullable']
                 ]);
         $user = Absensi::find($id);
+        $user->timestamps = false;
         $user->update($data_valid);
         return redirect('attendance')->with('success', 'Data Berhasil di Update');
+    }
+
+    public function hapus_absen($id)
+    {
+        $data = Absensi::find($id);
+        $data->delete();
+        return redirect('/attendance')->with('success', 'Data berhasil dihapus');
     }
 }

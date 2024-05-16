@@ -34,7 +34,8 @@ Route::get('/absen',                    [AbsensiController::class, 'absen'])->na
 Route::post('/absenMasuk',              [AbsensiController::class, 'absenMasuk'])->name('absenMasuk');
 Route::get('/attendance',              [AbsensiController::class, 'attendance'])->name('attendance');
 Route::get('/edit_absen_{id}',              [AbsensiController::class, 'edit_absen'])->name('edit_absen');
-Route::put('/update_absen',              [AbsensiController::class, 'update_absen'])->name('update_absen');
+Route::put('/update_absen_{id}',              [AbsensiController::class, 'update_absen'])->name('update_absen');
+Route::get('/hapus_absen_{id}',              [AbsensiController::class, 'hapus_absen'])->name('hapus_absen');
 
 Route::get('/data_user',                [UserController::class, 'index'])->name('data_user');
 Route::post('/importUser',              [UserController::class, 'importUser'])->name('importUser');
