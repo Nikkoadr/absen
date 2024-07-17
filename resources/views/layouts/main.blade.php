@@ -28,7 +28,7 @@
 Application : v2.4.10 | Laravel : v{{ Illuminate\Foundation\Application::VERSION }} | Php : v{{ PHP_VERSION }}
 </div>
 <!-- Default to the left -->
-<strong>Copyright &copy; 2023-2024 <a href="https://github.com/Nikkoadr">Nikko Adrian</a>.</strong> All rights reserved.
+<strong>Copyright &copy; 2024-2025 <a href="https://github.com/Nikkoadr">Nikko Adrian</a>.</strong> All rights reserved.
 </footer>
 </div>
 <!-- ./wrapper -->
