@@ -148,4 +148,18 @@ document.querySelectorAll('.konfirmasi').forEach(function(element) {
     });
 });
 </script>
+<script>
+@if (session()->has('success'))
+var Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 5000
+});
+    Toast.fire({
+    icon: 'success',
+    title: '{{ session('success') }}'
+    })
+@endif
+</script>
 @endsection

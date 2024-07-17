@@ -115,6 +115,7 @@
         width: 320,
         height: 240,
         image_format: 'jpeg',
+        flip_horiz: true,
         jpeg_quality: 60
     });
     Webcam.attach( '.kamera' );
