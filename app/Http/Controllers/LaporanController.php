@@ -91,46 +91,46 @@ class LaporanController extends Controller
         return view('layouts.component.printLaporanSemua', compact('tanggalAwal', 'tanggalAkhir', 'rekap',));
     }
 
-    public function downloadLaporanBulanan(Request $request)
-    {
-        $tanggalAwal = $request->tanggal_awal;
-        $tanggalAkhir = $request->tanggal_akhir;
+public function downloadLaporanBulanan(Request $request)
+{
+    $tanggalAwal = $request->tanggal_awal;
+    $tanggalAkhir = $request->tanggal_akhir;
 
-        $selectStatements = [];
-        $tanggalMulai = Carbon::parse($tanggalAwal);
-        $tanggalSelesai = Carbon::parse($tanggalAkhir);
+    $selectStatements = [];
+    $tanggalMulai = Carbon::parse($tanggalAwal);
+    $tanggalSelesai = Carbon::parse($tanggalAkhir);
 
-        while ($tanggalMulai->lte($tanggalSelesai)) {
-            $hari = $tanggalMulai->day;
-            $selectStatements[] = "MAX(CASE WHEN DAY(tanggal_absen) = $hari THEN CONCAT(jam_masuk, '-', IFNULL(jam_keluar, '00:00:00')) ELSE '' END) as tgl_$hari";
-            $tanggalMulai->addDay();
-        }
+    while ($tanggalMulai->lte($tanggalSelesai)) {
+        $hari = $tanggalMulai->day;
+        $selectStatements[] = "MAX(CASE WHEN DAY(tanggal_absen) = $hari THEN CONCAT(jam_masuk, '-', IFNULL(jam_keluar, '00:00:00')) ELSE '' END) as tgl_$hari";
+        $tanggalMulai->addDay();
+    }
 
-        $rekap = DB::table('absensi')
-            ->selectRaw('absensi.id_user, users.jam_kerja, nama, ' . implode(', ', $selectStatements))
-            ->leftJoin('users', 'absensi.id_user', '=', 'users.id')
-            ->whereBetween('tanggal_absen', [$tanggalAwal, $tanggalAkhir])
-            ->groupByRaw('absensi.id_user, users.jam_kerja, nama')
-            ->orderBy('nama')
-            ->get();
+    $rekap = DB::table('absensi')
+        ->selectRaw('absensi.id_user, users.jam_kerja, users.nama, users.jabatan, ' . implode(', ', $selectStatements))
+        ->leftJoin('users', 'absensi.id_user', '=', 'users.id')
+        ->whereBetween('tanggal_absen', [$tanggalAwal, $tanggalAkhir])
+        ->groupByRaw('absensi.id_user, users.jam_kerja, users.nama, users.jabatan')
+        ->orderBy('users.nama')
+        ->get();
 
-        foreach ($rekap as $data) {
-            $totalJamTerlambat = 0;
-            for ($i = 1; $i <= 31; $i++) {
-                $key = "tgl_$i";
-                if (isset($data->$key) && $data->$key !== '') {
-                    $jamMasuk = substr($data->$key, 0, 5);
-                    $jamKerja = $data->jam_kerja;
+    foreach ($rekap as $data) {
+        $totalJamTerlambat = 0;
+        for ($i = 1; $i <= 31; $i++) {
+            $key = "tgl_$i";
+            if (isset($data->$key) && $data->$key !== '') {
+                $jamMasuk = substr($data->$key, 0, 5);
+                $jamKerja = $data->jam_kerja;
 
-                    if ($jamMasuk > $jamKerja) {
-                        $terlambat = Carbon::parse($jamMasuk)->diffInMinutes(Carbon::parse($jamKerja));
-                        $totalJamTerlambat += $terlambat / 60;
-                    }
+                if ($jamMasuk > $jamKerja) {
+                    $terlambat = Carbon::parse($jamMasuk)->diffInMinutes(Carbon::parse($jamKerja));
+                    $totalJamTerlambat += $terlambat / 60;
                 }
             }
-            $data->total_jam_terlambat = $totalJamTerlambat;
         }
-
-        return view('layouts.component.downloadSemuaLaporan', compact('tanggalAwal', 'tanggalAkhir', 'rekap',));
+        $data->total_jam_terlambat = $totalJamTerlambat;
     }
+    return view('layouts.component.downloadSemuaLaporan', compact('tanggalAwal', 'tanggalAkhir', 'rekap',));
+}
+
 }

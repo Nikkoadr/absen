@@ -26,30 +26,32 @@ $activeWorksheet = $spreadsheet->getActiveSheet();
 
 // Judul laporan
 $activeWorksheet->setCellValue('A1', 'Laporan Bulanan');
-$activeWorksheet->mergeCells('A1:E1');
+$activeWorksheet->mergeCells('A1:F1');
 $activeWorksheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
 
 // Tanggal periode
 $activeWorksheet->setCellValue('A2', 'Periode: ' . \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal)->translatedFormat('d F Y') . ' - ' . \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAkhir)->translatedFormat('d F Y'));
-$activeWorksheet->mergeCells('A2:E2');
+$activeWorksheet->mergeCells('A2:F2');
 $activeWorksheet->getStyle('A2')->getFont()->setBold(true);
 
 // Header tabel
 $activeWorksheet->setCellValue('A4', 'Nama');
-$activeWorksheet->setCellValue('B4', 'Jumlah');
-$activeWorksheet->setCellValue('C4', 'Keterangan');
+$activeWorksheet->setCellValue('B4', 'Jabatan');
+$activeWorksheet->setCellValue('C4', 'Jumlah');
+$activeWorksheet->setCellValue('D4', 'Keterangan');
 
 // Mengatur lebar kolom
 $activeWorksheet->getColumnDimension('A')->setAutoSize(true);
 $activeWorksheet->getColumnDimension('B')->setAutoSize(true);
 $activeWorksheet->getColumnDimension('C')->setAutoSize(true);
+$activeWorksheet->getColumnDimension('D')->setAutoSize(true);
 
-$startColumn = 'D';
+$startColumn = 'E';
 $start = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal);
 $end = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAkhir);
 
 // Mengisi header tanggal
-$columnIndex = 4;
+$columnIndex = 5;
 while ($start <= $end) {
     $activeWorksheet->setCellValue($startColumn . '4', $start->day);
     $activeWorksheet->getColumnDimension($startColumn)->setAutoSize(true);
@@ -62,14 +64,12 @@ while ($start <= $end) {
 $rowIndex = 5;
 foreach ($rekap as $data) {
     $activeWorksheet->setCellValue('A' . $rowIndex, $data->nama);
-
+    $activeWorksheet->setCellValue('B' . $rowIndex, $data->jabatan);
     $start = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal);
     $end = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAkhir);
     $total = 0;
-    $totalTerlambat = 0;
 
-    // Mengisi data kehadiran
-    $columnIndex = 4;
+    $columnIndex = 5;
     while ($start <= $end) {
         $cellValue = '';
         if ($data->{'tgl_'.$start->day}) {
@@ -82,37 +82,24 @@ foreach ($rekap as $data) {
         $start->addDay();
         $columnIndex++;
     }
-
-        // Jumlah kehadiran
-    $activeWorksheet->setCellValue('B' . $rowIndex, $total);
-
-    // Keterangan terlambat
-    $activeWorksheet->setCellValue('C' . $rowIndex, 'Terlambat Dalam 1 Bulan: ' . ($data->total_jam_terlambat * 60) . ' Menit');
-
+    $activeWorksheet->setCellValue('C' . $rowIndex, $total);
+    $activeWorksheet->setCellValue('D' . $rowIndex, 'Terlambat Dalam 1 Bulan: ' . ($data->total_jam_terlambat * 60) . ' Menit');
     $rowIndex++;
 }
 
-// Style
 $styleArray = [
     'font' => ['bold' => true],
     'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
     'borders' => ['allBorders' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]],
 ];
 $activeWorksheet->getStyle('A4:' . $startColumn . ($rowIndex - 1))->applyFromArray($styleArray);
-
-// Menyimpan file
 $filename = 'Laporan_bulanan.xlsx';
 $filepath = __DIR__ . '/' . $filename;
 $writer = new Xlsx($spreadsheet);
 $writer->save($filepath);
 
-// Atur header untuk file download
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 header('Content-Disposition: attachment;filename="' . $filename . '"');
 header('Cache-Control: max-age=0');
-
-// Baca file dan keluarkan ke output
 readfile($filepath);
-
-// Hapus file setelah didownload (opsional)
 unlink($filepath);
