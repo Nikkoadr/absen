@@ -53,12 +53,15 @@
                                 <button id="tombolmasuk" class="btn btn-primary btn-block disabled">
                                     <i class="fa-solid fa-camera-retro"></i> Absen Masuk
                                 </button>
-                                @else
+                            @elseif($jam < '06:45:00')
+                                <button id="mulai_absen" class="btn btn-primary btn-block disabled">
+                                    <i class="fa-solid fa-camera-retro"></i> Absen Masuk
+                                </button>
+                            @else
                                 <button id="ambilFoto" class="btn btn-primary btn-block">
                                     <i class="fa-solid fa-camera-retro"></i> Absen Masuk
                                 </button>
                             @endif
-
                             @endif
                         </div>
                     </div>
@@ -174,7 +177,16 @@ $("#tombolpulang").click(function() {
 $("#tombolmasuk").click(function() {
     var Toast = Swal.fire({
         title: "Waduh..!!!",
-        text: "masih dalam proses pengen bangan ICT SMK",
+        text: "Sudah melebihi waktunya absen masuk...!!!",
+        icon: "error"
+    });
+});
+</script>
+<script>
+$("#mulai_absen").click(function() {
+    var Toast = Swal.fire({
+        title: "Waduh..!!!",
+        text: "Maaf, Waktu mulai absensi jam 06.45 WIB...!!!",
         icon: "error"
     });
 });
