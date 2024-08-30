@@ -8,6 +8,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\UsersImport;
 use App\Exports\UsersExport;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -106,8 +107,16 @@ class UserController extends Controller
 
     public function hapus_data_user($id)
     {
+        // Hapus data absensi yang terkait dengan id_user
+        DB::table('absensi')->where('id_user', $id)->delete();
+
+        // Hapus data pengguna
         $data = User::find($id);
-        $data->delete();
-        return redirect('data_user')->with('success', 'Data berhasil dihapus');
+        if ($data) {
+            $data->delete();
+            return redirect('data_user')->with('success', 'Data berhasil dihapus beserta data absensi terkait.');
+        } else {
+            return redirect('data_user')->with('error', 'Data pengguna tidak ditemukan.');
+        }
     }
 }
