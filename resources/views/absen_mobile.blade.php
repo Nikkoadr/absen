@@ -53,7 +53,7 @@
                                 <button id="tombolmasuk" class="btn btn-primary btn-block disabled">
                                     <i class="fa-solid fa-camera-retro"></i> Absen Masuk
                                 </button>
-                            @elseif($jam < '06:45:00')
+                            @elseif($jam < '06:00:00')
                                 <button id="mulai_absen" class="btn btn-primary btn-block disabled">
                                     <i class="fa-solid fa-camera-retro"></i> Absen Masuk
                                 </button>
@@ -120,7 +120,7 @@
             function (error) {
                 console.error('Error getting geolocation:', error);
             },
-            { timeout: 10000 } // timeout set to 10 seconds
+            { timeout: 10000 }
         );
     }
 
@@ -186,7 +186,7 @@ $("#tombolmasuk").click(function() {
 $("#mulai_absen").click(function() {
     var Toast = Swal.fire({
         title: "Waduh..!!!",
-        text: "Maaf, Waktu mulai absensi jam 06.45 WIB...!!!",
+        text: "Maaf, Waktu mulai absensi jam 06.00 WIB...!!!",
         icon: "error"
     });
 });
