@@ -46,6 +46,17 @@
                             </div>
                         </div>
 
+                        <div class="item-menu text-center">
+                            <div class="menu-icon">
+                                <a href="/izin" class="primary" style="font-size: 40px">
+                                    <i class="fa-solid fa-truck-fast"></i>
+                                </a>
+                            </div>
+                            <div class="menu-name">
+                                <span class="text-center">Izin</span>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -115,12 +126,12 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="presencecontent">
-                                    <div class="iconpresence warning">
-                                        <i class="fa fa-clock"></i>
+                                    <div class="iconpresence danger">
+                                        <i class="fa-regular fa-circle-xmark"></i>
                                     </div>
                                     <div class="presencedetail">
-                                        <h4 class="rekappresencetitle">Terlambat</h4>
-                                        <span class="rekappresencedetail">{{ $rekapAbsensi->jumlahTerlambat }} Hari</span>
+                                        <h4 class="rekappresencetitle">Tidak Masuk</h4>
+                                        <span class="rekappresencedetail">{{ $rekapAbsensi->jumlahTidakHadir }} Hari</span>
                                     </div>
                                 </div>
                             </div>

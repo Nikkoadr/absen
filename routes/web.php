@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SettingContoller;
+use App\Http\Controllers\IzinContoller;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -58,3 +59,5 @@ Route::put('/downloadLaporanBulanan',                  [LaporanController::class
 
 Route::get('/setting',                  [SettingContoller::class, 'setting'])->name('setting');
 Route::put('/editSetting',                  [SettingContoller::class, 'editSetting'])->name('editSetting');
+
+Route::get('/izin',                    [IzinContoller::class, 'izin'])->name('izin');

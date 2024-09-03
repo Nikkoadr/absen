@@ -41,12 +41,14 @@ class HomeController extends Controller
             ->orderBy('tanggal_absen')
             ->get();
 
-        $rekapAbsensi = DB::table('absensi')
-            ->selectRaw('COUNT(id_user) as jumlahHadir, SUM(IF(jam_masuk > ?,1,0)) as jumlahTerlambat', [$set_jam_kerja])
-            ->where('id_user', $userAktif)
-            ->whereMonth('tanggal_absen', $bulanIni)
-            ->whereYear('tanggal_absen', $tahunIni)
-            ->first();
+    $rekapAbsensi = DB::table('absensi')
+        ->selectRaw('
+            COUNT(id_user) as jumlahHadir, 
+            (DAY(LAST_DAY(?)) - COUNT(id_user)) as jumlahTidakHadir', [$hariIni])
+        ->where('id_user', $userAktif)
+        ->whereMonth('tanggal_absen', $bulanIni)
+        ->whereYear('tanggal_absen', $tahunIni)
+        ->first();
 
         $hitungPulang = DB::table('absensi')
             ->join('users', 'absensi.id_user', '=', 'users.id')
