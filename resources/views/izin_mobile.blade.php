@@ -4,7 +4,7 @@
 @endsection
 @section('content')
 <div class="presencetab mt-2">
-    <h5 style="font-weight: bold; text-align: center; font-size: 1.5rem; color: #4A90E2;">Request Izin</h5>
+    <h5 style="font-weight: bold; text-align: center; font-size: 1.5rem;">Request Izin</h5>
     <div class="tab-content mt-2" style="margin-bottom: 100px">
         <div class="tab-pane fade show active" id="dataDiri" role="tabpanel">
             <div class="section mt-3 mb-5">

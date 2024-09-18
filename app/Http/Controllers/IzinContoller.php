@@ -30,4 +30,8 @@ class IzinContoller extends Controller
             return view('izin_mobile');
         }
     }
+    public function request_izin_user()
+    {
+        echo "Maaf Dalam proses Development";
+    }
 }
