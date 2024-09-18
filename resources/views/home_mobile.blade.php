@@ -49,11 +49,11 @@
                         <div class="item-menu text-center">
                             <div class="menu-icon">
                                 <a href="/izin" class="primary" style="font-size: 40px">
-                                    <i class="fa-solid fa-truck-fast"></i>
+                                    <i class="fa-solid fa-comment-dots"></i>
                                 </a>
                             </div>
                             <div class="menu-name">
-                                <span class="text-center">Izin</span>
+                                <span class="text-center">request Izin</span>
                             </div>
                         </div>
 

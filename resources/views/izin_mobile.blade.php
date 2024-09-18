@@ -9,7 +9,7 @@
         <div class="tab-pane fade show active" id="dataDiri" role="tabpanel">
             <div class="section mt-3 mb-5">
                 <div class="card">
-                    <form action="#" method="POST">
+                    <form action="/request_izin_user_id{{ Auth::user()->id }}" method="POST">
                         @csrf
                         <div class="col">
                             <div class="row mb-3">
@@ -30,7 +30,7 @@
                                     <select id="izin" class="form-control @error('izin') is-invalid @enderror" name="izin">
                                         <option value="" disabled selected>Pilih Jenis Izin</option>
                                         <option value="Sakit">Sakit</option>
-                                        <option value="Cuti">Cuti</option>
+                                        <option value="Dinas Luar">Dinas Luar</option>
                                         <option value="Izin Lainnya">Izin Lainnya</option>
                                     </select>
                                     @error('izin')
@@ -54,7 +54,7 @@
                             <!-- End of Request Izin -->
                             <div style="margin-bottom: 50px" class="form-group boxed">
                                 <div class="input-wrapper">
-                                    <button type="submit" class="btn btn-primary btn-block disabled">
+                                    <button type="submit" class="btn btn-primary btn-block">
                                         <ion-icon name="refresh-outline"></ion-icon>
                                         Izin
                                     </button>
@@ -70,7 +70,7 @@
 
 @endsection
 @section('script')
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             Swal.fire({
                 title: 'Maaf !!!',
@@ -83,7 +83,7 @@
                 }
             });
         });
-    </script>
+    </script> --}}
 @endsection
 </body>
 </html>
