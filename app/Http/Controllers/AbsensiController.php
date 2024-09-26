@@ -40,84 +40,98 @@ class AbsensiController extends Controller
         }
     }
 
-    public function absenMasuk(Request $request)
-    {
-        $id_user = Auth::user()->id;
-        $nomor_hp = Auth::user()->nomor_hp;
-        $nama = Auth::user()->nama;
-        $tanggal_absen = date("Y-m-d");
-        $jam = date("H:i:s");
-        $setting = Setting::first();
-        $latitudeKantor = $setting->latitude;
-        $longitudeKantor = $setting->longitude;
-        $lokasi = $request->lokasi;
-        $lokasiUser = explode(",", $lokasi);
-        $latitudeUser = $lokasiUser[0];
-        $longitudeUser = $lokasiUser[1];
-        $jarak = $this->distance($latitudeKantor, $longitudeKantor, $latitudeUser, $longitudeUser);
-        $radius = round($jarak["meters"]);
-        $foto = $request->foto;
-        $cek = DB::table('absensi')->where('tanggal_absen', $tanggal_absen)->where('id_user', $id_user)->count();
-        if ($radius > $setting->radius) {
-            echo "error|Maaf, Jarak Anda " . $radius . " M dari " . $setting->namaLokasi;
+public function absenMasuk(Request $request)
+{
+    $user = Auth::user();
+    $tanggal_absen = date("Y-m-d");
+    $jam = date("H:i:s");
+    $setting = Setting::first();
+    
+    // Lokasi dan Jarak
+    [$latitudeUser, $longitudeUser] = explode(",", $request->lokasi);
+    $radius = round($this->distance(
+        $setting->latitude, $setting->longitude, 
+        $latitudeUser, $longitudeUser
+    )["meters"]);
+    
+    // Cek absen hari ini
+    $absensiHariIni = DB::table('absensi')
+        ->where('tanggal_absen', $tanggal_absen)
+        ->where('id_user', $user->id)
+        ->first();
+    
+    if ($radius > $setting->radius) {
+        echo "error|Maaf, Jarak Anda $radius M dari {$setting->namaLokasi}";
+        return;
+    }
+    
+    if ($absensiHariIni) {
+        // Jika sudah ada absen masuk, cek apakah sudah cukup waktu untuk absen keluar
+        if ($absensiHariIni->jam_keluar) {
+            echo 'error|Anda sudah absen keluar hari ini.';
+            return;
+        }
+        
+        // Tambahkan logika untuk memastikan absen keluar minimal setelah 5 menit dari absen masuk
+        $diff = strtotime($jam) - strtotime($absensiHariIni->jam_masuk);
+        if ($diff < 300) { // 5 menit = 300 detik
+            echo 'error|Anda tidak bisa absen keluar terlalu cepat setelah absen masuk.';
+            return;
+        }
+        
+        // Absen keluar
+        $nama_foto = "{$user->id}-$tanggal_absen-keluar.png";
+        $foto_base64 = base64_decode(explode("base64", $request->foto)[1]);
+        $data = [
+            'jam_keluar' => $jam,
+            'foto_keluar' => $nama_foto,
+            'lokasi_keluar' =>  $request->lokasi,
+        ];
+        $simpan = DB::table('absensi')->where('id', $absensiHariIni->id)->update($data);
+        
+        if ($simpan) {
+            echo 'sukses|Anda Sudah Absen Pulang. Hati - hati Dijalan !';
+            Storage::disk(env('STORAGE_DISK'))->put($nama_foto, $foto_base64);
         } else {
-            if ($cek) {
-                $keterangan = "keluar";
-            } else {
-                $keterangan = "masuk";
-            }
-            $nama_foto = $id_user . "-" . $tanggal_absen . "-" . $keterangan . ".png";
-            $foto_parts = explode("base64", $foto);
-            $foto_base64 = base64_decode($foto_parts[1]);
-            if ($cek > 0) {
-                $data = [
-                    'jam_keluar' => $jam,
-                    'foto_keluar' => $nama_foto,
-                    'lokasi_keluar' =>  $lokasi,
-                ];
-                $simpan = DB::table('absensi')->where('tanggal_absen', $tanggal_absen)->where('id_user', $id_user)->update($data);
-                if ($simpan) {
-                    echo 'sukses|Anda Sudah Absen Pulang. Hati - hati Dijalan !|';
-                    Storage::disk(env('STORAGE_DISK'))->put($nama_foto, $foto_base64);
-                    // if ($nomor_hp != null) {
-                    //     Http::withOptions(['verify' => false])->post(
-                    //         '10.20.30.9:3000/send-message',
-                    //         [
-                    //             'number' => $nomor_hp,
-                    //             'message' => 'Terima kasih ' . $nama . ', Anda Sudah absen Pulang di jam ' . $jam . ' Wib. Hati - Hati Dijalan',
-                    //         ]
-                    //     );
-                    // }
-                } else {
-                    echo 'error|Maaf, Masih Dalam Proses Pengembangan Oleh ICT SMK';
-                }
-            } else {
-                $data = [
-                    'id_user' => $id_user,
-                    'tanggal_absen' => $tanggal_absen,
-                    'jam_masuk' => $jam,
-                    'foto_masuk' => $nama_foto,
-                    'lokasi_masuk' =>  $lokasi,
-                ];
-                $simpan = DB::table('absensi')->insert($data);
-                if ($simpan) {
-                    echo 'sukses|Terimakasih anda sudah melakukan absen masuk';
-                    Storage::disk(env('STORAGE_DISK'))->put($nama_foto, $foto_base64);
-                    // if ($nomor_hp != null) {
-                    //     Http::withOptions(['verify' => false])->post(
-                    //         '10.20.30.9:3000/send-message',
-                    //         [
-                    //             'number' => $nomor_hp,
-                    //             'message' => 'Terima kasih ' . $nama . ', Anda Sudah absen Masuk di jam ' . $jam . ' Wib. Jangan Lupa Masuk Kelas',
-                    //         ]
-                    //     );
-                    // }
-                } else {
-                    echo 'error|Maaf, Masih Dalam Proses Pengembangan Oleh ICT SMK';
-                }
-            }
+            echo 'error|Maaf, Masih Dalam Proses Pengembangan Oleh ICT SMK';
+        }
+    } else {
+        // Absen masuk
+        $nama_foto = "{$user->id}-$tanggal_absen-masuk.png";
+        $foto_base64 = base64_decode(explode("base64", $request->foto)[1]);
+        $data = [
+            'id_user' => $user->id,
+            'tanggal_absen' => $tanggal_absen,
+            'jam_masuk' => $jam,
+            'foto_masuk' => $nama_foto,
+            'lokasi_masuk' =>  $request->lokasi,
+        ];
+        $simpan = DB::table('absensi')->insert($data);
+        
+        if ($simpan) {
+            echo 'sukses|Terimakasih anda sudah melakukan absen masuk';
+            Storage::disk(env('STORAGE_DISK'))->put($nama_foto, $foto_base64);
+        } else {
+            echo 'error|Maaf, Masih Dalam Proses Pengembangan Oleh ICT SMK';
         }
     }
+}
+
+
+// Fungsi kirim pesan jika diperlukan
+// private function kirimPesan($nomor_hp, $jam, $keterangan, $nama)
+// {
+//     if ($nomor_hp) {
+//         Http::withOptions(['verify' => false])->post(
+//             '10.20.30.9:3000/send-message',
+//             [
+//                 'number' => $nomor_hp,
+//                 'message' => "Terima kasih $nama, Anda Sudah absen $keterangan di jam $jam Wib.",
+//             ]
+//         );
+//     }
+// }
+
 
     function distance($lat1, $lon1, $lat2, $lon2)
     {

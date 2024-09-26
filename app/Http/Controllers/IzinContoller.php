@@ -32,6 +32,6 @@ class IzinContoller extends Controller
     }
     public function request_izin_user()
     {
-        echo "Maaf Dalam proses Development";
+        echo "Maaf Dalam proses Development, sabar ya kakak";
     }
 }
