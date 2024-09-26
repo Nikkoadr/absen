@@ -66,16 +66,14 @@ public function absenMasuk(Request $request)
     }
     
     if ($absensiHariIni) {
-        // Jika sudah ada absen masuk, cek apakah sudah cukup waktu untuk absen keluar
         if ($absensiHariIni->jam_keluar) {
-            echo 'error|Anda sudah absen keluar hari ini.';
+            echo 'error|Anda sudah absen Pulang hari ini.';
             return;
         }
         
-        // Tambahkan logika untuk memastikan absen keluar minimal setelah 5 menit dari absen masuk
         $diff = strtotime($jam) - strtotime($absensiHariIni->jam_masuk);
-        if ($diff < 300) { // 5 menit = 300 detik
-            echo 'error|Anda tidak bisa absen keluar terlalu cepat setelah absen masuk.';
+        if ($diff < 150) { // 5 menit = 300 detik
+            echo 'error|Anda tidak bisa absen keluar terlalu cepat setelah absen masuk !. tunggu 5 menit.';
             return;
         }
         
@@ -109,7 +107,7 @@ public function absenMasuk(Request $request)
         $simpan = DB::table('absensi')->insert($data);
         
         if ($simpan) {
-            echo 'sukses|Terimakasih anda sudah melakukan absen masuk';
+            echo 'sukses|Terima kasih anda sudah melakukan absen masuk. Tolong jangan pulang lagi !!!';
             Storage::disk(env('STORAGE_DISK'))->put($nama_foto, $foto_base64);
         } else {
             echo 'error|Maaf, Masih Dalam Proses Pengembangan Oleh ICT SMK';
