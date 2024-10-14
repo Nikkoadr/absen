@@ -4,7 +4,7 @@
 .kamera,
 .kamera video {
     display: inline-block;
-    width: 100% !important;
+    width: 50% !important;
     margin: auto;
     height: auto !important;
     border-radius: 15px;
@@ -87,6 +87,7 @@
     Webcam.set({
         width: 320,
         height: 240,
+        flip_horiz: true,
         image_format: 'jpeg',
         jpeg_quality: 60
     });
