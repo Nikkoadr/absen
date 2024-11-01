@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ProfileController extends Controller
 {
@@ -80,7 +81,7 @@ class ProfileController extends Controller
         $request->validate([
             'pas_foto' => 'required|image|mimes:jpeg,png,jpg,gif|file|max:5120',
         ]);
-        $namaFoto = 'pasfoto' . '_' . Auth::user()->id . '_' . Auth::user()->nama . '.' . $request->pas_foto->getClientOriginalExtension();
+        $namaFoto = Str::random(10) . '.' . $request->pas_foto->getClientOriginalExtension();
         Storage::disk(env('STORAGE_DISK'))->put('pasFotoAbsen/' . $namaFoto, file_get_contents($request->pas_foto));
         $user = User::find($id);
         $user->update(['pasfoto' => $namaFoto]);
