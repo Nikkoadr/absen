@@ -65,7 +65,7 @@
                     <img src="{{asset('assets/dist/img/dikdasmenmuh.png')}}" width="100%">
                 </td>
                 <td style="padding: 1px" align="center" valign="middle">
-                    <b style="color:#007bff;font-size:13pt !important;">MAJELIS PENDIDIKAN DASAR MENENGAH DAN PENDIDIKAN NON FORMAL</b><br>
+                    <b style="color:#007bff;font-size:13pt !important;">MAJELIS PENDIDIKAN DASAR MENENGAH DAN PENDIDIKAN NONFORMAL</b><br>
                     <b style="color:#007bff;font-size:13pt !important;">PIMPINAN WILAYAH MUHAMMADIYAH JAWA BARAT</b><br>
                     <b style="color:#007bff;font-size:15pt !important;">SMK MUHAMMADIYAH KANDANGHAUR</b><br>
                     <b style="color:#007bff;;font-size:15pt !important;">SMK PUSAT KEUNGGULAN (PK)</b><br>
@@ -92,6 +92,7 @@
     <thead>
 <tr>
     <th style="border: 1px solid black;" rowspan="2">Nama</th>
+    <th style="border: 1px solid black;" rowspan="2">Jabatan</th>
     <th style="border: 1px solid black;" colspan="{{ \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAkhir)->diffInDays(\Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal)) + 1 }}">Tanggal</th>
     <th style="border: 1px solid black;" rowspan="2">Jumlah</th>
     <th style="border: 1px solid black;" rowspan="2">Keterangan</th>
@@ -113,6 +114,7 @@
     @foreach ($rekap as $data)
         <tr>
             <td style="border: 1px solid black;">{{ $data->nama }}</td>
+            <td style="border: 1px solid black;">{{ $data->jabatan ?? ($data->user->jabatan ?? '-') }}</td>
             @php
                 $start = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal);
                 $end = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAkhir);
