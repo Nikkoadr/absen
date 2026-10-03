@@ -193,7 +193,7 @@
                             </form>
                         </div>
                         </div>
-                        <div class="card mt-3" style="margin-bottom: 120px;">
+                        <div class="card mt-3" style="margin-bottom: 170px;">
                             <div class="card-header">Wajah untuk Presensi Mandiri</div>
                             <div class="card-body text-center">
                                 <p class="text-muted">Ambil foto wajah langsung dari kamera, lalu daftarkan.</p>
@@ -201,10 +201,10 @@
                                 <canvas id="kanvasWajah" style="display: none;"></canvas>
                                 <div class="text-center mt-2"><span class="chip-sky" id="statusWajah">Kamera belum aktif</span></div>
                             </div>
-                            <div class="card-footer">
-                                <button id="btnKameraWajah" type="button" class="btn btn-secondary btn-block btn-lg mb-2">Aktifkan Kamera</button>
-                                <button id="btnDaftarWajah" type="button" class="btn btn-sky btn-block btn-lg" disabled>Daftarkan Wajah</button>
-                            </div>
+                        </div>
+                        <div class="aksi-wajah-fixed">
+                            <button id="btnKameraWajah" type="button" class="btn btn-secondary btn-lg">Aktifkan Kamera</button>
+                            <button id="btnDaftarWajah" type="button" class="btn btn-sky btn-lg" disabled>Daftarkan Wajah</button>
                         </div>
                         </div>
                     </div>

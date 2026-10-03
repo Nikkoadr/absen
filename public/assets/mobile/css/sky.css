@@ -14,6 +14,17 @@ body { background: linear-gradient(180deg, var(--sky-100) 0%, #f8fafc 240px) !im
 
 #appCapsule { padding-bottom: 120px; }
 
+.aksi-wajah-fixed {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: 70px;
+    z-index: 1001;
+    display: flex;
+    gap: 8px;
+}
+.aksi-wajah-fixed .btn { flex: 1; margin: 0; }
+
 .sky-header {
     background: linear-gradient(135deg, var(--sky-600), var(--sky-400)) !important;
     color: #fff;
