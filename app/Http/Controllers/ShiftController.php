@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ShiftContohExport;
+use App\Imports\ShiftImport;
 use App\Models\Shift;
 use App\Models\ShiftAssignment;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ShiftController extends Controller
 {
@@ -59,5 +62,29 @@ class ShiftController extends Controller
         $tugas->delete();
 
         return to_route('shift.index')->with('success', 'Penugasan shift berhasil dihapus.');
+    }
+
+    public function contoh()
+    {
+        return Excel::download(new ShiftContohExport, 'contoh_import_jadwal.xlsx');
+    }
+
+    public function impor(Request $request)
+    {
+        $request->validate([
+            'berkas' => ['required', 'file', 'mimes:xlsx,xls,csv', 'max:5120'],
+        ]);
+
+        $impor = new ShiftImport;
+        Excel::import($impor, $request->file('berkas'));
+
+        $pesan = "{$impor->diimpor} baris jadwal berhasil diimpor.";
+        if ($impor->dilewati) {
+            $pesan .= ' Dilewati '.count($impor->dilewati).': '.implode(' ', array_slice($impor->dilewati, 0, 3));
+
+            return to_route('shift.index')->with('success', $pesan)->with('warning_impor', $impor->dilewati);
+        }
+
+        return to_route('shift.index')->with('success', $pesan);
     }
 }

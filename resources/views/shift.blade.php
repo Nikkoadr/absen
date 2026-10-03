@@ -46,6 +46,33 @@
             </form>
         </div>
         <div class="card">
+            <div class="card-header"><h3 class="card-title">Impor Jadwal (Excel)</h3></div>
+            <div class="card-body">
+                <p class="text-muted">Upload jadwal terbaru sekaligus. Shift baru otomatis dibuat.</p>
+                <a href="{{ route('shift.contoh') }}" class="btn btn-info btn-block mb-2">Unduh Contoh Excel</a>
+                <form action="{{ route('shift.impor') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input @error('berkas') is-invalid @enderror" id="berkas" name="berkas" accept=".xlsx,.xls,.csv">
+                            <label class="custom-file-label" for="berkas">Pilih file</label>
+                        </div>
+                        @error('berkas')<span class="invalid-feedback d-block"><strong>{{ $message }}</strong></span>@enderror
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block">Upload Jadwal</button>
+                </form>
+                @if (session('warning_impor'))
+                    <div class="alert alert-warning mt-2 mb-0">
+                        <ul class="mb-0 pl-3">
+                            @foreach (session('warning_impor') as $w)
+                                <li>{{ $w }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+            </div>
+        </div>
+        <div class="card">
             <div class="card-header"><h3 class="card-title">Daftar Shift</h3></div>
             <div class="card-body p-0">
             <table class="table table-striped">

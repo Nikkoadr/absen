@@ -73,6 +73,8 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/shift', [ShiftController::class, 'index'])->name('shift.index');
         Route::post('/shift', [ShiftController::class, 'storeShift'])->name('shift.store');
+        Route::get('/shift/contoh', [ShiftController::class, 'contoh'])->name('shift.contoh');
+        Route::post('/shift/impor', [ShiftController::class, 'impor'])->name('shift.impor');
         Route::delete('/shift/{shift}', [ShiftController::class, 'destroyShift'])->name('shift.destroy');
         Route::post('/shift/tugas', [ShiftController::class, 'storeTugas'])->name('shift.tugas.store');
         Route::delete('/shift/tugas/{tugas}', [ShiftController::class, 'destroyTugas'])->name('shift.tugas.destroy');
