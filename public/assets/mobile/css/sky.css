@@ -12,16 +12,12 @@
 
 body { background: linear-gradient(180deg, var(--sky-100) 0%, #f8fafc 240px) !important; }
 
-#appCapsule { padding-bottom: 120px; }
+#appCapsule { padding-top: 70px; padding-bottom: 32px; }
 
 .aksi-wajah-fixed {
-    position: fixed;
-    left: 12px;
-    right: 12px;
-    bottom: 70px;
-    z-index: 1001;
     display: flex;
     gap: 8px;
+    margin-top: 12px;
 }
 .aksi-wajah-fixed .btn { flex: 1; margin: 0; }
 
