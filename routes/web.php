@@ -68,6 +68,7 @@ Route::middleware('auth')->group(function () {
         Route::put('/setting', [SettingController::class, 'editSetting'])->name('editSetting');
 
         Route::get('/libur', [HolidayController::class, 'index'])->name('libur.index');
+        Route::get('/libur/data', [HolidayController::class, 'data'])->name('libur.data');
         Route::post('/libur', [HolidayController::class, 'store'])->name('libur.store');
         Route::post('/libur/sinkron', [HolidayController::class, 'sinkron'])->name('libur.sinkron');
         Route::delete('/libur/{libur}', [HolidayController::class, 'destroy'])->name('libur.destroy');

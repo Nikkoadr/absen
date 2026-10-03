@@ -1,4 +1,9 @@
 @extends('layouts.main')
+@section('link')
+<link rel="stylesheet" href="{{ asset('assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+@endsection
 @section('content')
 <div class="content-wrapper">
 <div class="content-header">
@@ -20,6 +25,9 @@
     <div class="container-fluid">
     @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+    @if (session('error'))
+        <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
     <div class="row">
         <div class="col-md-4">
@@ -47,12 +55,16 @@
                     <div class="form-group">
                         <label for="tanggal">Tanggal</label>
                         <input type="date" name="tanggal" id="tanggal" value="{{ old('tanggal') }}" class="form-control @error('tanggal') is-invalid @enderror" required>
-                        @error('tanggal')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                        @error('tanggal')
+                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                        @enderror
                     </div>
                     <div class="form-group">
                         <label for="nama">Keterangan</label>
-                        <input type="text" name="nama" id="nama" value="{{ old('nama') }}" class="form-control @error('nama') is-invalid @enderror" placeholder="cth: Tahun Baru Masehi" required>
-                        @error('nama')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                        <input type="text" name="nama" id="nama" value="{{ old('nama') }}" class="form-control @error('nama') is-invalid @enderror" placeholder="cth: Cuti bersama" required>
+                        @error('nama')
+                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                        @enderror
                     </div>
                 </div>
                 <div class="card-footer">
@@ -64,29 +76,14 @@
         <div class="col-md-8">
         <div class="card">
             <div class="card-header"><h3 class="card-title">Daftar Hari Libur</h3></div>
-            <div class="card-body p-0">
-            <table class="table table-striped">
-                <thead><tr><th>No</th><th>Tanggal</th><th>Keterangan</th><th>Aksi</th></tr></thead>
-                <tbody>
-                @forelse ($libur as $h)
-                    <tr>
-                        <td>{{ $loop->iteration + ($libur->currentPage() - 1) * $libur->perPage() }}</td>
-                        <td>{{ \Carbon\Carbon::parse($h->tanggal)->isoFormat('dddd, D MMMM Y') }}</td>
-                        <td>{{ $h->nama }}</td>
-                        <td>
-                            <form action="{{ route('libur.destroy', $h) }}" method="POST" class="d-inline konfirmasi-form">
-                                @csrf @method('delete')
-                                <button class="btn btn-sm btn-danger">Hapus</button>
-                            </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr><td colspan="4" class="text-center">Belum ada hari libur. Akhir pekan otomatis libur.</td></tr>
-                @endforelse
-                </tbody>
+            <div class="card-body">
+            <table id="table_libur" class="table table-bordered table-striped">
+                <thead>
+                <tr><th>No</th><th>Tanggal</th><th>Keterangan</th><th data-orderable="false">Aksi</th></tr>
+                </thead>
+                <tbody></tbody>
             </table>
             </div>
-            <div class="card-footer">{{ $libur->links() }}</div>
         </div>
         </div>
     </div>
@@ -95,11 +92,31 @@
 </div>
 @endsection
 @section('script')
+<script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
 <script>
-document.querySelectorAll('.konfirmasi-form').forEach(function (form) {
-    form.addEventListener('submit', function (event) {
+$(function () {
+    $("#table_libur").DataTable({
+        processing: true,
+        serverSide: true,
+        responsive: true,
+        autoWidth: false,
+        ajax: "{{ route('libur.data') }}",
+        columns: [
+            { data: "no", orderable: false, searchable: false },
+            { data: "tanggal" },
+            { data: "nama" },
+            { data: "aksi", orderable: false, searchable: false },
+        ],
+        language: { url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json" },
+    });
+    document.getElementById("table_libur").addEventListener("submit", function (event) {
+        if (!event.target.matches(".hapus-libur")) return;
         event.preventDefault();
-        Swal.fire({ text: 'Hapus hari libur ini?', icon: 'warning', showCancelButton: true, confirmButtonText: 'Ya, Hapus!' })
+        const form = event.target;
+        Swal.fire({ text: "Hapus hari libur ini?", icon: "warning", showCancelButton: true, confirmButtonText: "Ya, Hapus!" })
             .then((r) => { if (r.isConfirmed) form.submit(); });
     });
 });

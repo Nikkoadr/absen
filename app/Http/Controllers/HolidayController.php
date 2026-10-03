@@ -10,9 +10,54 @@ class HolidayController extends Controller
 {
     public function index()
     {
-        $libur = Holiday::orderBy('tanggal')->paginate(20);
+        return view('libur');
+    }
 
-        return view('libur', compact('libur'));
+    public function data(Request $request)
+    {
+        $draw = (int) $request->input('draw', 1);
+        $mulai = max(0, (int) $request->input('start', 0));
+        $panjang = (int) $request->input('length', 10);
+        $panjang = $panjang < 1 || $panjang > 100 ? 10 : $panjang;
+        $cari = trim((string) $request->input('search.value', ''));
+
+        $dasar = Holiday::query();
+        $total = (clone $dasar)->count();
+
+        if ($cari !== '') {
+            $dasar->where(function ($q) use ($cari) {
+                $q->where('nama', 'like', "%{$cari}%")
+                    ->orWhere('tanggal', 'like', "%{$cari}%");
+            });
+        }
+        $tersaring = (clone $dasar)->count();
+
+        $kolom = [1 => 'tanggal', 2 => 'nama'];
+        $urut = $kolom[(int) $request->input('order.0.column', 1)] ?? 'tanggal';
+        $arah = strtolower((string) $request->input('order.0.dir', 'asc')) === 'desc' ? 'desc' : 'asc';
+
+        $baris = $dasar->orderBy($urut, $arah)
+            ->skip($mulai)
+            ->take($panjang)
+            ->get();
+
+        $data = $baris->map(function (Holiday $h, $i) use ($mulai) {
+            return [
+                'no' => $mulai + $i + 1,
+                'tanggal' => $h->tanggal->isoFormat('dddd, D MMMM Y'),
+                'nama' => e($h->nama),
+                'aksi' => '<form action="'.route('libur.destroy', $h).'" method="POST" class="d-inline hapus-libur">'
+                    .csrf_field().method_field('delete')
+                    .'<button type="submit" class="btn btn-sm btn-danger">Hapus</button></form>',
+            ];
+        });
+
+        return response()->json([
+            'draw' => $draw,
+            'recordsTotal' => $total,
+            'recordsFiltered' => $tersaring,
+            'data' => $data,
+        ]);
     }
 
     public function store(Request $request)
