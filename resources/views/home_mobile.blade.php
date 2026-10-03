@@ -15,14 +15,14 @@
                     @endif
                 </div>
                 <div id="user-info">
-                    <p class="mb-0">Halo,</p>
-                    <h2 id="user-name">{{ Auth::user()->nama }}</h2>
-                    <span class="chip-sky">{{ \Carbon\Carbon::now('Asia/Jakarta')->isoFormat('dddd, D MMMM Y') }}</span>
+                    <p class="mb-0">Halo, {{ Auth::user()->nama }} 👋</p>
+                    <div class="jam-besar" id="jamBerjalan">--:--:--</div>
+                    <div class="tanggal-kecil">{{ \Carbon\Carbon::now('Asia/Jakarta')->isoFormat('dddd, D MMMM Y') }} &middot; {{ Auth::user()->jabatan ?? ucfirst(Auth::user()->role) }}</div>
                     <div class="mt-1">
                         @if ($absenHariIni)
-                            <span class="chip-sky">Sudah presensi {{ $absenHariIni->jam_masuk }}</span>
+                            <span class="chip-sky" style="background: #fff;">Sudah presensi {{ $absenHariIni->jam_masuk }}</span>
                         @else
-                            <span class="chip-sky">Belum presensi hari ini</span>
+                            <span class="chip-sky" style="background: #fff;">Belum presensi hari ini</span>
                         @endif
                     </div>
                 </div>
@@ -30,9 +30,23 @@
         </div>
 
         <div class="section mt-2">
-            <a href="/absen" class="btn btn-sky btn-block" style="padding: 14px; font-size: 17px;">
-                <i class="fas fa-camera"></i> Ambil Presensi
-            </a>
+            <div class="sky-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-muted" style="font-size: 12px;">Jadwal kerja Anda</div>
+                            <div style="font-weight: 800; font-size: 18px; color: #0369a1;">{{ $set_jam_kerja ? substr($set_jam_kerja, 0, 5) : '-' }} WIB</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-muted" style="font-size: 12px;">Status hari ini</div>
+                            <div style="font-weight: 700;">{{ $absenHariIni ? ($absenHariIni->jam_keluar ? 'Selesai' : 'Sudah masuk') : 'Belum hadir' }}</div>
+                        </div>
+                    </div>
+                    <a href="/absen" class="btn btn-sky btn-block mt-2" style="padding: 14px; font-size: 17px;">
+                        <i class="fas fa-camera"></i> {{ $absenHariIni ? 'Presensi Pulang' : 'Ambil Presensi' }}
+                    </a>
+                </div>
+            </div>
         </div>
 
         <div class="section mt-2">
@@ -59,31 +73,50 @@
             <p class="text-muted text-center mt-1" style="font-size: 12px;">Rekap {{ $namaBulan }} {{ $tahunIni }} (hari kerja)</p>
         </div>
 
-        <div class="section" id="menu-section">
+        <div class="section mt-2">
+            <div class="sky-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <strong>Aktivitas Minggu Ini</strong>
+                        <a href="/history" style="font-size: 12px;">Lihat Riwayat</a>
+                    </div>
+                    <div class="minggu-bar">
+                        @foreach ($mingguan as $hari)
+                            <div class="hari-bar">
+                                <div class="batang {{ $hari['ada'] ? 'isi' : '' }} {{ $hari['hariIni'] ? 'hari-ini' : '' }}"></div>
+                                <small>{{ $hari['label'] }}</small>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section mt-2" id="menu-section">
             <div class="sky-card">
                 <div class="card-body">
                     <div class="list-menu">
                         <div class="item-menu text-center">
                             <div class="menu-icon">
-                                <a href="/absen" class="primary" style="font-size: 40px"><i class="fas fa-camera"></i></a>
+                                <a href="/absen"><span class="menu-ikon-bulat"><i class="fas fa-camera"></i></span></a>
                             </div>
                             <div class="menu-name"><span class="text-center">Presensi</span></div>
                         </div>
                         <div class="item-menu text-center">
                             <div class="menu-icon">
-                                <a href="/history" class="warning" style="font-size: 40px"><i class="fas fa-file-alt"></i></a>
+                                <a href="/history"><span class="menu-ikon-bulat"><i class="fas fa-file-alt"></i></span></a>
                             </div>
                             <div class="menu-name"><span class="text-center">Riwayat</span></div>
                         </div>
                         <div class="item-menu text-center">
                             <div class="menu-icon">
-                                <a href="/izin" class="primary" style="font-size: 40px"><i class="fa-solid fa-comment-dots"></i></a>
+                                <a href="/izin"><span class="menu-ikon-bulat"><i class="fa-solid fa-comment-dots"></i></span></a>
                             </div>
                             <div class="menu-name"><span class="text-center">Ajukan Izin</span></div>
                         </div>
                         <div class="item-menu text-center">
                             <div class="menu-icon">
-                                <a href="/profile" class="green" style="font-size: 40px"><i class="fas fa-user"></i></a>
+                                <a href="/profile"><span class="menu-ikon-bulat"><i class="fas fa-user"></i></span></a>
                             </div>
                             <div class="menu-name"><span class="text-center">Profil</span></div>
                         </div>
@@ -207,4 +240,15 @@
     <!-- * App Capsule -->
 @endsection
 @section('script')
+<script>
+(function () {
+    function tick() {
+        var el = document.getElementById('jamBerjalan');
+        if (!el) return;
+        el.textContent = new Date().toLocaleTimeString('id-ID', { hour12: false });
+    }
+    tick();
+    setInterval(tick, 1000);
+})();
+</script>
 @endsection

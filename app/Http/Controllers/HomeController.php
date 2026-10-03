@@ -68,6 +68,16 @@ class HomeController extends Controller
             ->whereYear('tanggal_mulai', (int) $today->year)
             ->count();
 
+        $mingguan = collect(range(6, 0))->map(function ($mundur) use ($pengguna) {
+            $tgl = Carbon::today('Asia/Jakarta')->subDays($mundur);
+
+            return [
+                'label' => $tgl->isoFormat('dd'),
+                'ada' => Absensi::milikPengguna($pengguna->id)->padaTanggal($tgl->toDateString())->exists(),
+                'hariIni' => $mundur === 0,
+            ];
+        });
+
         return view('home_mobile', [
             'absenHariIni' => $absenHariIni,
             'historyBulanIni' => $historyBulanIni,
@@ -79,6 +89,7 @@ class HomeController extends Controller
                 'jumlahTidakHadir' => max(0, $hariKerjaBerjalan - $jumlahHadir),
                 'jumlahIzin' => $jumlahIzin,
             ],
+            'mingguan' => $mingguan,
             'leaderboard_mobile' => (clone $dasar)->take(10)->get(),
             'set_jam_kerja' => $pengguna->jam_kerja,
         ]);

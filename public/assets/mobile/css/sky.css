@@ -79,3 +79,14 @@ body { background: linear-gradient(180deg, var(--sky-100) 0%, #f8fafc 240px) !im
 
 .badge-status { font-size: 12px; }
 .list-riwayat .list-group-item { border-color: var(--sky-100); }
+
+/* Dasbor mobile gaya baru */
+.jam-besar { font-size: 44px; font-weight: 800; color: #fff; line-height: 1; letter-spacing: 1px; }
+.tanggal-kecil { color: rgba(255,255,255,.9); font-size: 13px; }
+.minggu-bar { display: flex; gap: 6px; align-items: flex-end; justify-content: space-between; }
+.hari-bar { flex: 1; text-align: center; }
+.batang { width: 100%; border-radius: 8px; background: var(--sky-100); height: 56px; position: relative; overflow: hidden; }
+.batang.isi { background: linear-gradient(180deg, var(--sky-400), var(--sky-600)); }
+.batang.hari-ini { outline: 2px solid var(--sky-500); outline-offset: 1px; }
+.hari-bar small { font-size: 11px; color: var(--sky-700); font-weight: 600; }
+.menu-ikon-bulat { width: 60px; height: 60px; border-radius: 20px; display: inline-flex; align-items: center; justify-content: center; background: var(--sky-100); color: var(--sky-600); font-size: 26px; }
