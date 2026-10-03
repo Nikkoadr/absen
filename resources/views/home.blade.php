@@ -96,6 +96,14 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
+                    <div class="card-header"><h4>Tren Kehadiran 7 Hari Terakhir</h4></div>
+                    <div class="card-body"><canvas id="grafikTren" height="90"></canvas></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
                         <div class="card-header">
                             <h4>Riwayat Presensi Hari Ini</h4>
                         </div>
@@ -118,8 +126,8 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $data->nama }}</td>
                                 <td><img style="width: 15%" src="{{ asset('storage/absen_file/'. $data->foto_masuk) }}" alt="image" class="image" /></td>
-                                <td><span class="badge 
-                                        @if($data->jam_masuk > $data->jam_kerja) badge-warning @else badge-success @endif ">{{ $data->jam_masuk }}</span>
+                                <td><span class="badge
+                                        @if($data->user?->jam_kerja && $data->jam_masuk > $data->user->jam_kerja) badge-warning @else badge-success @endif ">{{ $data->jam_masuk }}</span>
                                 </td>
                                     <td>@if ($data->foto_keluar == null)
                                         <small>Belum Pulang</small>
@@ -152,7 +160,6 @@
 <!-- /.content-wrapper -->
 @endsection
 @section('script')
-@section('script')
 <!-- DataTables  & Plugins -->
 <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
@@ -176,6 +183,21 @@
             // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
         }).buttons().container().appendTo('#table_rekap_wrapper .col-md-6:eq(0)');
     });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+    (function () {
+        var el = document.getElementById('grafikTren');
+        if (!el || typeof Chart === 'undefined') return;
+        new Chart(el, {
+            type: 'bar',
+            data: {
+                labels: @json($tren7Hari->pluck('label')),
+                datasets: [{ label: 'Hadir', data: @json($tren7Hari->pluck('hadir')), backgroundColor: '#0ea5e9' }],
+            },
+            options: { responsive: true, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } },
+        });
+    })();
 </script>
 
 @endsection

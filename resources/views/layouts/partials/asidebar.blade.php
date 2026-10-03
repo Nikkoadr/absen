@@ -52,6 +52,12 @@
             <p>Kehadiran</p>
         </a>
         </li>
+        <li class="nav-item">
+        <a href="/perizinan" class="nav-link {{ request()->is('perizinan') ? 'active' : '' }}">
+            <i class="nav-icon fa-solid fa-envelope-open-text"></i>
+            <p>Persetujuan Izin</p>
+        </a>
+        </li>
         <li class="nav-header">LAPORAN</li>
         <li class="nav-item menu-close">
         <a href="#" class="nav-link {{ request()->is('laporanSemua') ? 'active' : '' }}">
@@ -71,6 +77,12 @@
         </ul>
         </li>
         <li class="nav-header">SISTEM</li>
+        <li class="nav-item">
+        <a href="/libur" class="nav-link {{ request()->is('libur') ? 'active' : '' }}">
+            <i class="nav-icon fa-solid fa-calendar-xmark"></i>
+            <p>Hari Libur</p>
+        </a>
+        </li>
         <li class="nav-item">
         <a href="/setting" class="nav-link {{ request()->is('setting') ? 'active' : '' }}">
             <i class="nav-icon fa-solid fa-gears"></i>

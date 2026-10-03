@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AbsensiController;
+use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IzinController;
 use App\Http\Controllers\KiosPresensiController;
@@ -42,6 +43,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/izin', [IzinController::class, 'request_izin_user'])->name('request_izin_user');
 
     Route::middleware('can:is_admin')->group(function () {
+        Route::get('/perizinan', [IzinController::class, 'daftar'])->name('perizinan');
+        Route::put('/perizinan/{perizinan}/setujui', [IzinController::class, 'setujui'])->name('perizinan.setujui');
+        Route::put('/perizinan/{perizinan}/tolak', [IzinController::class, 'tolak'])->name('perizinan.tolak');
         Route::get('/attendance', [AbsensiController::class, 'attendance'])->name('attendance');
         Route::get('/attendance/{absensi}/edit', [AbsensiController::class, 'edit_absen'])->name('edit_absen');
         Route::put('/attendance/{absensi}', [AbsensiController::class, 'update_absen'])->name('update_absen');
@@ -62,5 +66,9 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/setting', [SettingController::class, 'setting'])->name('setting');
         Route::put('/setting', [SettingController::class, 'editSetting'])->name('editSetting');
+
+        Route::get('/libur', [HolidayController::class, 'index'])->name('libur.index');
+        Route::post('/libur', [HolidayController::class, 'store'])->name('libur.store');
+        Route::delete('/libur/{libur}', [HolidayController::class, 'destroy'])->name('libur.destroy');
     });
 });

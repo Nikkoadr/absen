@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\IzinRequest;
 use App\Models\LeaveRequest;
+use Illuminate\Support\Carbon;
 
 class IzinController extends Controller
 {
@@ -28,5 +29,41 @@ class IzinController extends Controller
         ]);
 
         return back()->with('success', 'Pengajuan izin berhasil dikirim dan menunggu persetujuan.');
+    }
+
+    public function daftar()
+    {
+        $menunggu = LeaveRequest::with('user:id,nama')
+            ->where('status', 'pending')
+            ->terbaru()
+            ->paginate(15, ['*'], 'menunggu');
+
+        return view('perizinan', compact('menunggu'));
+    }
+
+    public function setujui(LeaveRequest $perizinan)
+    {
+        abort_if($perizinan->status !== 'pending', 422, 'Hanya pengajuan pending yang bisa diproses.');
+
+        $perizinan->update([
+            'status' => 'disetujui',
+            'approved_by' => request()->user()->id,
+            'decided_at' => Carbon::now('Asia/Jakarta'),
+        ]);
+
+        return back()->with('success', 'Pengajuan izin disetujui.');
+    }
+
+    public function tolak(LeaveRequest $perizinan)
+    {
+        abort_if($perizinan->status !== 'pending', 422, 'Hanya pengajuan pending yang bisa diproses.');
+
+        $perizinan->update([
+            'status' => 'ditolak',
+            'approved_by' => request()->user()->id,
+            'decided_at' => Carbon::now('Asia/Jakarta'),
+        ]);
+
+        return back()->with('success', 'Pengajuan izin ditolak.');
     }
 }
