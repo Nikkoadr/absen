@@ -3,6 +3,7 @@
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IzinController;
+use App\Http\Controllers\KiosPresensiController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
@@ -19,6 +20,11 @@ Auth::routes([
     'reset' => false,
 ]);
 
+// Kios presensi wajah tanpa login (dibatas throttle agar tidak disalahgunakan)
+Route::get('/presensi-mandiri', [KiosPresensiController::class, 'kios'])->name('kios');
+Route::get('/api/deskriptor-wajah', [KiosPresensiController::class, 'deskriptor'])->middleware('throttle:30,1');
+Route::post('/presensi-mandiri', [KiosPresensiController::class, 'simpan'])->middleware('throttle:10,1')->name('kios.simpan');
+
 Route::middleware('auth')->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
@@ -29,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile/{user}', [ProfileController::class, 'edit_user'])->name('profile.update');
     Route::put('/profile/{user}/password', [ProfileController::class, 'edit_password_user_id'])->name('profile.password');
     Route::put('/profile/{user}/pasfoto', [ProfileController::class, 'upload_pasfoto_id'])->name('profile.pasfoto');
+    Route::post('/profile/{user}/wajah', [KiosPresensiController::class, 'simpanDeskriptor'])->name('profile.wajah');
     Route::get('/history', [ProfileController::class, 'history'])->name('history.cari');
 
     Route::get('/izin', [IzinController::class, 'izin'])->name('izin');

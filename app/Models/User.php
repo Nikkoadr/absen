@@ -24,6 +24,7 @@ class User extends Authenticatable
         'jam_kerja',
         'jam_pulang',
         'pasfoto',
+        'face_descriptor',
     ];
 
     protected $hidden = [
@@ -36,6 +37,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'face_descriptor' => 'array',
         ];
     }
 

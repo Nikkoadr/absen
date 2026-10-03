@@ -8,8 +8,8 @@
     <meta http-equiv="Expires" content="0" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#000000">
-    <title>Absen SMK</title>
+    <meta name="theme-color" content="#0ea5e9">
+    <title>Presensi SMK</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/dist/img/logoKotak.png') }}">
     <meta name="description" content="Absensi SMK Muhammadiyah Kandanghaur">
     <meta name="keywords" content="bootstrap 4, mobile template, cordova, phonegap, mobile, html" />
@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" />
     <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome-free-6.4.2/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/mobile/css/style.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/mobile/css/sky.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
     <meta name="mobile-web-app-capable" content="yes">
 

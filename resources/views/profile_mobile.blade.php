@@ -193,6 +193,15 @@
                             </form>
                         </div>
                         </div>
+                        <div class="card mt-3">
+                            <div class="card-header">Wajah untuk Presensi Mandiri</div>
+                            <div class="card-body">
+                                <p class="text-muted">Daftarkan wajah agar bisa presensi tanpa login di kios.</p>
+                                <img id="fotoAcuanWajah" style="max-width: 50%;" class="rounded mx-auto d-block" src="{{ Auth::user()->pasfoto ? asset('storage/absen_file/pasFotoAbsen/'.Auth::user()->pasfoto) : asset('assets/dist/img/logo.png') }}" crossorigin="anonymous">
+                                <div class="text-center mt-2"><span class="chip-sky" id="statusWajah">Belum didaftarkan</span></div>
+                                <button id="btnDaftarWajah" class="btn btn-sky btn-block mt-2">Daftarkan Wajah Ini</button>
+                            </div>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -200,9 +209,32 @@
 @endsection
 @section('script')
 <script src="assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/face-api.js@0.20.0/dist/face-api.min.js"></script>
 <script>
 $(function () {
     bsCustomFileInput.init();
+});
+document.getElementById('btnDaftarWajah')?.addEventListener('click', async () => {
+    const status = document.getElementById('statusWajah');
+    try {
+        status.textContent = 'Memuat model AI…';
+        await Promise.all([
+            faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
+            faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
+            faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
+        ]);
+        status.textContent = 'Mengenali wajah…';
+        const img = document.getElementById('fotoAcuanWajah');
+        const det = await faceapi.detectSingleFace(img, new faceapi.TinyFaceDetectorOptions({ inputSize: 512, scoreThreshold: 0.4 })).withFaceLandmarks().withFaceDescriptor();
+        if (!det) { status.textContent = 'Wajah tidak ditemukan di foto. Gunakan foto wajah jelas.'; return; }
+        const res = await fetch("{{ route('profile.wajah', Auth::user()->id) }}", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+            body: JSON.stringify({ descriptor: Array.from(det.descriptor) }),
+        });
+        const j = await res.json();
+        status.textContent = j.message || 'Berhasil';
+    } catch (e) { console.error(e); status.textContent = 'Gagal mendaftarkan wajah.'; }
 });
 </script>
 <script>

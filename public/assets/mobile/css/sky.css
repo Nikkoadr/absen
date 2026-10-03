@@ -1,0 +1,64 @@
+/* Tema Sky Blue untuk aplikasi presensi mobile (override Mobilekit) */
+:root {
+    --sky-50: #f0f9ff;
+    --sky-100: #e0f2fe;
+    --sky-200: #bae6fd;
+    --sky-300: #7dd3fc;
+    --sky-400: #38bdf8;
+    --sky-500: #0ea5e9;
+    --sky-600: #0284c7;
+    --sky-700: #0369a1;
+}
+
+body { background: linear-gradient(180deg, var(--sky-100) 0%, #f8fafc 240px) !important; }
+
+.sky-header {
+    background: linear-gradient(135deg, var(--sky-600), var(--sky-400)) !important;
+    color: #fff;
+    border-radius: 0 0 24px 24px;
+    padding: 18px 16px 22px;
+    box-shadow: 0 8px 24px rgba(2, 132, 199, .25);
+}
+.sky-header h1, .sky-header h2, .sky-header h5 { color: #fff !important; margin: 0; }
+.sky-header p { color: rgba(255,255,255,.85) !important; margin: 4px 0 0; }
+
+.sky-card {
+    background: #fff;
+    border: 1px solid var(--sky-100);
+    border-radius: 18px;
+    box-shadow: 0 6px 18px rgba(2, 132, 199, .10);
+}
+
+.btn-sky {
+    background: linear-gradient(135deg, var(--sky-500), var(--sky-700));
+    border: none;
+    color: #fff;
+    border-radius: 14px;
+    font-weight: 600;
+    box-shadow: 0 8px 18px rgba(2, 132, 199, .35);
+}
+.btn-sky:active, .btn-sky:focus { filter: brightness(1.05); color: #fff; }
+
+.appBottomMenu { border-top: 1px solid var(--sky-100); }
+.appBottomMenu .item strong { color: var(--sky-700); font-size: 11px; }
+.appBottomMenu .item.active strong { color: var(--sky-500); }
+.appBottomMenu .action-button.large {
+    background: linear-gradient(135deg, var(--sky-500), var(--sky-700)) !important;
+    border: 2px solid #fff;
+    box-shadow: 0 8px 20px rgba(2, 132, 199, .45) !important;
+}
+
+.kamera { border: 2px solid var(--sky-200); }
+#map { border: 2px solid var(--sky-200); }
+
+.chip-sky {
+    display: inline-block;
+    background: var(--sky-100);
+    color: var(--sky-700);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.badge-status { font-size: 12px; }
+.list-riwayat .list-group-item { border-color: var(--sky-100); }
