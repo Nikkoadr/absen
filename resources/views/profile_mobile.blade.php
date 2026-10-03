@@ -193,17 +193,17 @@
                             </form>
                         </div>
                         </div>
-                        <div class="card mt-3" style="margin-bottom: 90px;">
+                        <div class="card mt-3" style="margin-bottom: 120px;">
                             <div class="card-header">Wajah untuk Presensi Mandiri</div>
                             <div class="card-body text-center">
                                 <p class="text-muted">Ambil foto wajah langsung dari kamera, lalu daftarkan.</p>
-                                <video id="videoWajah" autoplay muted playsinline style="width: 100%; max-width: 320px; border-radius: 12px; transform: scaleX(-1);"></video>
+                                <video id="videoWajah" autoplay muted playsinline style="width: 100%; max-width: 320px; min-height: 240px; border-radius: 12px; transform: scaleX(-1); background: #0f172a;"></video>
                                 <canvas id="kanvasWajah" style="display: none;"></canvas>
                                 <div class="text-center mt-2"><span class="chip-sky" id="statusWajah">Kamera belum aktif</span></div>
-                                <div class="row mt-2">
-                                    <div class="col-6"><button id="btnKameraWajah" type="button" class="btn btn-secondary btn-block">Aktifkan Kamera</button></div>
-                                    <div class="col-6"><button id="btnDaftarWajah" type="button" class="btn btn-sky btn-block" disabled>Daftarkan Wajah</button></div>
-                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button id="btnKameraWajah" type="button" class="btn btn-secondary btn-block btn-lg mb-2">Aktifkan Kamera</button>
+                                <button id="btnDaftarWajah" type="button" class="btn btn-sky btn-block btn-lg" disabled>Daftarkan Wajah</button>
                             </div>
                         </div>
                         </div>

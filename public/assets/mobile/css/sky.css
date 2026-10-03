@@ -12,6 +12,8 @@
 
 body { background: linear-gradient(180deg, var(--sky-100) 0%, #f8fafc 240px) !important; }
 
+#appCapsule { padding-bottom: 120px; }
+
 .sky-header {
     background: linear-gradient(135deg, var(--sky-600), var(--sky-400)) !important;
     color: #fff;
