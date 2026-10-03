@@ -24,6 +24,22 @@
     <div class="row">
         <div class="col-md-4">
         <div class="card">
+            <div class="card-header"><h3 class="card-title">Sinkron Otomatis (API)</h3></div>
+            <form action="{{ route('libur.sinkron') }}" method="POST">
+                @csrf
+                <div class="card-body">
+                    <p class="text-muted">Ambil kalender libur nasional Indonesia dari data terbuka, realtime per tahun.</p>
+                    <div class="form-group">
+                        <label for="tahun">Tahun</label>
+                        <input type="number" name="tahun" id="tahun" value="{{ now()->year }}" min="2020" max="2100" class="form-control">
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-success float-right">Sinkron dari API</button>
+                </div>
+            </form>
+        </div>
+        <div class="card">
             <div class="card-header"><h3 class="card-title">Tambah Hari Libur</h3></div>
             <form action="{{ route('libur.store') }}" method="POST">
                 @csrf

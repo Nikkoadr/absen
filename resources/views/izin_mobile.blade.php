@@ -3,8 +3,10 @@
 
 @endsection
 @section('content')
-<div class="presencetab mt-2">
-    <h5 style="font-weight: bold; text-align: center; font-size: 1.5rem;">Pengajuan Izin</h5>
+<div class="presencetab">
+<div class="sky-header text-center mb-2">
+    <h1 style="font-size: 20px;">Pengajuan Izin</h1>
+</div>
     @if (session('success'))
         <div class="alert alert-success m-3">{{ session('success') }}</div>
     @endif

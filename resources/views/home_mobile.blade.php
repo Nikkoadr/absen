@@ -5,7 +5,7 @@
 @section('content')
     <!-- App Capsule -->
     <div id="appCapsule">
-        <div class="section bg-primary" id="user-section">
+        <div class="sky-header" id="user-section">
             <div id="user-detail">
                 <div class="avatar">
                     @if(Auth::user()->pasfoto==null)

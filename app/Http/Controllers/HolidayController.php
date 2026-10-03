@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Holiday;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 
 class HolidayController extends Controller
 {
@@ -36,5 +37,20 @@ class HolidayController extends Controller
         $libur->delete();
 
         return to_route('libur.index')->with('success', 'Hari libur berhasil dihapus.');
+    }
+
+    public function sinkron(Request $request)
+    {
+        $data = $request->validate([
+            'tahun' => ['nullable', 'integer', 'min:2020', 'max:2100'],
+        ]);
+
+        $tahun = (string) ($data['tahun'] ?? now('Asia/Jakarta')->year);
+        $kode = Artisan::call('holidays:sync', ['tahun' => $tahun]);
+
+        return to_route('libur.index')->with(
+            $kode === 0 ? 'success' : 'error',
+            $kode === 0 ? "Sinkron libur {$tahun} dari API berhasil." : "Sinkron libur {$tahun} gagal. Coba lagi."
+        );
     }
 }

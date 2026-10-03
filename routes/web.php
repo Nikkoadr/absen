@@ -69,6 +69,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/libur', [HolidayController::class, 'index'])->name('libur.index');
         Route::post('/libur', [HolidayController::class, 'store'])->name('libur.store');
+        Route::post('/libur/sinkron', [HolidayController::class, 'sinkron'])->name('libur.sinkron');
         Route::delete('/libur/{libur}', [HolidayController::class, 'destroy'])->name('libur.destroy');
     });
 });

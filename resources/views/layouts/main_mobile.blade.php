@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" />
     <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome-free-6.4.2/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/mobile/css/style.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/mobile/css/sky.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/mobile/css/sky.css') }}?v=2" />
     <link rel="stylesheet" href="{{ asset('assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
     <meta name="mobile-web-app-capable" content="yes">
 

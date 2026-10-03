@@ -3,7 +3,9 @@
     
 @endsection
 @section('content')
-<h5 style="font-weight: bold; text-align: center; font-size: 1.5rem;">Riwayat Presensi</h5>
+<div class="sky-header text-center mb-2">
+    <h1 style="font-size: 20px;">Riwayat Presensi</h1>
+</div>
 <div class="section mt-3">
         <div class="row">
             <div class="col-12">

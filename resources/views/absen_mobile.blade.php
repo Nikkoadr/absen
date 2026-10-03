@@ -57,6 +57,10 @@
 
 @section('content')
 <div id="appCapsule">
+    <div class="sky-header text-center mb-2">
+        <h1 style="font-size: 20px;">Ambil Presensi</h1>
+        <p>Wajah + lokasi terverifikasi AI</p>
+    </div>
     <div class="section full mt-2">
         <div class="section-title text-center">
             <span>Menu Presensi</span>
