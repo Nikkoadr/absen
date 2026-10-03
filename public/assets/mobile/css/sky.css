@@ -69,5 +69,13 @@ body { background: linear-gradient(180deg, var(--sky-100) 0%, #f8fafc 240px) !im
     font-size: 12px;
     font-weight: 600;
 }
+/* Matikan layout absolute bawaan template (dibuat untuk struktur lama) */
+#menu-section { position: static !important; width: auto !important; top: auto !important; z-index: auto !important; }
+#presence-section { position: static !important; top: auto !important; width: auto !important; background: transparent !important; }
+#user-section { height: auto !important; }
+#user-info { line-height: 1.5 !important; margin-left: 12px !important; }
+#user-detail { align-items: center; }
+.todaypresence { margin-top: 0 !important; }
+
 .badge-status { font-size: 12px; }
 .list-riwayat .list-group-item { border-color: var(--sky-100); }
