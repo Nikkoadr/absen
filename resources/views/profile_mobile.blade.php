@@ -167,28 +167,23 @@
                             @csrf
                             @method('put')
                             <div class="form-group">
-                                <div class="form-group">
-                                <label for="pas_foto">Upload Pas Foto <br><small>Note : Gunakan Gambar yang berukuran kotak</small> </label>
-                                <div class="input-group">
-                                    <div class="custom-file">
-                                    <input type="file" class="custom-file-input @error('pasfoto') is-invalid @enderror" id="pas_foto" name="pas_foto">
-                                    <label class="custom-file-label" for="pas_foto">Pilih file</label>
-                                </div>
-                                </div>
+                                <label>Upload Pas Foto <br><small>Note : Gunakan Gambar yang berukuran kotak</small></label>
+                                <label for="pas_foto" class="btn btn-outline-primary btn-block">Pilih Foto</label>
+                                <input type="file" id="pas_foto" name="pas_foto" accept="image/*" style="display: none;">
+                                <div id="namaFileDipilih" class="text-muted small text-center"></div>
                                 @error('pas_foto')
                                     <span class="invalid-feedback d-block" role="alert">
                                     <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
+                            </div>
+                            <div class="form-group boxed">
+                                <div class="input-wrapper">
+                                    <button type="submit" class="btn btn-primary btn-block">
+                                        <ion-icon name="refresh-outline"></ion-icon>
+                                        Update
+                                    </button>
                                 </div>
-                                    <div class="form-group boxed">
-                                        <div class="input-wrapper">
-                                            <button type="submit" class="btn btn-primary btn-block">
-                                                <ion-icon name="refresh-outline"></ion-icon>
-                                                Update
-                                            </button>
-                                        </div>
-                                    </div>
                             </div>
                             </form>
                         </div>
@@ -217,6 +212,9 @@
 <script>
 $(function () {
     bsCustomFileInput.init();
+    document.getElementById('pas_foto')?.addEventListener('change', function () {
+        document.getElementById('namaFileDipilih').textContent = this.files.length ? this.files[0].name : '';
+    });
 });
 document.getElementById('btnKameraWajah')?.addEventListener('click', async () => {
     const status = document.getElementById('statusWajah');
