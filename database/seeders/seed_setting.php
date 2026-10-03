@@ -15,7 +15,7 @@ class seed_setting extends Seeder
     public function run()
     {
         Setting::create([
-            'namaLokasi' => 'SMK Muhammadiyah Kandanghaur',
+            'nama_lokasi' => 'SMK Muhammadiyah Kandanghaur',
             'latitude' => '-6.363041',
             'longitude' => '108.113627',
             'radius' => '70',

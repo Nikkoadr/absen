@@ -29,7 +29,7 @@
         <a href="/home" class="nav-link {{ request()->is('home') ? 'active' : '' }}">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>
-            Dashboard
+            Dasbor
             </p>
         </a>
         </li>
@@ -37,7 +37,7 @@
         <a href="/absen" class="nav-link {{ request()->is('absen') ? 'active' : '' }}">
             <i class="nav-icon fa-solid fa-camera"></i>
             <p>
-            Absen
+            Ambil Presensi
             </p>
         </a>
         </li>
@@ -54,7 +54,7 @@
         <a href="/attendance" class="nav-link {{ request()->is('attendance') ? 'active' : '' }}">
             <i class="nav-icon fa-solid fa-clipboard-user"></i>
             <p>
-            Attendance
+            Kehadiran
             </p>
         </a>
         </li>
@@ -79,7 +79,7 @@
         <a href="/setting" class="nav-link {{ request()->is('setting') ? 'active' : '' }}">
             <i class="nav-icon fa-solid fa-gears"></i>
             <p>
-            Setting
+            Pengaturan
             </p>
         </a>
         </li>

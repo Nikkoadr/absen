@@ -2,32 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\IzinRequest;
+use App\Models\LeaveRequest;
 
 class IzinController extends Controller
 {
     public function izin()
     {
-        if (Auth::user()->role === 'admin') {
-            return redirect()->route('home')->with('info', 'Halaman izin hanya untuk pengguna non-admin.');
+        $pengguna = request()->user();
+
+        if ($pengguna->role === 'admin') {
+            return to_route('home')->with('info', 'Halaman pengajuan izin hanya untuk karyawan.');
         }
 
-        return view('izin_mobile');
+        $riwayat = LeaveRequest::milikPengguna($pengguna->id)->terbaru()->take(10)->get();
+
+        return view('izin_mobile', compact('riwayat'));
     }
 
-    public function request_izin_user(Request $request, $id)
+    public function request_izin_user(IzinRequest $request)
     {
-        if ((int) $id !== (int) Auth::id()) {
-            abort(403, 'Tidak diizinkan mengajukan izin untuk pengguna lain.');
-        }
-
-        $request->validate([
-            'jenis' => ['nullable', 'string', 'max:50'],
-            'tanggal' => ['nullable', 'date'],
-            'keterangan' => ['nullable', 'string', 'max:1000'],
+        LeaveRequest::create([
+            'user_id' => $request->user()->id,
+            ...$request->validated(),
         ]);
 
-        return back()->with('info', 'Maaf, fitur izin masih dalam proses development.');
+        return back()->with('success', 'Pengajuan izin berhasil dikirim dan menunggu persetujuan.');
     }
 }

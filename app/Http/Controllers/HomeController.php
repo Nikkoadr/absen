@@ -2,75 +2,62 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Absensi;
 use App\Models\User;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $today = Carbon::today('Asia/Jakarta');
+        $pengguna = request()->user();
+        $zona = 'Asia/Jakarta';
+        $today = Carbon::today($zona);
         $hariIni = $today->toDateString();
-        $userAktif = Auth::id();
-        $bulanIni = (int) $today->month;
-        $tahunIni = (int) $today->year;
 
-        $absenHariIni = DB::table('absensi')
-            ->where('id_user', $userAktif)
-            ->where('tanggal_absen', $hariIni)
-            ->first();
+        $dasar = Absensi::with('user:id,nama')->padaTanggal($hariIni)->orderBy('jam_masuk');
 
-        $historyBulanIni = DB::table('absensi')
-            ->where('id_user', $userAktif)
-            ->whereMonth('tanggal_absen', $bulanIni)
-            ->whereYear('tanggal_absen', $tahunIni)
+        $absenHariIni = Absensi::milikPengguna($pengguna->id)->padaTanggal($hariIni)->first();
+        $historyBulanIni = Absensi::milikPengguna($pengguna->id)
+            ->bulan((int) $today->month, (int) $today->year)
             ->orderBy('tanggal_absen')
             ->get();
 
-        $set_jam_kerja = Auth::user()->jam_kerja;
-
-        $jumlahHadir = DB::table('absensi')
-            ->where('id_user', $userAktif)
-            ->whereMonth('tanggal_absen', $bulanIni)
-            ->whereYear('tanggal_absen', $tahunIni)
+        $jumlahHadir = Absensi::milikPengguna($pengguna->id)
+            ->bulan((int) $today->month, (int) $today->year)
             ->count();
 
-        $rekapAbsensi = (object) [
-            'jumlahHadir' => $jumlahHadir,
-            'jumlahTidakHadir' => max(0, $today->day - $jumlahHadir),
-        ];
-
-        $hitungPulang = DB::table('absensi')
-            ->where('tanggal_absen', $hariIni)
-            ->whereNotNull('jam_keluar')
-            ->count();
-
-        $leaderboard = DB::table('absensi')
-            ->join('users', 'absensi.id_user', '=', 'users.id')
-            ->where('tanggal_absen', $hariIni)
-            ->orderBy('jam_masuk')
-            ->select('absensi.*', 'users.nama')
-            ->get();
-
-        $leaderboard_mobile = DB::table('absensi')
-            ->join('users', 'absensi.id_user', '=', 'users.id')
-            ->where('tanggal_absen', $hariIni)
-            ->orderBy('jam_masuk')
-            ->select('absensi.*', 'users.nama')
-            ->take(10)
-            ->get();
-
+        $hitungPulang = Absensi::padaTanggal($hariIni)->whereNotNull('jam_keluar')->count();
+        $leaderboard = (clone $dasar)->get();
         $hitungUser = User::count();
-        $hitungMasukHariIni = $leaderboard->count();
-        $hitungAlfa = max(0, $hitungUser - $hitungMasukHariIni);
-        $namaBulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
-        if (Auth::user()->role === 'admin') {
-            return view('home', compact('absenHariIni', 'historyBulanIni', 'bulanIni', 'tahunIni', 'namaBulan', 'leaderboard', 'hitungUser', 'hitungMasukHariIni', 'hitungPulang', 'hitungAlfa'));
+        if ($pengguna->role === 'admin') {
+            return view('home', [
+                'absenHariIni' => $absenHariIni,
+                'historyBulanIni' => $historyBulanIni,
+                'bulanIni' => (int) $today->month,
+                'tahunIni' => (int) $today->year,
+                'namaBulan' => $today->isoFormat('MMMM'),
+                'leaderboard' => $leaderboard,
+                'hitungUser' => $hitungUser,
+                'hitungMasukHariIni' => $leaderboard->count(),
+                'hitungPulang' => $hitungPulang,
+                'hitungAlfa' => max(0, $hitungUser - $leaderboard->count()),
+            ]);
         }
 
-        return view('home_mobile', compact('absenHariIni', 'historyBulanIni', 'bulanIni', 'tahunIni', 'namaBulan', 'rekapAbsensi', 'leaderboard_mobile', 'set_jam_kerja'));
+        return view('home_mobile', [
+            'absenHariIni' => $absenHariIni,
+            'historyBulanIni' => $historyBulanIni,
+            'bulanIni' => (int) $today->month,
+            'tahunIni' => (int) $today->year,
+            'namaBulan' => $today->isoFormat('MMMM'),
+            'rekapAbsensi' => (object) [
+                'jumlahHadir' => $jumlahHadir,
+                'jumlahTidakHadir' => max(0, $today->day - $jumlahHadir),
+            ],
+            'leaderboard_mobile' => (clone $dasar)->take(10)->get(),
+            'set_jam_kerja' => $pengguna->jam_kerja,
+        ]);
     }
 }

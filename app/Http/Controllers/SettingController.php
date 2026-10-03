@@ -2,36 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateSettingRequest;
 use App\Models\Setting;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class SettingController extends Controller
 {
     public function setting()
     {
-        Gate::authorize('is_admin');
-
-        $setting = Setting::first();
+        $setting = Setting::firstOrCreate(
+            ['id' => 1],
+            [
+                'nama_lokasi' => 'SMK Muhammadiyah Kandanghaur',
+                'latitude' => '-6.363041',
+                'longitude' => '108.113627',
+                'radius' => '70',
+                'limit_absen' => '13:00:00',
+            ]
+        );
 
         return view('setting', compact('setting'));
     }
 
-    public function editSetting(Request $request)
+    public function editSetting(UpdateSettingRequest $request)
     {
-        Gate::authorize('is_admin');
+        Setting::firstOrFail()->update($request->validated());
 
-        $data_valid = $request->validate([
-            'namaLokasi' => ['required', 'string', 'max:255'],
-            'latitude' => ['required', 'numeric', 'between:-90,90'],
-            'longitude' => ['required', 'numeric', 'between:-180,180'],
-            'radius' => ['required', 'integer', 'min:1', 'max:100000'],
-            'limit_absen' => ['required', 'date_format:H:i,H:i:s'],
-        ]);
-
-        $setting = Setting::firstOrFail();
-        $setting->update($data_valid);
-
-        return redirect('setting')->with('success', 'Data Berhasil di Update');
+        return to_route('setting')->with('success', 'Pengaturan berhasil diperbarui.');
     }
 }

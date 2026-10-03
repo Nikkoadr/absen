@@ -3,6 +3,7 @@
     
 @endsection
 @section('content')
+<h5 style="font-weight: bold; text-align: center; font-size: 1.5rem;">Riwayat Presensi</h5>
 <div class="section mt-3">
         <div class="row">
             <div class="col-12">

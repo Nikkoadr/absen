@@ -1,24 +1,3 @@
-@php
-    use Illuminate\Support\Carbon;
-
-    function selisih($jam_masuk, $jam_batas)
-    {
-        list($h_masuk, $m_masuk, $s_masuk) = explode(":", $jam_masuk);
-        $dtAwal = mktime($h_masuk, $m_masuk, $s_masuk, 1, 1, 1);
-
-        list($h_batas, $m_batas, $s_batas) = explode(":", $jam_batas);
-        $dtBatas = mktime($h_batas, $m_batas, $s_batas, 1, 1, 1);
-
-        $dtSelisih = $dtAwal - $dtBatas;
-
-        $totalmenit = $dtSelisih / 60;
-        $jam = explode(".", $totalmenit / 60);
-        $sisamenit = ($totalmenit / 60) - $jam[0];
-        $sisamenit2 = $sisamenit * 60;
-
-        return $jam[0] . ":" . round($sisamenit2);
-    }
-@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -80,7 +59,7 @@
                         <b style="font-size:14pt !important;">:</b>
                     </td>
                     <td>
-                        <b style="font-size:14pt !important;">{{ Carbon::create()->month($bulan)->isoFormat('MMMM') }} {{ $tahun }}</b>
+                        <b style="font-size:14pt !important;">{{ \Illuminate\Support\Carbon::create()->month($bulan)->isoFormat('MMMM') }} {{ $tahun }}</b>
                     </td>
                 </tr>
                 <tr>
@@ -170,10 +149,10 @@
             @foreach ($rekap as $data)
             <tr>
                 <td width="100px" align="center" width="250px">{{ $loop->iteration }}</td>
-                <td align="center" width="250px">{{ Carbon::parse($data->tanggal_absen ?? $bulan . '-01')->format('d F Y') }}</td>
+                <td align="center" width="250px">{{ \Illuminate\Support\Carbon::parse($data->tanggal_absen ?? $bulan . '-01')->format('d F Y') }}</td>
                 <td align="center" width="250px"><img style="width: 60px" src="{{ asset('storage/absen_file/'. $data->foto_masuk) }}" alt="fotoMasuk"></td>
                 <td align="center" width="250px">
-                    <span @if($data->jam_masuk > $data->jam_kerja)
+                    <span @if($data->jam_masuk > $user->jam_kerja)
                         style="background: yellow"
                         @else
                         style="background: #00FF00"
@@ -194,14 +173,14 @@
                 </td>
                 <td align="center" width="250px">
                     @if($data->jam_keluar != null)
-                    {{ selisih($data->jam_keluar, $data->jam_masuk) }}
+                    {{ \App\Support\WaktuKerja::formatSelisih($data->jam_masuk, $data->jam_keluar) }}
                     @else
                     0
                     @endif
                 </td>
                 <td align="center" width="250px">
-                    @if($data->jam_masuk > $data->jam_kerja)
-                    Terlambat {{ selisih($data->jam_masuk, $data->jam_kerja) }}
+                    @if($data->jam_masuk > $user->jam_kerja)
+                    Terlambat {{ \App\Support\WaktuKerja::formatSelisih($user->jam_kerja, $data->jam_masuk) }}
                     @else
                     Tepat Waktu
                     @endif

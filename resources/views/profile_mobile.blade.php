@@ -13,7 +13,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#password" role="tab">
-                                Password
+                                Kata Sandi
                             </a>
                         </li>
                         <li class="nav-item">
@@ -129,7 +129,7 @@
                                             </div>
                                         </div>
                                         <div class="mb-3 row">
-                                            <label for="password-confirm" class="col-sm-3 col-form-label">Konfirmasi Password :</label>
+                                            <label for="password-confirm" class="col-sm-3 col-form-label">Konfirmasi Kata Sandi :</label>
                                             <div class="col-sm-9">
                                                 <input type="password" class="form-control @error('password-confirm') is-invalid @enderror" name="password_confirmation" id="password-confirm" required>
                                                 @error('password-confirm')

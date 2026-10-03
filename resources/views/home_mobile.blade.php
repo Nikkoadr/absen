@@ -42,7 +42,7 @@
                                 </a>
                             </div>
                             <div class="menu-name">
-                                <span class="text-center">Histori</span>
+                                <span class="text-center">Riwayat</span>
                             </div>
                         </div>
 
@@ -53,7 +53,7 @@
                                 </a>
                             </div>
                             <div class="menu-name">
-                                <span class="text-center">request Izin</span>
+                                <span class="text-center">Ajukan Izin</span>
                             </div>
                         </div>
 
@@ -105,7 +105,7 @@
                 </div>
             </div>
             <div class="rekappresence mt-1">
-                <h3>Rekap Bulan {{ $namaBulan[$bulanIni] }} Tahun {{ $tahunIni }} : </h3>
+                <h3>Rekap Bulan {{ $namaBulan }} Tahun {{ $tahunIni }} : </h3>
                 <div class="row">
                     <div class="col-6">
                         <div class="card">
@@ -181,7 +181,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#profile" role="tab">
-                                Leaderboard
+                                Peringkat
                             </a>
                         </li>
                     </ul>

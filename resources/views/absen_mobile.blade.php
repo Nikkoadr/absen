@@ -59,7 +59,7 @@
 <div id="appCapsule">
     <div class="section full mt-2">
         <div class="section-title text-center">
-            <span>Menu Absensi</span>
+            <span>Menu Presensi</span>
         </div>
         <div class="wide-block pt-2 pb-2">
             <h5 class="text-center mb-3">Kamera Anda</h5>
@@ -72,25 +72,25 @@
                     @if($cek > 0)
                         @if($jam > Auth::user()->jam_pulang)
                             <button id="ambilFoto" class="btn btn-danger btn-block btn-absen">
-                                <i class="fa-solid fa-camera-retro"></i> Absen Pulang
+                                <i class="fa-solid fa-camera-retro"></i> Presensi Pulang
                             </button>
                         @else
                             <button id="tombolpulang" class="btn btn-danger btn-block btn-absen">
-                                <i class="fa-solid fa-camera-retro"></i> Absen Pulang
+                                <i class="fa-solid fa-camera-retro"></i> Presensi Pulang
                             </button>
                         @endif
                     @else
                         @if($jam > $limit_absen)
                             <button id="tombolmasuk" class="btn btn-primary btn-block btn-absen">
-                                <i class="fa-solid fa-camera-retro"></i> Absen Masuk
+                                <i class="fa-solid fa-camera-retro"></i> Presensi Masuk
                             </button>
                         @elseif($jam < '06:00:00')
                             <button id="mulai_absen" class="btn btn-primary btn-block btn-absen">
-                                <i class="fa-solid fa-camera-retro"></i> Absen Masuk
+                                <i class="fa-solid fa-camera-retro"></i> Presensi Masuk
                             </button>
                         @else
                             <button id="ambilFoto" class="btn btn-primary btn-block btn-absen">
-                                <i class="fa-solid fa-camera-retro"></i> Absen Masuk
+                                <i class="fa-solid fa-camera-retro"></i> Presensi Masuk
                             </button>
                         @endif
                     @endif
@@ -279,7 +279,7 @@ $("#tombolpulang").click(() => {
     Swal.fire({ title: "Opss..!!!", text: "Maaf Belum Waktunya Pulang ya !", icon: "error" });
 });
 $("#tombolmasuk").click(() => {
-    Swal.fire({ title: "Maaf !", text: "Absen masuknya sudah tidak bisa karena terlalu siang", icon: "error" });
+    Swal.fire({ title: "Maaf !", text: "Presensi Masuknya sudah tidak bisa karena terlalu siang", icon: "error" });
 });
 </script>
 @endsection

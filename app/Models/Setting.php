@@ -9,10 +9,19 @@ class Setting extends Model
     protected $table = 'setting';
 
     protected $fillable = [
-        'namaLokasi',
+        'nama_lokasi',
         'latitude',
         'longitude',
         'radius',
         'limit_absen',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'latitude' => 'decimal:7',
+            'longitude' => 'decimal:7',
+            'radius' => 'integer',
+        ];
+    }
 }

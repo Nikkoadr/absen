@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @section('title')
-{{'Profile Admin'}}
+{{'Profil Admin'}}
 @endsection
 @section('link')
 <link rel="stylesheet" href="assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
@@ -13,12 +13,12 @@
     <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-sm-6">
-        <h1>Profile</h1>
+        <h1>Profil</h1>
         </div>
         <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Admin</a></li>
-            <li class="breadcrumb-item active">Profile Administrator</li>
+            <li class="breadcrumb-item active">Profil Administrator</li>
         </ol>
         </div>
     </div>
@@ -88,9 +88,9 @@
         <div class="card">
             <div class="card-header p-2">
             <ul class="nav nav-pills">
-                <li class="nav-item"><a class="nav-link active" href="#historyBulanIni" data-toggle="tab">History Bulan Ini</a></li>
+                <li class="nav-item"><a class="nav-link active" href="#historyBulanIni" data-toggle="tab">Riwayat Bulan Ini</a></li>
                 <li class="nav-item"><a class="nav-link" href="#data_diri" data-toggle="tab">Data diri</a></li>
-                <li class="nav-item"><a class="nav-link" href="#password" data-toggle="tab">Password</a></li>
+                <li class="nav-item"><a class="nav-link" href="#password" data-toggle="tab">Kata Sandi</a></li>
                 <li class="nav-item"><a class="nav-link" href="#dokumen" data-toggle="tab">Dokumen</a></li>
                 
             </ul>
@@ -246,7 +246,7 @@
                                 </div>
                             </div>
                             <div class="mb-3 row">
-                                <label for="password-confirm" class="col-sm-3 col-form-label">Konfirmasi Password :</label>
+                                <label for="password-confirm" class="col-sm-3 col-form-label">Konfirmasi Kata Sandi :</label>
                                 <div class="col-sm-9">
                                     <input type="password" class="form-control @error('password-confirm') is-invalid @enderror" name="password_confirmation" id="password-confirm" required>
                                     @error('password-confirm')

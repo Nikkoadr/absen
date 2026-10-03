@@ -26,29 +26,29 @@ Route::middleware('auth')->group(function () {
     Route::post('/absenMasuk', [AbsensiController::class, 'absenMasuk'])->name('absenMasuk');
 
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
-    Route::put('/profile/{id}', [ProfileController::class, 'edit_user'])->name('profile.update');
-    Route::put('/profile/{id}/password', [ProfileController::class, 'edit_password_user_id'])->name('profile.password');
-    Route::put('/profile/{id}/pasfoto', [ProfileController::class, 'upload_pasfoto_id'])->name('profile.pasfoto');
+    Route::put('/profile/{user}', [ProfileController::class, 'edit_user'])->name('profile.update');
+    Route::put('/profile/{user}/password', [ProfileController::class, 'edit_password_user_id'])->name('profile.password');
+    Route::put('/profile/{user}/pasfoto', [ProfileController::class, 'upload_pasfoto_id'])->name('profile.pasfoto');
     Route::get('/history', [ProfileController::class, 'history'])->name('history.cari');
 
     Route::get('/izin', [IzinController::class, 'izin'])->name('izin');
-    Route::post('/izin/{id}', [IzinController::class, 'request_izin_user'])->name('request_izin_user');
+    Route::post('/izin', [IzinController::class, 'request_izin_user'])->name('request_izin_user');
 
     Route::middleware('can:is_admin')->group(function () {
         Route::get('/attendance', [AbsensiController::class, 'attendance'])->name('attendance');
-        Route::get('/attendance/{id}/edit', [AbsensiController::class, 'edit_absen'])->name('edit_absen');
-        Route::put('/attendance/{id}', [AbsensiController::class, 'update_absen'])->name('update_absen');
-        Route::delete('/attendance/{id}', [AbsensiController::class, 'hapus_absen'])->name('hapus_absen');
+        Route::get('/attendance/{absensi}/edit', [AbsensiController::class, 'edit_absen'])->name('edit_absen');
+        Route::put('/attendance/{absensi}', [AbsensiController::class, 'update_absen'])->name('update_absen');
+        Route::delete('/attendance/{absensi}', [AbsensiController::class, 'hapus_absen'])->name('hapus_absen');
 
         Route::get('/data_user', [UserController::class, 'index'])->name('data_user');
         Route::post('/importUser', [UserController::class, 'importUser'])->name('importUser');
         Route::get('/exportuser', [UserController::class, 'exportuser'])->name('exportuser');
         Route::post('/tambah_user', [UserController::class, 'tambah_user'])->name('tambah_user');
-        Route::put('/user/{id}', [UserController::class, 'edit_user'])->name('edit_user');
-        Route::delete('/user/{id}', [UserController::class, 'hapus_data_user'])->name('hapus_data_user');
-        Route::put('/user/{id}/password', [UserController::class, 'ubah_password'])->name('ubah_password');
+        Route::put('/user/{user}', [UserController::class, 'edit_user'])->name('edit_user');
+        Route::delete('/user/{user}', [UserController::class, 'hapus_data_user'])->name('hapus_data_user');
+        Route::put('/user/{user}/password', [UserController::class, 'ubah_password'])->name('ubah_password');
 
-        Route::post('/laporan/individu/{id}', [LaporanController::class, 'printLaporanIndividu'])->name('printLaporanIndividu');
+        Route::post('/laporan/individu/{user}', [LaporanController::class, 'printLaporanIndividu'])->name('printLaporanIndividu');
         Route::get('/laporanSemua', [LaporanController::class, 'laporanSemua'])->name('laporanSemua');
         Route::post('/printLaporanBulanan', [LaporanController::class, 'printSemuaLaporan'])->name('printSemuaLaporan');
         Route::post('/downloadLaporanBulanan', [LaporanController::class, 'downloadLaporanBulanan'])->name('downloadLaporanBulanan');

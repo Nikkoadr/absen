@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,8 +11,6 @@ class Absensi extends Model
     use HasFactory;
 
     protected $table = 'absensi';
-
-    public $timestamps = false;
 
     protected $fillable = [
         'id_user',
@@ -24,12 +23,35 @@ class Absensi extends Model
         'lokasi_keluar',
     ];
 
-    protected $casts = [
-        'tanggal_absen' => 'date:Y-m-d',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'tanggal_absen' => 'date:Y-m-d',
+        ];
+    }
 
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');
+    }
+
+    public function scopePadaTanggal(Builder $query, string $tanggal): Builder
+    {
+        return $query->where('tanggal_absen', $tanggal);
+    }
+
+    public function scopeMilikPengguna(Builder $query, int $userId): Builder
+    {
+        return $query->where('id_user', $userId);
+    }
+
+    public function scopeBulan(Builder $query, int $bulan, int $tahun): Builder
+    {
+        return $query->whereMonth('tanggal_absen', $bulan)->whereYear('tanggal_absen', $tahun);
+    }
+
+    public function getSudahPulangAttribute(): bool
+    {
+        return $this->jam_keluar !== null;
     }
 }

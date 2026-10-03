@@ -4,36 +4,56 @@
 @endsection
 @section('content')
 <div class="presencetab mt-2">
-    <h5 style="font-weight: bold; text-align: center; font-size: 1.5rem;">Request Izin</h5>
+    <h5 style="font-weight: bold; text-align: center; font-size: 1.5rem;">Pengajuan Izin</h5>
+    @if (session('success'))
+        <div class="alert alert-success m-3">{{ session('success') }}</div>
+    @endif
     <div class="tab-content mt-2" style="margin-bottom: 100px">
         <div class="tab-pane fade show active" id="dataDiri" role="tabpanel">
             <div class="section mt-3 mb-5">
                 <div class="card">
-                    <form action="{{ route('request_izin_user', Auth::user()->id) }}" method="POST">
+                    <form action="{{ route('request_izin_user') }}" method="POST">
                         @csrf
                         <div class="col">
                             <div class="row mb-3">
                                 <label for="nama" class="col-sm-3 col-form-label text-md-end">Nama <span style="color: red">*</span> : </label>
                                 <div class="col-sm-9">
-                                    <input id="nama" readonly type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" value="{{ Auth::user()->nama }}" autocomplete="nama" autofocus>
-                                    @error('nama')
+                                    <input id="nama" readonly type="text" class="form-control" name="nama" value="{{ Auth::user()->nama }}">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="jenis" class="col-sm-3 col-form-label text-md-end">Jenis Izin <span style="color: red">*</span> : </label>
+                                <div class="col-sm-9">
+                                    <select id="jenis" class="form-control @error('jenis') is-invalid @enderror" name="jenis" required>
+                                        <option value="" disabled selected>Pilih jenis izin</option>
+                                        <option value="izin" @selected(old('jenis') === 'izin')>Izin</option>
+                                        <option value="sakit" @selected(old('jenis') === 'sakit')>Sakit</option>
+                                        <option value="cuti" @selected(old('jenis') === 'cuti')>Cuti</option>
+                                        <option value="dinas_luar" @selected(old('jenis') === 'dinas_luar')>Dinas Luar</option>
+                                    </select>
+                                    @error('jenis')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
                                 </div>
                             </div>
-                            <!-- Form tambahan untuk Request Izin -->
                             <div class="row mb-3">
-                                <label for="izin" class="col-sm-3 col-form-label text-md-end">Jenis Izin <span style="color: red">*</span> : </label>
+                                <label for="tanggal_mulai" class="col-sm-3 col-form-label text-md-end">Tanggal Mulai <span style="color: red">*</span> : </label>
                                 <div class="col-sm-9">
-                                    <select id="izin" class="form-control @error('izin') is-invalid @enderror" name="izin">
-                                        <option value="" disabled selected>Pilih Jenis Izin</option>
-                                        <option value="Sakit">Sakit</option>
-                                        <option value="Dinas Luar">Dinas Luar</option>
-                                        <option value="Izin Lainnya">Izin Lainnya</option>
-                                    </select>
-                                    @error('izin')
+                                    <input id="tanggal_mulai" type="date" class="form-control @error('tanggal_mulai') is-invalid @enderror" name="tanggal_mulai" value="{{ old('tanggal_mulai') }}" required>
+                                    @error('tanggal_mulai')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="tanggal_selesai" class="col-sm-3 col-form-label text-md-end">Tanggal Selesai :</label>
+                                <div class="col-sm-9">
+                                    <input id="tanggal_selesai" type="date" class="form-control @error('tanggal_selesai') is-invalid @enderror" name="tanggal_selesai" value="{{ old('tanggal_selesai') }}">
+                                    @error('tanggal_selesai')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -43,7 +63,7 @@
                             <div class="row mb-3">
                                 <label for="keterangan" class="col-sm-3 col-form-label text-md-end">Keterangan :</label>
                                 <div class="col-sm-9">
-                                    <textarea id="keterangan" class="form-control @error('keterangan') is-invalid @enderror" name="keterangan" rows="3" placeholder="Isi keterangan izin Anda"></textarea>
+                                    <textarea id="keterangan" class="form-control @error('keterangan') is-invalid @enderror" name="keterangan" rows="3" placeholder="Isi keterangan izin Anda">{{ old('keterangan') }}</textarea>
                                     @error('keterangan')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -51,18 +71,30 @@
                                     @enderror
                                 </div>
                             </div>
-                            <!-- End of Request Izin -->
                             <div style="margin-bottom: 50px" class="form-group boxed">
                                 <div class="input-wrapper">
                                     <button type="submit" class="btn btn-primary btn-block">
                                         <ion-icon name="refresh-outline"></ion-icon>
-                                        Izin
+                                        Ajukan Izin
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </form>
                 </div>
+                @if (! empty($riwayat) && $riwayat->count())
+                    <div class="card mt-3">
+                        <div class="card-header">Riwayat Pengajuan Terakhir</div>
+                        <ul class="list-group list-group-flush">
+                            @foreach ($riwayat as $izin)
+                                <li class="list-group-item">
+                                    {{ $izin->tanggal_mulai->format('d M Y') }} — {{ ucwords(str_replace('_', ' ', $izin->jenis)) }}
+                                    <span class="badge bg-info float-end">{{ ucfirst($izin->status) }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -70,20 +102,6 @@
 
 @endsection
 @section('script')
-    {{-- <script>
-        $(document).ready(function() {
-            Swal.fire({
-                title: 'Maaf !!!',
-                text: 'Form Izin Masih Dalam Pengembangan ICT !!!',
-                icon: 'warning',
-                confirmButtonText: 'Siap Kapten !!!',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "/home";
-                }
-            });
-        });
-    </script> --}}
 @endsection
 </body>
 </html>

@@ -10,12 +10,12 @@
     <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-sm-6">
-        <h1>Riwayat Transaksi</h1>
+        <h1>Data Kehadiran</h1>
         </div>
         <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Riwayat Transaksi</li>
+            <li class="breadcrumb-item"><a href="/home">Beranda</a></li>
+            <li class="breadcrumb-item active">Data Kehadiran</li>
         </ol>
         </div>
     </div>
@@ -33,7 +33,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="hari">Hari:</label>
-                            <input type="text" class="form-control" id="hari" name="hari" placeholder="Masukkan tahun" value="{{ $hari }}">
+                            <input type="text" class="form-control" id="hari" name="hari" placeholder="Masukkan hari (1-31)" value="{{ $hari }}">
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -69,25 +69,24 @@
 <section class="content">
     <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Data Nota</h3>
+        <h3 class="card-title">Data Kehadiran</h3>
     </div>
             <div class="card-body">
             <table id="table_att" class="table table-bordered table-striped">
                 <thead>
                 <tr>
                 <th>No</th>
-                <th>nama</th>
-                <th>tanggal</th>
+                <th>Nama</th>
+                <th>Tanggal</th>
                 <th>Jam Masuk</th>
                 <th>Jam Keluar</th>
-                <th>Menu</th>
+                <th>Aksi</th>
                 </tr>
                 </thead>
                 <tbody>
-                <?php $no=1; ?>
                 @foreach ($attendance as $data )
                 <tr>
-                    <td><?= $no++ ?></td>
+                    <td>{{ $loop->iteration }}</td>
                     <td>{{ $data -> nama }}</td>
                     <td>{{ Illuminate\Support\Carbon::parse($data->tanggal_absen)->format('d-M-Y'); }}</td>
                     <td>{{ $data -> jam_masuk }}</td>

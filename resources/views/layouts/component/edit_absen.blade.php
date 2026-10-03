@@ -9,12 +9,12 @@
     <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-sm-6">
-        <h1 class="m-0">Edit Absensi</h1>
+        <h1 class="m-0">Ubah Presensi</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Admin</a></li>
-            <li class="breadcrumb-item active">edit absensi</li>
+            <li class="breadcrumb-item active">Ubah Presensi</li>
         </ol>
         </div><!-- /.col -->
     </div><!-- /.row -->
@@ -27,11 +27,11 @@
         <div class="col-12">
         <div class="card">
             <div class="card-header">
-            <h3 class="card-title">Edit Absensi</h3>
+            <h3 class="card-title">Ubah Presensi</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <form action="update_absen_{{ $data->id }}" method="POST">
+                <form action="{{ route('update_absen', $data->id) }}" method="POST">
                             @method('put')
                             @csrf
                             <div class="card-body">
@@ -52,7 +52,7 @@
                                     <input type="text" class="form-control" id="jam_keluar" name="jam_keluar" value="{{ $data->jam_keluar }}">
                                 </div>
                             </div>
-                                <button style="float: right" type="submit" class="btn btn-primary m-2">Edit</button>
+                                <button style="float: right" type="submit" class="btn btn-primary m-2">Simpan</button>
                                 <a style="float: right" href="/attendance" class="btn btn-secondary m-2">Kembali</a>
                         </form>
             </div>

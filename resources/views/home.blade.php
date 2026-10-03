@@ -18,12 +18,12 @@
     <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-sm-6">
-        <h1 class="m-0">Dashboard Absensi</h1>
+        <h1 class="m-0">Dasbor Presensi</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="/home">Admin</a></li>
-            <li class="breadcrumb-item active">Dashboard</li>
+            <li class="breadcrumb-item"><a href="/home">Beranda</a></li>
+            <li class="breadcrumb-item active">Dasbor</li>
         </ol>
         </div><!-- /.col -->
     </div><!-- /.row -->
@@ -46,7 +46,7 @@
             <div class="icon">
             <i class="ion ion-android-people"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="#" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
         </div>
         </div>
         <!-- ./col -->
@@ -60,7 +60,7 @@
             <div class="icon">
             <i class="ion ion-ios-download-outline"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="#" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
         </div>
         </div>
         <!-- ./col -->
@@ -74,7 +74,7 @@
             <div class="icon">
             <i class="ion ion-ios-upload-outline"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="#" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
         </div>
         </div>
         <!-- ./col -->
@@ -88,7 +88,7 @@
             <div class="icon">
             <i class="ion ion-ios-pulse-strong"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="#" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
         </div>
         </div>
         <!-- ./col -->
@@ -97,7 +97,7 @@
             <div class="col-12">
                 <div class="card">
                         <div class="card-header">
-                            <h4>History Absensi Hari Ini</h4>
+                            <h4>Riwayat Presensi Hari Ini</h4>
                         </div>
                     <!-- /.card-header -->
                         <div class="card-body">
@@ -105,7 +105,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Nama User</th>
+                                    <th>Nama</th>
                                     <th>Foto Masuk</th>
                                     <th>Jam Masuk</th>
                                     <th>Foto Keluar</th>
@@ -113,10 +113,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            <?php $no = 1; ?>
                             @foreach ($leaderboard as $data)
                             <tr>
-                                <td><?= $no++; ?></td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $data->nama }}</td>
                                 <td><img style="width: 15%" src="{{ asset('storage/absen_file/'. $data->foto_masuk) }}" alt="image" class="image" /></td>
                                 <td><span class="badge 

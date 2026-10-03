@@ -9,12 +9,12 @@
     <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-sm-6">
-        <h1 class="m-0">Setting</h1>
+        <h1 class="m-0">Pengaturan</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Admin</a></li>
-            <li class="breadcrumb-item active">setting</li>
+            <li class="breadcrumb-item active">Pengaturan</li>
         </ol>
         </div><!-- /.col -->
     </div><!-- /.row -->
@@ -27,7 +27,7 @@
         <div class="col-12">
         <div class="card">
             <div class="card-header">
-            <h3 class="card-title">Setting</h3>
+            <h3 class="card-title">Pengaturan</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -35,8 +35,8 @@
                     @csrf
                     @method('put')
                     <div class="form-group">
-                        <label for="namaLokasi">Nama Lokasi:</label>
-                        <input type="text" class="form-control" id="namaLokasi" name="namaLokasi" value="{{ $setting->namaLokasi }}">
+                        <label for="nama_lokasi">Nama Lokasi:</label>
+                        <input type="text" class="form-control" id="nama_lokasi" name="nama_lokasi" value="{{ $setting->nama_lokasi }}">
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">

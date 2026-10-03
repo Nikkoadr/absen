@@ -28,12 +28,12 @@
     <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-sm-6">
-        <h1 class="m-0">Data Users</h1>
+        <h1 class="m-0">Data Karyawan</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="/home">Admin</a></li>
-            <li class="breadcrumb-item active">Absensi</li>
+            <li class="breadcrumb-item active">Data Karyawan</li>
         </ol>
         </div><!-- /.col -->
     </div><!-- /.row -->
@@ -71,14 +71,13 @@
                         <th>Jabatan</th>
                         <th>Jam Kerja</th>
                         <th>Jam Pulang</th>
-                        <th data-orderable="false">Menu</th>
+                        <th data-orderable="false">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                <?php $no=1; ?>
                 @foreach ( $data_user as $data )
                     <tr>
-                        <td><?= $no++; ?></td>
+                        <td>{{ $loop->iteration }}</td>
                         <td>{{ $data->id }}</td>
                         <td>{{ $data->role }}</td>
                         <td>{{ $data->nik }}</td>
