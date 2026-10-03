@@ -222,9 +222,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary float-right">
-                                Update
-                            </button>
+                            <button type="submit" class="btn btn-primary float-right">Simpan</button>
                         </div>
                     </form>
                 </div>
@@ -235,7 +233,7 @@
                         @method('put')
                         <div class="col">
                             <div class="row mb-3">
-                                <label for="email" class="col-sm-3 col-form-label text-md-end">Password : </label>
+                                <label for="password" class="col-sm-3 col-form-label text-md-end">Kata Sandi Baru : </label>
                                 <div class="col-sm-9">
                                     <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password">
                                     @error('password')
@@ -256,9 +254,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary float-right">
-                                Update
-                            </button>
+                            <button type="submit" class="btn btn-primary float-right">Simpan</button>
                         </div>
                     </form>
                 </div>

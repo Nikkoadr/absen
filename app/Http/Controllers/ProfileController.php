@@ -33,7 +33,12 @@ class ProfileController extends Controller
             ]);
         }
 
-        return view('profile_mobile');
+        $riwayatTerakhir = Absensi::milikPengguna($pengguna->id)
+            ->orderByDesc('tanggal_absen')
+            ->take(5)
+            ->get();
+
+        return view('profile_mobile', compact('riwayatTerakhir'));
     }
 
     public function edit_user(UpdateProfilRequest $request, User $user)
