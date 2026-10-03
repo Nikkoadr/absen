@@ -193,13 +193,17 @@
                             </form>
                         </div>
                         </div>
-                        <div class="card mt-3">
+                        <div class="card mt-3" style="margin-bottom: 90px;">
                             <div class="card-header">Wajah untuk Presensi Mandiri</div>
-                            <div class="card-body">
-                                <p class="text-muted">Daftarkan wajah agar bisa presensi tanpa login di kios.</p>
-                                <img id="fotoAcuanWajah" style="max-width: 50%;" class="rounded mx-auto d-block" src="{{ Auth::user()->pasfoto ? asset('storage/absen_file/pasFotoAbsen/'.Auth::user()->pasfoto) : asset('assets/dist/img/logo.png') }}" crossorigin="anonymous">
-                                <div class="text-center mt-2"><span class="chip-sky" id="statusWajah">Belum didaftarkan</span></div>
-                                <button id="btnDaftarWajah" class="btn btn-sky btn-block mt-2">Daftarkan Wajah Ini</button>
+                            <div class="card-body text-center">
+                                <p class="text-muted">Ambil foto wajah langsung dari kamera, lalu daftarkan.</p>
+                                <video id="videoWajah" autoplay muted playsinline style="width: 100%; max-width: 320px; border-radius: 12px; transform: scaleX(-1);"></video>
+                                <canvas id="kanvasWajah" style="display: none;"></canvas>
+                                <div class="text-center mt-2"><span class="chip-sky" id="statusWajah">Kamera belum aktif</span></div>
+                                <div class="row mt-2">
+                                    <div class="col-6"><button id="btnKameraWajah" type="button" class="btn btn-secondary btn-block">Aktifkan Kamera</button></div>
+                                    <div class="col-6"><button id="btnDaftarWajah" type="button" class="btn btn-sky btn-block" disabled>Daftarkan Wajah</button></div>
+                                </div>
                             </div>
                         </div>
                         </div>
@@ -214,8 +218,9 @@
 $(function () {
     bsCustomFileInput.init();
 });
-document.getElementById('btnDaftarWajah')?.addEventListener('click', async () => {
+document.getElementById('btnKameraWajah')?.addEventListener('click', async () => {
     const status = document.getElementById('statusWajah');
+    const video = document.getElementById('videoWajah');
     try {
         status.textContent = 'Memuat model AI…';
         await Promise.all([
@@ -223,10 +228,20 @@ document.getElementById('btnDaftarWajah')?.addEventListener('click', async () =>
             faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
             faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
         ]);
+        const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
+        video.srcObject = stream;
+        await video.play();
+        status.textContent = 'Arahkan wajah ke kamera lalu tekan Daftarkan Wajah.';
+        document.getElementById('btnDaftarWajah').disabled = false;
+    } catch (e) { console.error(e); status.textContent = 'Kamera/model gagal dimuat.'; }
+});
+document.getElementById('btnDaftarWajah')?.addEventListener('click', async () => {
+    const status = document.getElementById('statusWajah');
+    const video = document.getElementById('videoWajah');
+    try {
         status.textContent = 'Mengenali wajah…';
-        const img = document.getElementById('fotoAcuanWajah');
-        const det = await faceapi.detectSingleFace(img, new faceapi.TinyFaceDetectorOptions({ inputSize: 512, scoreThreshold: 0.4 })).withFaceLandmarks().withFaceDescriptor();
-        if (!det) { status.textContent = 'Wajah tidak ditemukan di foto. Gunakan foto wajah jelas.'; return; }
+        const det = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 512, scoreThreshold: 0.4 })).withFaceLandmarks().withFaceDescriptor();
+        if (!det) { status.textContent = 'Wajah tidak ditemukan. Arahkan wajah ke kamera.'; return; }
         const res = await fetch("{{ route('profile.wajah', Auth::user()->id) }}", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
@@ -234,6 +249,7 @@ document.getElementById('btnDaftarWajah')?.addEventListener('click', async () =>
         });
         const j = await res.json();
         status.textContent = j.message || 'Berhasil';
+        if (video.srcObject) video.srcObject.getTracks().forEach(t => t.stop());
     } catch (e) { console.error(e); status.textContent = 'Gagal mendaftarkan wajah.'; }
 });
 </script>

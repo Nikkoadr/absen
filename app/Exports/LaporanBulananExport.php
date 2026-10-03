@@ -28,15 +28,22 @@ class LaporanBulananExport implements FromCollection, WithHeadings
             while ($cursor->lte($selesai)) {
                 $kunci = 'tgl_'.$cursor->day;
                 $nilai = $baris->$kunci ?? '';
-                $presensi[] = $nilai !== '' ? substr((string) $nilai, 0, 5) : '';
-                if ($nilai !== '') {
-                    $hadir++;
+
+                if ($nilai === 'Izin') {
+                    $presensi[] = 'I';
+                } else {
+                    $presensi[] = $nilai !== '' ? substr((string) $nilai, 0, 5) : '';
+
+                    if ($nilai !== '' && preg_match('/^\d{2}:\d{2}/', (string) $nilai)) {
+                        $hadir++;
+                    }
                 }
+
                 $cursor->addDay();
             }
 
             return array_merge(
-                [$baris->nama, $baris->jabatan, $hadir, 'Terlambat: '.round($baris->total_jam_terlambat * 60).' menit'],
+                [$baris->nama, $baris->jabatan, $hadir, 'Terlambat: '.round($baris->total_jam_terlambat * 60).' menit. Izin: '.($baris->jumlah_izin ?? 0).' hari. Kosong = Alfa (A).'],
                 $presensi
             );
         });

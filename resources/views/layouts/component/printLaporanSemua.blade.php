@@ -109,7 +109,9 @@
             @endphp
             @while ($cursor->lte($periodeAkhir))
                 <td style="border: 1px solid black;">
-                    @if ($data->{'tgl_'.$cursor->day})
+                    @if (($data->{'tgl_'.$cursor->day} ?? '') === 'Izin')
+                        <span style="color: blue">I</span>
+                    @elseif ($data->{'tgl_'.$cursor->day})
                         @php
                             [$jamMasuk, $jamKeluar] = explode('-', $data->{'tgl_'.$cursor->day});
                             $total++;
@@ -128,6 +130,7 @@
             <td style="border: 1px solid black;">{{ $total }}</td>
         <td style="border: 1px solid black;">
             Terlambat Dalam 1 Bulan : {{ $data->total_jam_terlambat * 60}} Menit<br>
+            Izin Disetujui : {{ $data->jumlah_izin ?? 0 }} Hari (I), selainnya tanpa presensi = Alfa (A)<br>
         </td>
     @endforeach
 </tbody>
