@@ -7,13 +7,14 @@ use App\Http\Requests\FilterTanggalRequest;
 use App\Http\Requests\LaporanRentangRequest;
 use App\Models\Absensi;
 use App\Models\User;
+use App\Services\JadwalService;
 use App\Services\LaporanService;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
 class LaporanController extends Controller
 {
-    public function __construct(protected LaporanService $laporan) {}
+    public function __construct(protected LaporanService $laporan, protected JadwalService $jadwal) {}
 
     public function printLaporanIndividu(Request $request, ?User $user = null)
     {
@@ -28,7 +29,12 @@ class LaporanController extends Controller
             ->milikPengguna($pengguna->id)
             ->bulan((int) $data['bulan'], (int) $data['tahun'])
             ->orderBy('tanggal_absen')
-            ->get();
+            ->get()
+            ->each(function ($absen) {
+                $shift = $this->jadwal->untukTanggal($absen->id_user, substr((string) $absen->tanggal_absen, 0, 10));
+                $absen->jam_kerja_hari = $shift['jam_masuk'];
+                $absen->nama_shift = $shift['nama'];
+            });
 
         return view('layouts.component.printLaporanIndividu', [
             'user' => $pengguna,

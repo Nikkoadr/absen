@@ -58,6 +58,12 @@
             <p>Persetujuan Izin</p>
         </a>
         </li>
+        <li class="nav-item">
+        <a href="/shift" class="nav-link {{ request()->is('shift') ? 'active' : '' }}">
+            <i class="nav-icon fa-solid fa-clock"></i>
+            <p>Jadwal Shift</p>
+        </a>
+        </li>
         <li class="nav-header">LAPORAN</li>
         <li class="nav-item menu-close">
         <a href="#" class="nav-link {{ request()->is('laporanSemua') ? 'active' : '' }}">

@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 
 class LaporanService
 {
+    public function __construct(protected JadwalService $jadwal) {}
+
     public function rekap(string $tanggalAwal, string $tanggalAkhir): Collection
     {
         $mulai = Carbon::parse($tanggalAwal, 'Asia/Jakarta');
@@ -33,12 +35,36 @@ class LaporanService
             ->get();
 
         foreach ($rekap as $baris) {
-            $baris->total_jam_terlambat = $this->totalTerlambatJam($baris);
+            $baris->total_jam_terlambat = $this->totalTerlambatJam($baris, $tanggalAwal, $tanggalAkhir);
         }
 
+        $this->anotasiShift($rekap, $tanggalAwal, $tanggalAkhir);
         $this->tandaiIzinDisetujui($rekap, $tanggalAwal, $tanggalAkhir);
 
         return $rekap;
+    }
+
+    /** Anotasi sj_N = jam masuk shift yang berlaku per hari (fallback jam_kerja user). */
+    public function anotasiShift(Collection $rekap, string $tanggalAwal, string $tanggalAkhir): void
+    {
+        $peta = $this->jadwal->petaRentang($tanggalAwal, $tanggalAkhir);
+
+        foreach ($rekap as $baris) {
+            for ($i = 1; $i <= 31; $i++) {
+                $tanggal = $this->tanggalUntukHari($i, $tanggalAwal, $tanggalAkhir);
+
+                if ($tanggal === null) {
+                    continue;
+                }
+
+                $baris->{"sj_{$i}"} = $this->jadwal->jamMasukPada(
+                    $peta,
+                    (int) $baris->id_user,
+                    $tanggal,
+                    $baris->jam_kerja ?? null
+                );
+            }
+        }
     }
 
     /**
@@ -84,9 +110,10 @@ class LaporanService
         }
     }
 
-    public function totalTerlambatJam(object $baris): float
+    public function totalTerlambatJam(object $baris, ?string $tanggalAwal = null, ?string $tanggalAkhir = null): float
     {
         $total = 0.0;
+        $peta = ($tanggalAwal && $tanggalAkhir) ? $this->jadwal->petaRentang($tanggalAwal, $tanggalAkhir) : collect();
 
         for ($i = 1; $i <= 31; $i++) {
             $kunci = "tgl_{$i}";
@@ -96,13 +123,19 @@ class LaporanService
             }
 
             $jamMasuk = substr((string) $baris->$kunci, 0, 5);
-            $jamKerja = isset($baris->jam_kerja) && $baris->jam_kerja
-                ? substr((string) $baris->jam_kerja, 0, 5)
-                : null;
+            $bawaan = isset($baris->jam_kerja) && $baris->jam_kerja ? substr((string) $baris->jam_kerja, 0, 5) : null;
+            $jamKerja = $bawaan;
+
+            if ($tanggalAwal && $tanggalAkhir && isset($baris->id_user)) {
+                $tanggal = $this->tanggalUntukHari($i, $tanggalAwal, $tanggalAkhir);
+                $jamKerja = $tanggal
+                    ? $this->jadwal->jamMasukPada($peta, (int) $baris->id_user, $tanggal, $baris->jam_kerja ?? null)
+                    : $bawaan;
+            }
 
             if ($jamKerja && $jamMasuk > $jamKerja) {
-                $total += Carbon::parse($jamMasuk, 'Asia/Jakarta')
-                    ->diffInMinutes(Carbon::parse($jamKerja, 'Asia/Jakarta')) / 60;
+                $total += abs(Carbon::parse($jamMasuk, 'Asia/Jakarta')
+                    ->diffInMinutes(Carbon::parse($jamKerja, 'Asia/Jakarta'))) / 60;
             }
         }
 
@@ -115,7 +148,32 @@ class LaporanService
             return 0;
         }
 
-        return Carbon::parse($jamMasuk, 'Asia/Jakarta')
-            ->diffInMinutes(Carbon::parse($jamKerja, 'Asia/Jakarta'));
+        return abs(Carbon::parse($jamMasuk, 'Asia/Jakarta')
+            ->diffInMinutes(Carbon::parse($jamKerja, 'Asia/Jakarta')));
+    }
+
+    /**
+     * Petakan nomor hari (tgl_N) ke tanggal penuh. Rentang dibatasi 62 hari
+     * sehingga hanya mencakup maksimal 2 bulan kalender: hari >= hari awal
+     * milik bulan awal, sisanya milik bulan akhir.
+     */
+    public function tanggalUntukHari(int $hari, string $tanggalAwal, string $tanggalAkhir): ?string
+    {
+        $awal = Carbon::parse($tanggalAwal);
+        $akhir = Carbon::parse($tanggalAkhir);
+
+        if ($awal->month === $akhir->month && $awal->year === $akhir->year) {
+            return $awal->copy()->day($hari)->toDateString();
+        }
+
+        $target = $hari >= $awal->day
+            ? $awal->copy()->day($hari)
+            : $akhir->copy()->day($hari);
+
+        if ($target->lt($awal) || $target->gt($akhir)) {
+            return null;
+        }
+
+        return $target->toDateString();
     }
 }

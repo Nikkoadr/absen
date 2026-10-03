@@ -5,6 +5,7 @@ use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IzinController;
 use App\Http\Controllers\KiosPresensiController;
+use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
@@ -69,6 +70,12 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/libur', [HolidayController::class, 'index'])->name('libur.index');
         Route::get('/libur/data', [HolidayController::class, 'data'])->name('libur.data');
+
+        Route::get('/shift', [ShiftController::class, 'index'])->name('shift.index');
+        Route::post('/shift', [ShiftController::class, 'storeShift'])->name('shift.store');
+        Route::delete('/shift/{shift}', [ShiftController::class, 'destroyShift'])->name('shift.destroy');
+        Route::post('/shift/tugas', [ShiftController::class, 'storeTugas'])->name('shift.tugas.store');
+        Route::delete('/shift/tugas/{tugas}', [ShiftController::class, 'destroyTugas'])->name('shift.tugas.destroy');
         Route::post('/libur', [HolidayController::class, 'store'])->name('libur.store');
         Route::post('/libur/sinkron', [HolidayController::class, 'sinkron'])->name('libur.sinkron');
         Route::delete('/libur/{libur}', [HolidayController::class, 'destroy'])->name('libur.destroy');

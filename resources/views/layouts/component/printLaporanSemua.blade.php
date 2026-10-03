@@ -114,9 +114,10 @@
                     @elseif ($data->{'tgl_'.$cursor->day})
                         @php
                             [$jamMasuk, $jamKeluar] = explode('-', $data->{'tgl_'.$cursor->day});
+                            $batasHari = substr($data->{'sj_'.$cursor->day} ?? $data->jam_kerja ?? '', 0, 5);
                             $total++;
                         @endphp
-                        @if($jamMasuk > substr($data->jam_kerja ?? '', 0, 5))
+                        @if($batasHari !== '' && $jamMasuk > $batasHari)
                             <span style="color: red">T</span>
                         @else
                             H
