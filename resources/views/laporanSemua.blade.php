@@ -36,9 +36,8 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <form method="POST" action="printLaporanBulanan" target="_blank">
+                        <form method="POST" action="{{ route('printSemuaLaporan') }}" target="_blank">
                             @csrf
-                            @method('put')
                             <div class="form-row">
                                 <div class="form-group col-6">
                                     <label for="tanggal_awal" class="col-form-label">Tanggal Awal</label>
@@ -87,9 +86,8 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <form method="POST" action="downloadLaporanBulanan" target="_blank">
+                        <form method="POST" action="{{ route('downloadLaporanBulanan') }}" target="_blank">
                             @csrf
-                            @method('put')
                             <div class="form-row">
                                 <div class="form-group col-6">
                                     <label for="tanggal_awal" class="col-form-label">Tanggal Awal</label>

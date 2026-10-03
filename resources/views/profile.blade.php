@@ -152,7 +152,7 @@
                     </table>
                 </div>
                 <div class="tab-pane" id="data_diri">
-                    <form action="edit/profile_id{{ Auth::user()->id }}" method="POST">
+                    <form action="{{ route('profile.update', Auth::user()->id) }}" method="POST">
                         @csrf
                         @method('put')
                         <div class="col">
@@ -230,7 +230,7 @@
                 </div>
 
                 <div class="tab-pane" id="password">
-                    <form action="edit/password_user_id{{ Auth::user()->id }}" method="POST">
+                    <form action="{{ route('profile.password', Auth::user()->id) }}" method="POST">
                         @csrf
                         @method('put')
                         <div class="col">
@@ -276,7 +276,7 @@
                             @endif
                         </div>
                         <div class="card-footer">
-                            <form action="upload_pasfoto_id{{ Auth::user()->id }}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+                            <form action="{{ route('profile.pasfoto', Auth::user()->id) }}" method="POST" enctype="multipart/form-data" class="form-horizontal">
                             @csrf
                             @method('put')
                             <div class="form-group">

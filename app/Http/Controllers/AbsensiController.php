@@ -5,151 +5,187 @@ namespace App\Http\Controllers;
 use App\Models\Absensi;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 
 class AbsensiController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function absen()
     {
+        $hariIni = Carbon::today('Asia/Jakarta')->toDateString();
+        $id = Auth::id();
+        $cek = DB::table('absensi')
+            ->where('tanggal_absen', $hariIni)
+            ->where('id_user', $id)
+            ->count();
+        $setting = Setting::first();
+        $limit_absen = $setting?->limit_absen;
+        $jam = Carbon::now('Asia/Jakarta')->toTimeString();
+
+        $viewData = compact('cek', 'setting', 'hariIni', 'jam', 'limit_absen');
+
         if (Auth::user()->role === 'admin') {
-            $hariIni = date("Y-m-d");
-            $id = Auth::user()->id;
-            $cek = DB::table('absensi')->where('tanggal_absen', $hariIni)->where('id_user', $id)->count();
-            $setting = Setting::first();
-            $limit_absen = $setting->limit_absen;
-            $jam = date("H:i:s");
-            return view('absen', compact('cek', 'setting', 'hariIni', 'jam', 'limit_absen'));
-        } else {
-            $hariIni = date("Y-m-d");
-            $id = Auth::user()->id;
-            $cek = DB::table('absensi')->where('tanggal_absen', $hariIni)->where('id_user', $id)->count();
-            $setting = Setting::first();
-            $limit_absen = $setting->limit_absen;
-            $jam = date("H:i:s");
-            return view('absen_mobile', compact('cek', 'setting', 'hariIni', 'jam', 'limit_absen'));
+            return view('absen', $viewData);
         }
+
+        return view('absen_mobile', $viewData);
     }
 
     public function absenMasuk(Request $request)
     {
+        $request->validate([
+            'lokasi' => ['required', 'string', 'regex:/^-?\d+(\.\d+)?,-?\d+(\.\d+)?$/'],
+            'foto' => ['required', 'string', 'min:100'],
+        ]);
+
         $user = Auth::user();
-        $tanggal_absen = date("Y-m-d");
-        $jam = date("H:i:s");
+        $now = Carbon::now('Asia/Jakarta');
+        $tanggal_absen = $now->toDateString();
+        $jam = $now->toTimeString();
         $setting = Setting::first();
 
-        // Lokasi dan Jarak
-        [$latitudeUser, $longitudeUser] = explode(",", $request->lokasi);
-        $radius = round($this->distance(
-            $setting->latitude,
-            $setting->longitude,
+        if (! $setting) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Pengaturan lokasi belum dikonfigurasi. Hubungi admin.',
+            ], 500);
+        }
+
+        [$latitudeUser, $longitudeUser] = array_map('floatval', explode(',', $request->lokasi));
+
+        $radius = (int) round($this->distance(
+            (float) $setting->latitude,
+            (float) $setting->longitude,
             $latitudeUser,
             $longitudeUser
-        )["meters"]);
+        )['meters']);
 
-        // Cek absen hari ini
+        if ($radius > (int) $setting->radius) {
+            return response()->json([
+                'status' => 'error',
+                'message' => "Maaf, Jarak Anda {$radius} M dari {$setting->namaLokasi}",
+            ], 422);
+        }
+
+        $parts = explode('base64,', $request->foto);
+        if (count($parts) !== 2 || empty($parts[1])) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Format foto tidak valid.',
+            ], 422);
+        }
+
+        $foto_base64 = base64_decode($parts[1], true);
+        if ($foto_base64 === false) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Foto tidak dapat diproses.',
+            ], 422);
+        }
+
         $absensiHariIni = DB::table('absensi')
             ->where('tanggal_absen', $tanggal_absen)
             ->where('id_user', $user->id)
             ->first();
 
-        if ($radius > $setting->radius) {
-            echo "error|Maaf, Jarak Anda $radius M dari {$setting->namaLokasi}";
-            return;
-        }
+        $disk = config('filesystems.default');
 
         if ($absensiHariIni) {
             if ($absensiHariIni->jam_keluar) {
-                echo 'error|Anda sudah presensi pulang hari ini.';
-                return;
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Anda sudah presensi pulang hari ini.',
+                ], 422);
             }
 
-            $diff = strtotime($jam) - strtotime($absensiHariIni->jam_masuk);
-            if ($diff < 150) { // 5 menit = 300 detik
-                echo 'error|Anda tidak bisa presensi keluar terlalu cepat setelah presensi masuk !. tunggu 5 menit.';
-                return;
+            $diff = $now->diffInSeconds(Carbon::parse("{$tanggal_absen} {$absensiHariIni->jam_masuk}", 'Asia/Jakarta'), false);
+            // $diff negatif jika jam_masuk di masa lalu; ambil absolut
+            $selisih = abs($diff);
+            if ($selisih < 300) { // 5 menit = 300 detik
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Anda tidak bisa presensi keluar terlalu cepat setelah presensi masuk! Tunggu 5 menit.',
+                ], 422);
             }
 
-            // Absen keluar
-            $nama_foto = "{$user->id}-$tanggal_absen-keluar.png";
-            $foto_base64 = base64_decode(explode("base64", $request->foto)[1]);
-            $data = [
+            $nama_foto = "{$user->id}-{$tanggal_absen}-keluar.png";
+            $updated = DB::table('absensi')->where('id', $absensiHariIni->id)->update([
                 'jam_keluar' => $jam,
                 'foto_keluar' => $nama_foto,
-                'lokasi_keluar' =>  $request->lokasi,
-            ];
-            $simpan = DB::table('absensi')->where('id', $absensiHariIni->id)->update($data);
+                'lokasi_keluar' => $request->lokasi,
+            ]);
 
-            if ($simpan) {
-                echo 'sukses|Anda Sudah Absen Pulang. Hati - hati Dijalan !';
-                Storage::disk(env('STORAGE_DISK'))->put($nama_foto, $foto_base64);
-            } else {
-                echo 'error|Maaf, Masih Dalam Proses Pengembangan Oleh ICT SMK';
-            }
-        } else {
-            // Absen masuk
-            $nama_foto = "{$user->id}-$tanggal_absen-masuk.png";
-            $foto_base64 = base64_decode(explode("base64", $request->foto)[1]);
-            $data = [
-                'id_user' => $user->id,
-                'tanggal_absen' => $tanggal_absen,
-                'jam_masuk' => $jam,
-                'foto_masuk' => $nama_foto,
-                'lokasi_masuk' =>  $request->lokasi,
-            ];
-            $simpan = DB::table('absensi')->insert($data);
+            if ($updated) {
+                Storage::disk($disk)->put($nama_foto, $foto_base64);
 
-            if ($simpan) {
-                echo 'sukses|Terima kasih anda sudah melakukan presensi masuk hari ini.';
-                Storage::disk(env('STORAGE_DISK'))->put($nama_foto, $foto_base64);
-            } else {
-                echo 'error|Maaf, Masih Dalam Proses Pengembangan Oleh ICT SMK';
+                return response()->json([
+                    'status' => 'sukses',
+                    'message' => 'Anda Sudah Absen Pulang. Hati-hati di jalan!',
+                ]);
             }
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal menyimpan absen pulang. Coba lagi.',
+            ], 500);
         }
+
+        $nama_foto = "{$user->id}-{$tanggal_absen}-masuk.png";
+        $inserted = DB::table('absensi')->insert([
+            'id_user' => $user->id,
+            'tanggal_absen' => $tanggal_absen,
+            'jam_masuk' => $jam,
+            'foto_masuk' => $nama_foto,
+            'lokasi_masuk' => $request->lokasi,
+        ]);
+
+        if ($inserted) {
+            Storage::disk($disk)->put($nama_foto, $foto_base64);
+
+            return response()->json([
+                'status' => 'sukses',
+                'message' => 'Terima kasih, Anda sudah melakukan presensi masuk hari ini.',
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Gagal menyimpan absen masuk. Coba lagi.',
+        ], 500);
     }
 
-
-    // Fungsi kirim pesan jika diperlukan
-    // private function kirimPesan($nomor_hp, $jam, $keterangan, $nama)
-    // {
-    //     if ($nomor_hp) {
-    //         Http::withOptions(['verify' => false])->post(
-    //             '10.20.30.9:3000/send-message',
-    //             [
-    //                 'number' => $nomor_hp,
-    //                 'message' => "Terima kasih $nama, Anda Sudah absen $keterangan di jam $jam Wib.",
-    //             ]
-    //         );
-    //     }
-    // }
-
-
-    function distance($lat1, $lon1, $lat2, $lon2)
+    public function distance($lat1, $lon1, $lat2, $lon2)
     {
         $theta = $lon1 - $lon2;
-        $miles = (sin(deg2rad($lat1)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)));
+        $miles = (sin(deg2rad($lat1)) * sin(deg2rad($lat2)))
+            + (cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)));
+        // Clamp untuk hindari NaN akibat floating point (acos domain [-1,1])
+        $miles = max(-1, min(1, $miles));
         $miles = acos($miles);
         $miles = rad2deg($miles);
         $miles = $miles * 60 * 1.1515;
-        $feet = $miles * 5280;
-        $yards = $feet / 3;
         $kilometers = $miles * 1.609344;
         $meters = $kilometers * 1000;
+
         return compact('meters');
     }
 
     public function attendance(Request $request)
     {
-        $hari = $request->input('hari', now()->day);
-        $bulan = $request->input('bulan', now()->month);
-        $tahun = $request->input('tahun', now()->year);
+        Gate::authorize('is_admin');
+
+        $data = $request->validate([
+            'hari' => ['nullable', 'integer', 'min:1', 'max:31'],
+            'bulan' => ['nullable', 'integer', 'min:1', 'max:12'],
+            'tahun' => ['nullable', 'integer', 'min:2000', 'max:2100'],
+        ]);
+
+        $hari = $data['hari'] ?? now('Asia/Jakarta')->day;
+        $bulan = $data['bulan'] ?? now('Asia/Jakarta')->month;
+        $tahun = $data['tahun'] ?? now('Asia/Jakarta')->year;
 
         $attendance = DB::table('absensi')
             ->join('users', 'absensi.id_user', '=', 'users.id')
@@ -163,31 +199,37 @@ class AbsensiController extends Controller
         return view('attendance', compact('attendance', 'hari', 'bulan', 'tahun'));
     }
 
-
-    public function edit_absen($id, Request $request)
+    public function edit_absen($id)
     {
-        $data = Absensi::with('user:id,nama')->find($id);
+        Gate::authorize('is_admin');
+
+        $data = Absensi::with('user:id,nama')->findOrFail($id);
 
         return view('layouts.component.edit_absen', compact('data'));
     }
 
     public function update_absen($id, Request $request)
     {
+        Gate::authorize('is_admin');
+
         $data_valid = $request->validate([
             'tanggal_absen' => ['required', 'date'],
-            'jam_masuk'     => ['required',],
-            'jam_keluar'    => ['nullable']
+            'jam_masuk' => ['required'],
+            'jam_keluar' => ['nullable'],
         ]);
-        $user = Absensi::find($id);
-        $user->timestamps = false;
-        $user->update($data_valid);
+        $absensi = Absensi::findOrFail($id);
+        $absensi->update($data_valid);
+
         return redirect('attendance')->with('success', 'Data Berhasil di Update');
     }
 
     public function hapus_absen($id)
     {
-        $data = Absensi::find($id);
+        Gate::authorize('is_admin');
+
+        $data = Absensi::findOrFail($id);
         $data->delete();
+
         return redirect('/attendance')->with('success', 'Data berhasil dihapus');
     }
 }

@@ -8,7 +8,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="/ubah_password_id{{ $data->id }}" method="POST" class="form-horizontal">
+                    <form action="{{ route('ubah_password', $data->id) }}" method="POST" class="form-horizontal">
                         @method('put')
                         @csrf
                         <div class="form-group row">

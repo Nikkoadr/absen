@@ -46,7 +46,7 @@
         <a href="/data_user" class="nav-link {{ request()->is('data_user') ? 'active' : '' }}">
             <i class="nav-icon fa-solid fa-users"></i>
             <p>
-            Data Users
+            Data Karyawan
             </p>
         </a>
         </li>

@@ -8,11 +8,10 @@
             </button>
         </div>
         <div class="modal-body">
-                <form method="POST" action="/printLaporanIndividu{{ $data->id }}" target="_blank">
+                <form method="POST" action="{{ route('printLaporanIndividu', $data->id) }}" target="_blank">
                         @csrf
-                        @method('put')
                         <div class="row">
-                            <input type="hidden" value="{{ $data->id }}">
+                            <input type="hidden" name="id" value="{{ $data->id }}">
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="bulan">Bulan:</label>

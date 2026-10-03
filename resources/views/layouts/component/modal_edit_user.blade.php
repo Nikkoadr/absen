@@ -8,7 +8,7 @@
             </button>
         </div>
         <div class="modal-body">
-                <form method="POST" action="/editUserId{{ $data->id }}">
+                <form method="POST" action="{{ route('edit_user', $data->id) }}">
                         @csrf
                         @method('put')
                         <div class="form-group row">

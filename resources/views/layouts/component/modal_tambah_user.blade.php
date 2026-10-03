@@ -8,9 +8,8 @@
             </button>
         </div>
         <div class="modal-body">
-                <form method="POST" action="/tambah_user">
+                <form method="POST" action="{{ route('tambah_user') }}">
                         @csrf
-                        @method('put')
                         <div class="form-group row">
                             <label for="role" class="col-sm-5 col-form-label">Role</label>
                                 <div class="col-sm-7">

@@ -93,8 +93,12 @@
                     <td>{{ $data -> jam_masuk }}</td>
                     <td>{{ $data -> jam_keluar }}</td>
                     <td>
-                        <a href="edit_absen_{{ $data -> id }}" class="btn btn-info"  ><i class="fa-solid fa-pen-to-square"></i></a>
-                        <a href="hapus_absen_{{ $data->id }}" class="btn btn-danger konfirmasi m-1"><i class="far fa-trash-alt"></i></a>
+                        <a href="{{ route('edit_absen', $data->id) }}" class="btn btn-info"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <form action="{{ route('hapus_absen', $data->id) }}" method="POST" class="d-inline konfirmasi-form">
+                            @csrf
+                            @method('delete')
+                            <button type="submit" class="btn btn-danger m-1"><i class="far fa-trash-alt"></i></button>
+                        </form>
                     </td>
                 </tr>
                 @endforeach
@@ -129,10 +133,9 @@ $("#table_att").DataTable({
 });
 </script>
 <script>
-document.querySelectorAll('.konfirmasi').forEach(function(element) {
-    element.addEventListener('click', function (event) {
+document.querySelectorAll('.konfirmasi-form').forEach(function(form) {
+    form.addEventListener('submit', function (event) {
         event.preventDefault();
-        const url = this.getAttribute('href');
         Swal.fire({
             text: "Anda yakin ingin menghapus data ini?",
             icon: 'warning',
@@ -142,7 +145,7 @@ document.querySelectorAll('.konfirmasi').forEach(function(element) {
             confirmButtonText: 'Ya, Hapus!'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = url;
+                form.submit();
             }
         });
     });

@@ -9,7 +9,7 @@
         <div class="tab-pane fade show active" id="dataDiri" role="tabpanel">
             <div class="section mt-3 mb-5">
                 <div class="card">
-                    <form action="/request_izin_user_id{{ Auth::user()->id }}" method="POST">
+                    <form action="{{ route('request_izin_user', Auth::user()->id) }}" method="POST">
                         @csrf
                         <div class="col">
                             <div class="row mb-3">

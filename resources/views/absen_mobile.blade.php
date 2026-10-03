@@ -217,13 +217,30 @@ function sendAbsenRequest(foto) {
         },
         cache: false,
         success: function (respond) {
-            var status = respond.split("|");
-            if (status[0] == "sukses") {
-                Swal.fire({ title: "Terimakasih", text: status[1], icon: "success" });
+            var status, message;
+            if (typeof respond === 'string') {
+                var parts = respond.split("|");
+                status = parts[0];
+                message = parts[1] || respond;
+            } else {
+                status = respond.status;
+                message = respond.message;
+            }
+            if (status == "sukses") {
+                Swal.fire({ title: "Terimakasih", text: message, icon: "success" });
                 setTimeout(() => location.href = '/home', 2000);
             } else {
-                Swal.fire({ title: "Opss..!!!", text: status[1], icon: "error" });
+                Swal.fire({ title: "Opss..!!!", text: message, icon: "error" });
             }
+        },
+        error: function (xhr) {
+            var message = 'Terjadi kesalahan. Coba lagi.';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                message = xhr.responseJSON.message;
+            } else if (xhr.responseJSON && xhr.responseJSON.errors) {
+                message = Object.values(xhr.responseJSON.errors).flat().join(' ');
+            }
+            Swal.fire({ title: "Opss..!!!", text: message, icon: "error" });
         }
     });
 }

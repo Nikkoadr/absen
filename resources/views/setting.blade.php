@@ -31,10 +31,9 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <form action="/editSetting" method="POST">
+                <form action="{{ route('editSetting') }}" method="POST">
                     @csrf
                     @method('put')
-                    <input type="hidden" name="id" value="{{ $setting->id }}">
                     <div class="form-group">
                         <label for="namaLokasi">Nama Lokasi:</label>
                         <input type="text" class="form-control" id="namaLokasi" name="namaLokasi" value="{{ $setting->namaLokasi }}">

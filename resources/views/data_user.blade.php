@@ -98,7 +98,11 @@
                                 @include('layouts.component.modal_ubah_password')
                                 <button type="button" class="btn btn-primary m-1" data-toggle="modal" data-target="#modalLaporanIndividu{{ $data->id }}"><i class="fa-solid fa-print"></i></button>
                                 @include('layouts.component.modal_print_laporan')
-                                <a href="hapusDataUserId{{ $data->id }}" class="btn btn-danger konfirmasi m-1"><i class="far fa-trash-alt"></i></a>
+                                <form action="{{ route('hapus_data_user', $data->id) }}" method="POST" class="d-inline konfirmasi-form">
+                                    @csrf
+                                    @method('delete')
+                                    <button type="submit" class="btn btn-danger m-1"><i class="far fa-trash-alt"></i></button>
+                                </form>
                             </div>
                         </td>
                     </tr>
@@ -169,10 +173,9 @@ var Toast = Swal.mixin({
 @endif
 </script>
 <script>
-document.querySelectorAll('.konfirmasi').forEach(function(element) {
-    element.addEventListener('click', function (event) {
+document.querySelectorAll('.konfirmasi-form').forEach(function(form) {
+    form.addEventListener('submit', function (event) {
         event.preventDefault();
-        const url = this.getAttribute('href');
         Swal.fire({
             text: "Anda yakin ingin menghapus data ini?",
             icon: 'warning',
@@ -182,7 +185,7 @@ document.querySelectorAll('.konfirmasi').forEach(function(element) {
             confirmButtonText: 'Ya, Hapus!'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = url;
+                form.submit();
             }
         });
     });
