@@ -14,7 +14,8 @@ class UpdateUserRequest extends FormRequest
 
     public function rules(): array
     {
-        $id = $this->route('id');
+        $user = $this->route('user');
+        $id = $user instanceof \App\Models\User ? $user->id : $user;
 
         return [
             'role' => ['required', 'string', Rule::in(['admin', 'karyawan', 'guru', 'siswa'])],
