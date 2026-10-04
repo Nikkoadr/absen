@@ -14,7 +14,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome', ['radius' => (int) (App\Models\Setting::first()?->radius ?? 70)]);
+    try {
+        $radius = (int) (App\Models\Setting::first()?->radius ?? 70);
+    } catch (Throwable) {
+        $radius = 70;
+    }
+
+    return view('welcome', ['radius' => $radius]);
 });
 
 Auth::routes([
