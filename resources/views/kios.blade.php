@@ -148,6 +148,11 @@ function startVideo() {
 }
 
 btn.addEventListener('click', async () => {
+    const uid = document.getElementById('userId').value;
+    if (!uid) {
+        Swal.fire({ title: 'Opss', text: 'Wajah belum terdeteksi. Arahkan wajah ke kamera hingga nama muncul.', icon: 'error' });
+        return;
+    }
     const nama = namaEl.textContent;
     const konfirmasi = await Swal.fire({
         title: 'Konfirmasi Presensi',
@@ -158,6 +163,11 @@ btn.addEventListener('click', async () => {
         cancelButtonText: 'Batal',
     });
     if (!konfirmasi.isConfirmed) return;
+    if (document.getElementById('userId').value !== uid) {
+        Swal.fire({ title: 'Opss', text: 'Wajah berubah saat konfirmasi. Pastikan wajah yang benar lalu ulangi.', icon: 'error' });
+        return;
+    }
+    btn.disabled = true;
     const video = document.getElementById('video');
     const c = document.createElement('canvas');
     c.width = video.videoWidth; c.height = video.videoHeight;
@@ -175,9 +185,12 @@ btn.addEventListener('click', async () => {
     try {
         const r = await fetch('/presensi-mandiri', { method: 'POST', headers: { 'Accept': 'application/json' }, body: payload });
         const j = await r.json();
-        Swal.fire({ title: j.status === 'sukses' ? 'Terima kasih' : 'Opss', text: j.message, icon: j.status === 'sukses' ? 'success' : 'error' });
+        const pesan = j.message || (j.errors ? Object.values(j.errors).flat().join(' ') : 'Terjadi kesalahan. Coba lagi.');
+        Swal.fire({ title: j.status === 'sukses' ? 'Terima kasih' : 'Opss', text: pesan, icon: j.status === 'sukses' ? 'success' : 'error' });
     } catch (e) {
         Swal.fire({ title: 'Opss', text: 'Terjadi kesalahan. Coba lagi.', icon: 'error' });
+    } finally {
+        btn.disabled = !document.getElementById('userId').value;
     }
 });
 
