@@ -1,0 +1,74 @@
+/* Token admin Presensi SMK: AdminLTE dipertahankan sebagai kerangka, warna disatukan ke biru-langit. */
+:root {
+    --sky-700: #0369a1; /* Aksi utama: putih di atasnya 5.93:1. */
+    --sky-800: #075985;
+    --ink: #1e293b;
+    --muted: #475569; /* Teks sekunder: 7.58:1 di atas putih. */
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+    outline: 3px solid var(--sky-700);
+    outline-offset: 2px;
+}
+
+.skip-link {
+    position: absolute;
+    left: 12px;
+    top: -48px;
+    z-index: 1050;
+    background: var(--sky-800);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.skip-link:focus {
+    top: 12px;
+    color: #fff;
+}
+
+/* Biru bawaan AdminLTE (#007bff) hanya 3.98:1 untuk teks putih. */
+.btn-primary { background-color: var(--sky-700); border-color: var(--sky-700); }
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus { background-color: var(--sky-800); border-color: var(--sky-800); }
+
+/* Cyan bawaan (#17a2b8) hanya 3.05:1; digelapkan agar ikon putih terbaca. */
+.btn-info { background-color: #0e7490; border-color: #0e7490; }
+
+/* Hijau bawaan (#28a745) hanya 3.13:1 untuk teks putih. */
+.badge-success { background-color: #1e7e34 !important; }
+
+/* Kartu statistik: angka dulu sebagai hierarki, tautan ke halaman yang benar-benar ada. */
+.stat-card .stat-angka { font-size: 2rem; font-weight: 800; color: var(--ink); line-height: 1.1; }
+.stat-card .stat-label { color: var(--muted); margin-top: 2px; }
+.stat-card .stat-link { display: inline-flex; align-items: center; min-height: 44px; color: var(--sky-700); font-weight: 600; }
+
+/* Avatar inisial: pengganti foto stok. Putih di atas sky-700 5.93:1. */
+.avatar-inisial {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--sky-700);
+    color: #fff;
+    font-weight: 800;
+    font-size: 24px;
+}
+.avatar-inisial.kecil { width: 34px; height: 34px; font-size: 14px; }
+.avatar-inisial.besar { width: 120px; height: 120px; font-size: 44px; }
+
+/* Foto presensi seragam: menutupi bingkai tanpa distorsi. */
+.img-presensi { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; }
+
+/* Target sentuh di tabel data. */
+.table .btn { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+}

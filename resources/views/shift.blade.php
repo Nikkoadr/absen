@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @section('content')
-<div class="content-wrapper">
+<div class="content-wrapper" id="konten-utama">
 <div class="content-header">
     <div class="container-fluid">
     <div class="row mb-2">
@@ -48,7 +48,7 @@
         <div class="card">
             <div class="card-header"><h3 class="card-title">Impor Jadwal (Excel)</h3></div>
             <div class="card-body">
-                <p class="text-muted">Upload jadwal terbaru sekaligus. Shift baru otomatis dibuat.</p>
+                <p class="text-muted">Unggah jadwal terbaru sekaligus. Nama shift yang belum ada dibuat baru; baris tak dikenal dilewati dan dilaporkan.</p>
                 <a href="{{ route('shift.contoh') }}" class="btn btn-info btn-block mb-2">Unduh Contoh Excel</a>
                 <form action="{{ route('shift.impor') }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -108,7 +108,7 @@
                         <div class="form-group col-md-4">
                             <label for="user_id">Karyawan</label>
                             <select name="user_id" id="user_id" class="form-control @error('user_id') is-invalid @enderror" required>
-                                <option value="">— Pilih —</option>
+                                <option value="">- Pilih -</option>
                                 @foreach ($karyawan as $k)
                                     <option value="{{ $k->id }}" @selected(old('user_id') == $k->id)>{{ $k->nama }}</option>
                                 @endforeach
@@ -117,7 +117,7 @@
                         <div class="form-group col-md-4">
                             <label for="shift_id">Shift</label>
                             <select name="shift_id" id="shift_id" class="form-control @error('shift_id') is-invalid @enderror" required>
-                                <option value="">— Pilih —</option>
+                                <option value="">- Pilih -</option>
                                 @foreach ($shifts as $s)
                                     <option value="{{ $s->id }}" @selected(old('shift_id') == $s->id)>{{ $s->nama }} ({{ substr($s->jam_masuk, 0, 5) }})</option>
                                 @endforeach

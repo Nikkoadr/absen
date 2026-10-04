@@ -3,10 +3,13 @@
 
 @endsection
 @section('content')
+@php
+$inisial = fn ($nama) => collect(preg_split('/\s+/', trim((string) $nama)))->filter()->take(2)->map(fn ($kata) => mb_strtoupper(mb_substr($kata, 0, 1)))->join('');
+@endphp
 <div id="appCapsule">
 <div class="sky-header text-center mb-2">
     <h1 style="font-size: 20px;">Profil Saya</h1>
-    <p>{{ Auth::user()->nama }} — {{ ucfirst(Auth::user()->role) }}</p>
+    <p>{{ Auth::user()->nama }} · {{ ucfirst(Auth::user()->role) }}</p>
 </div>
 <div class="section mt-2">
     <div class="card">
@@ -32,6 +35,7 @@
                     <form action="{{ route('profile.update', Auth::user()->id) }}" method="POST">
                         @csrf
                         @method('put')
+                        <p class="text-muted small">Tanda * wajib diisi.</p>
                         <div class="row mb-3">
                             <label for="nik" class="col-sm-3 col-form-label text-md-end">NIK : </label>
                             <div class="col-sm-9">
@@ -66,7 +70,7 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="nama" class="col-sm-3 col-form-label text-md-end">Nama <span style="color: red">*</span> : </label>
+                            <label for="nama" class="col-sm-3 col-form-label text-md-end">Nama <span style="color: #b91c1c;" aria-hidden="true">*</span> : </label>
                             <div class="col-sm-9">
                                 <input id="nama" type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" value="{{ Auth::user()->nama }}" autocomplete="nama">
                                 @error('nama')
@@ -88,7 +92,7 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="email" class="col-sm-3 col-form-label text-md-end">E-mail <span style="color: red">*</span> : </label>
+                            <label for="email" class="col-sm-3 col-form-label text-md-end">E-mail <span style="color: #b91c1c;" aria-hidden="true">*</span> : </label>
                             <div class="col-sm-9">
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ Auth::user()->email }}" autocomplete="email">
                                 @error('email')
@@ -129,16 +133,16 @@
                     <div class="text-center">
                         <h6>Pas Foto</h6>
                         @if (Auth::user()->pasfoto)
-                        <img style="max-width: 50%;" class="rounded mx-auto d-block" src="{{ asset('storage/absen_file/pasFotoAbsen/'. Auth::user()->pasfoto) }}">
+                        <img style="max-width: 50%;" class="rounded mx-auto d-block" alt="Pas foto {{ Auth::user()->nama }}" src="{{ asset('storage/absen_file/pasFotoAbsen/'. Auth::user()->pasfoto) }}">
                         @else
-                        <img style="max-width: 50%;" class="rounded mx-auto d-block" src="{{ asset('assets/dist/img/logo.png') }}">
+                        <span class="avatar-inisial besar" role="img" aria-label="Belum ada pas foto {{ Auth::user()->nama }}">{{ $inisial(Auth::user()->nama) }}</span>
                         @endif
                     </div>
                     <form action="{{ route('profile.pasfoto', Auth::user()->id) }}" method="POST" enctype="multipart/form-data" class="form-horizontal mt-2">
                         @csrf
                         @method('put')
                         <div class="form-group">
-                            <label>Upload Pas Foto <br><small>Note : Gunakan Gambar yang berukuran kotak</small></label>
+                            <p class="mb-2">Unggah pas foto berbentuk kotak.</p>
                             <label for="pas_foto" class="btn btn-outline-primary btn-block">Pilih Foto</label>
                             <input type="file" id="pas_foto" name="pas_foto" accept="image/*" style="display: none;">
                             <div id="namaFileDipilih" class="text-muted small text-center"></div>
@@ -156,7 +160,7 @@
                         <p class="text-muted">Ambil foto wajah langsung dari kamera, lalu daftarkan.</p>
                         <video id="videoWajah" autoplay muted playsinline style="width: 100%; max-width: 320px; min-height: 240px; border-radius: 12px; transform: scaleX(-1); background: #0f172a;"></video>
                         <canvas id="kanvasWajah" style="display: none;"></canvas>
-                        <div class="text-center mt-2"><span class="chip-sky" id="statusWajah">Kamera belum aktif</span></div>
+                        <div class="text-center mt-2"><span class="chip-sky" id="statusWajah" role="status" aria-live="polite">Kamera belum aktif</span></div>
                         <button id="btnKameraWajah" type="button" class="btn btn-secondary btn-block btn-lg mt-2">Aktifkan Kamera</button>
                         <button id="btnDaftarWajah" type="button" class="btn btn-sky btn-block btn-lg mt-2" disabled>Daftarkan Wajah</button>
                     </div>
@@ -248,5 +252,3 @@ var Toast = Swal.mixin({
 @endif
 </script>
 @endsection
-</body>
-</html>

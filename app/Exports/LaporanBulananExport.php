@@ -26,7 +26,7 @@ class LaporanBulananExport implements FromCollection, WithHeadings
             $presensi = [];
             $cursor = $mulai->copy();
             while ($cursor->lte($selesai)) {
-                $kunci = 'tgl_'.$cursor->day;
+                $kunci = 'tgl_'.$cursor->format('Ymd');
                 $nilai = $baris->$kunci ?? '';
 
                 if ($nilai === 'Izin') {

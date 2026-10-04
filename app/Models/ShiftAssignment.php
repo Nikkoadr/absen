@@ -37,4 +37,16 @@ class ShiftAssignment extends Model
                 $q->whereNull('tanggal_selesai')->orWhere('tanggal_selesai', '>=', $tanggal);
             });
     }
+
+    /** Rentang baru bertabrakan bila menyentuh penugasan lain user yang sama. */
+    public static function bertabrakan(int $userId, string $mulai, ?string $selesai, ?int $kecualiId = null): bool
+    {
+        return static::where('user_id', $userId)
+            ->when($kecualiId, fn ($q) => $q->where('id', '!=', $kecualiId))
+            ->where('tanggal_mulai', '<=', $selesai ?? '9999-12-31')
+            ->where(function ($q) use ($mulai) {
+                $q->whereNull('tanggal_selesai')->orWhere('tanggal_selesai', '>=', $mulai);
+            })
+            ->exists();
+    }
 }

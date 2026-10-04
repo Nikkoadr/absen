@@ -8,6 +8,7 @@ use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use Illuminate\Support\Carbon;
 
 class ShiftContohExport implements Export, WithMultipleSheets
 {
@@ -31,16 +32,22 @@ class ShiftContohDataSheet implements FromArray, WithHeadings, WithTitle, WithCo
 
     public function array(): array
     {
+        $senin = Carbon::now('Asia/Jakarta')->startOfWeek(Carbon::MONDAY);
+        $blok1Mulai = $senin->copy()->toDateString();
+        $blok1Akhir = $senin->copy()->addDays(11)->toDateString();
+        $blok2Mulai = $senin->copy()->addDays(14)->toDateString();
+        $blok2Akhir = $senin->copy()->addDays(25)->toDateString();
+
         return [
             // Blok 2 mingguan: guru yang sama ganti shift setelah 2 minggu
-            ['budi@sekolah.sch.id', 'Pagi Blok', '07:00', '15:00', '2026-11-03', '2026-11-14'],
-            ['budi@sekolah.sch.id', 'Siang Blok', '10:00', '15:00', '2026-11-17', '2026-11-28'],
+            ['budi@sekolah.sch.id', 'Pagi Blok', '07:00', '15:00', $blok1Mulai, $blok1Akhir],
+            ['budi@sekolah.sch.id', 'Siang Blok', '10:00', '15:00', $blok2Mulai, $blok2Akhir],
             // Shift yang sudah ada (Pagi/Siang): jam boleh dikosongkan
-            ['siti@sekolah.sch.id', 'Pagi', '', '', '2026-11-03', ''],
-            // Shift baru: otomatis dibuatkan dari jam yang diisi
-            ['agus@sekolah.sch.id', 'Blok Produktif', '07:30', '16:00', '2026-11-03', '2026-11-14'],
+            ['siti@sekolah.sch.id', 'Pagi', '', '', $blok1Mulai, ''],
+            // Shift baru: dibuat dari jam yang diisi
+            ['agus@sekolah.sch.id', 'Blok Produktif', '07:30', '16:00', $blok1Mulai, $blok1Akhir],
             // Tanpa tanggal_selesai = berlaku seterusnya sampai ada jadwal baru
-            ['dewi@sekolah.sch.id', 'Siang', '', '', '2026-12-01', ''],
+            ['dewi@sekolah.sch.id', 'Siang', '', '', $blok2Mulai, ''],
         ];
     }
 
@@ -75,7 +82,7 @@ class ShiftPetunjukSheet implements FromArray, WithTitle
             [''],
             ['ATURAN'],
             ['- Satu karyawan boleh punya banyak baris (rotasi/blok 2 mingguan).'],
-            ['- Bila rentang bertumpuk, penugasan dengan tanggal_mulai terbaru yang dipakai.'],
+            ['- Rentang yang bertumpuk dengan penugasan lain karyawan yang sama ditolak.'],
             ['- Tanpa penugasan, dipakai jam kerja bawaan di Data Karyawan.'],
         ];
     }

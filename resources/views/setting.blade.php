@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 @endsection
 @section('content')
-<div class="content-wrapper">
+<div class="content-wrapper" id="konten-utama">
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
@@ -13,7 +13,7 @@
         </div><!-- /.col -->
         <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Admin</a></li>
+            <li class="breadcrumb-item"><a href="/home">Beranda</a></li>
             <li class="breadcrumb-item active">Pengaturan</li>
         </ol>
         </div><!-- /.col -->
@@ -41,22 +41,22 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="latitude">Latitude:</label>
-                            <input type="text" class="form-control" id="latitude" name="latitude" value="{{ $setting->latitude }}">
+                            <input type="number" step="any" class="form-control" id="latitude" name="latitude" value="{{ $setting->latitude }}">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="longitude">Longitude:</label>
-                            <input type="text" class="form-control" id="longitude" name="longitude" value="{{ $setting->longitude }}">
+                            <input type="number" step="any" class="form-control" id="longitude" name="longitude" value="{{ $setting->longitude }}">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="radius">Radius:</label>
-                        <input type="text" class="form-control" id="radius" name="radius" value="{{ $setting->radius }}">
+                        <label for="radius">Radius (meter):</label>
+                        <input type="number" min="1" class="form-control" id="radius" name="radius" value="{{ $setting->radius }}">
                     </div>
                     <div class="form-group">
-                        <label for="radius">Limit Absen Harian</label>
+                        <label for="limit_absen">Limit Absen Harian</label>
                         <input type="time" class="form-control" id="limit_absen" name="limit_absen" value="{{ $setting->limit_absen }}">
                     </div>
-                    <button style="float: right" type="submit" class="btn btn-primary">Edit</button>
+                    <button type="submit" class="btn btn-primary float-right">Simpan</button>
                 </form>
             </div>
             <!-- /.card-body -->

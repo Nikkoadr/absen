@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Services\JadwalService;
 use App\Services\LaporanService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 
 class LaporanController extends Controller
@@ -25,13 +26,16 @@ class LaporanController extends Controller
         ]);
 
         $pengguna = $user->exists ? $user : User::findOrFail($data['id'] ?? abort(422, 'ID karyawan wajib diisi.'));
-        $rekap = Absensi::with('user:id,nama')
+        $awalBulan = Carbon::create($data['tahun'], $data['bulan'], 1, 'Asia/Jakarta')->startOfMonth()->toDateString();
+        $akhirBulan = Carbon::create($data['tahun'], $data['bulan'], 1, 'Asia/Jakarta')->endOfMonth()->toDateString();
+        $peta = $this->jadwal->petaRentang($awalBulan, $akhirBulan);
+        $rekap = Absensi::with('user:id,nama,jam_kerja,jam_pulang')
             ->milikPengguna($pengguna->id)
             ->bulan((int) $data['bulan'], (int) $data['tahun'])
             ->orderBy('tanggal_absen')
             ->get()
-            ->each(function ($absen) {
-                $shift = $this->jadwal->untukTanggal($absen->id_user, substr((string) $absen->tanggal_absen, 0, 10));
+            ->each(function ($absen) use ($peta) {
+                $shift = $this->jadwal->untukTanggalDariPeta($peta, $absen->id_user, substr((string) $absen->tanggal_absen, 0, 10), $absen->user);
                 $absen->jam_kerja_hari = $shift['jam_masuk'];
                 $absen->nama_shift = $shift['nama'];
             });

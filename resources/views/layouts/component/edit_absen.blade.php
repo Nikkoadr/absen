@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 @endsection
 @section('content')
-<div class="content-wrapper">
+<div class="content-wrapper" id="konten-utama">
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
@@ -13,7 +13,7 @@
         </div><!-- /.col -->
         <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Admin</a></li>
+            <li class="breadcrumb-item"><a href="/attendance">Kehadiran</a></li>
             <li class="breadcrumb-item active">Ubah Presensi</li>
         </ol>
         </div><!-- /.col -->
@@ -41,19 +41,19 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="tanggal_absen">Tanggal</label>
-                                    <input type="text" class="form-control" id="tanggal_absen" name="tanggal_absen" value="{{ $data->tanggal_absen }}" required>
+                                    <input type="date" class="form-control" id="tanggal_absen" name="tanggal_absen" value="{{ $data->tanggal_absen }}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="jam_masuk">Jam Masuk</label>
-                                    <input type="text" class="form-control" id="jam_masuk" name="jam_masuk" value="{{ $data->jam_masuk }}" required>
+                                    <input type="time" step="1" class="form-control" id="jam_masuk" name="jam_masuk" value="{{ $data->jam_masuk }}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="jam_keluar">Jam Pulang</label>
-                                    <input type="text" class="form-control" id="jam_keluar" name="jam_keluar" value="{{ $data->jam_keluar }}">
+                                    <input type="time" step="1" class="form-control" id="jam_keluar" name="jam_keluar" value="{{ $data->jam_keluar }}">
                                 </div>
                             </div>
-                                <button style="float: right" type="submit" class="btn btn-primary m-2">Simpan</button>
-                                <a style="float: right" href="/attendance" class="btn btn-secondary m-2">Kembali</a>
+                                <button type="submit" class="btn btn-primary m-2 float-right">Simpan</button>
+                                <a href="/attendance" class="btn btn-secondary m-2 float-right">Kembali</a>
                         </form>
             </div>
             <!-- /.card-body -->

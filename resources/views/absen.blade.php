@@ -1,9 +1,6 @@
 @extends('layouts.main')
 
 @section('link')
-<!-- Ionicons -->
-<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.20.0/dist/face-api.min.js"></script>
 
@@ -29,7 +26,7 @@
     left: 0;
 }
 #map {
-    height: 620px;
+    height: 360px; /* Cukup memverifikasi posisi dalam radius, peta bukan fokus halaman. */
     border-radius: 15px;
 }
 </style>
@@ -37,7 +34,7 @@
 
 @section('content')
 <!-- Content Wrapper -->
-<div class="content-wrapper">
+<div class="content-wrapper" id="konten-utama">
     <!-- Content Header -->
     <div class="content-header">
         <div class="container-fluid">
@@ -68,28 +65,29 @@
                         <div class="card-body">
                             <input type="hidden" id="lokasi">
                             <div class="kamera mb-3">
-                                <video id="video" autoplay muted playsinline></video>
+                                <video id="video" autoplay muted playsinline aria-label="Pratinjau kamera untuk verifikasi wajah"></video>
                             </div>
+                            <p id="statusKamera" role="status" class="text-muted mb-0">Memuat kamera…</p>
                             <div class="row mt-3">
                                 <div class="col">
                                     @if($cek > 0)
                                         @if($jam > Auth::user()->jam_pulang)
                                             <button id="ambilFoto" class="btn btn-danger btn-block">
-                                                <i class="fa-solid fa-camera-retro"></i> Presensi Pulang
+                                                <i class="fa-solid fa-camera-retro" aria-hidden="true"></i> Presensi Pulang
                                             </button>
                                         @else
-                                            <button id="tombolpulang" class="btn btn-danger btn-block disabled">
-                                                <i class="fa-solid fa-camera-retro"></i> Presensi Pulang
+                                            <button id="tombolpulang" class="btn btn-danger btn-block disabled" aria-disabled="true">
+                                                <i class="fa-solid fa-camera-retro" aria-hidden="true"></i> Presensi Pulang
                                             </button>
                                         @endif
                                     @else
                                         @if($jam > $limit_absen)
-                                            <button id="tombolmasuk" class="btn btn-primary btn-block disabled">
-                                                <i class="fa-solid fa-camera-retro"></i> Presensi Masuk
+                                            <button id="tombolmasuk" class="btn btn-primary btn-block disabled" aria-disabled="true">
+                                                <i class="fa-solid fa-camera-retro" aria-hidden="true"></i> Presensi Masuk
                                             </button>
                                         @else
                                             <button id="ambilFoto" class="btn btn-primary btn-block">
-                                                <i class="fa-solid fa-camera-retro"></i> Presensi Masuk
+                                                <i class="fa-solid fa-camera-retro" aria-hidden="true"></i> Presensi Masuk
                                             </button>
                                         @endif
                                     @endif
@@ -106,7 +104,7 @@
                             <h3 class="card-title">Peta Lokasi</h3>
                         </div>
                         <div class="card-body">
-                            <section id="map"></section>
+                            <section id="map" role="img" aria-label="Peta lokasi Anda dan radius area sekolah"></section>
                         </div>
                     </div>
                 </div>
@@ -130,12 +128,17 @@ Promise.all([
 
 function startVideo() {
     const video = document.getElementById('video');
+    const status = document.getElementById('statusKamera');
     navigator.mediaDevices.getUserMedia({ video: {} })
         .then(stream => video.srcObject = stream)
-        .catch(err => console.error("Camera error:", err));
+        .catch(err => {
+            console.error("Camera error:", err);
+            if (status) status.textContent = 'Kamera tidak dapat diakses. Periksa izin kamera browser.';
+        });
 
     video.addEventListener('loadedmetadata', () => {
         video.play();
+        if (status) status.textContent = 'Arahkan wajah ke kamera hingga bingkai hijau muncul.';
 
         const canvas = faceapi.createCanvasFromMedia(video);
         document.querySelector('.kamera').append(canvas);

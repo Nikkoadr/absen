@@ -17,12 +17,18 @@ class KiosPresensiController extends Controller
         $setting = Setting::first();
         $hariIni = Carbon::today('Asia/Jakarta')->toDateString();
         $jam = Carbon::now('Asia/Jakarta')->toTimeString();
+        $token = $this->tokenKios($hariIni);
 
-        return view('kios', compact('setting', 'hariIni', 'jam'));
+        return view('kios', compact('setting', 'hariIni', 'jam', 'token'));
     }
 
-    public function deskriptor()
+    public function deskriptor(Request $request)
     {
+        abort_unless(
+            hash_equals($this->tokenKios(Carbon::today('Asia/Jakarta')->toDateString()), (string) $request->query('token')),
+            403
+        );
+
         $data = User::whereNotNull('face_descriptor')
             ->select('id', 'nama', 'pasfoto', 'face_descriptor')
             ->get()
@@ -36,12 +42,18 @@ class KiosPresensiController extends Controller
         return response()->json($data);
     }
 
+    /** Token harian agar daftar biometrik tidak bisa diambil perayap buta. */
+    protected function tokenKios(string $hariIni): string
+    {
+        return hash_hmac('sha256', $hariIni, (string) config('app.key'));
+    }
+
     public function simpan(Request $request)
     {
         $data = $request->validate([
             'user_id' => ['required', 'integer', 'exists:users,id'],
             'lokasi' => ['required', 'string', 'regex:/^-?\d+(\.\d+)?,-?\d+(\.\d+)?$/'],
-            'foto' => ['required', 'string', 'min:100'],
+            'foto' => ['required', 'string', 'min:100', 'max:2000000'],
             'skor' => ['required', 'numeric', 'min:0', 'max:0.6'],
         ]);
 

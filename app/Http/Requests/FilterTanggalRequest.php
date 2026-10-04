@@ -34,4 +34,19 @@ class FilterTanggalRequest extends FormRequest
     {
         return (int) ($this->input('tahun') ?? now('Asia/Jakarta')->year);
     }
+
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            $hari = $this->input('hari');
+
+            if ($hari === null || $hari === '') {
+                return;
+            }
+
+            if (! checkdate((int) $this->bulan(), (int) $hari, (int) $this->tahun())) {
+                $validator->errors()->add('hari', 'Tanggal tidak ada pada bulan tersebut.');
+            }
+        });
+    }
 }

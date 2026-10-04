@@ -8,6 +8,7 @@ use App\Models\Absensi;
 use App\Services\AbsensiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
 
 class AbsensiController extends Controller
 {
@@ -74,9 +75,14 @@ class AbsensiController extends Controller
     public function update_absen(Request $request, Absensi $absensi)
     {
         $data = $request->validate([
-            'tanggal_absen' => ['required', 'date'],
+            'tanggal_absen' => [
+                'required', 'date', 'before_or_equal:today',
+                Rule::unique('absensi', 'tanggal_absen')
+                    ->where('id_user', $absensi->id_user)
+                    ->ignore($absensi->id),
+            ],
             'jam_masuk' => ['required', 'date_format:H:i,H:i:s'],
-            'jam_keluar' => ['nullable', 'date_format:H:i,H:i:s'],
+            'jam_keluar' => ['nullable', 'date_format:H:i,H:i:s', 'after_or_equal:jam_masuk'],
         ]);
         $absensi->update($data);
 

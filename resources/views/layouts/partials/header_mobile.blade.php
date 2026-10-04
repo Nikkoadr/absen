@@ -1,5 +1,5 @@
     <!-- App Header -->
-    <div class="appHeader position-fixed" style="background: linear-gradient(135deg, #0284c7, #38bdf8);">
+    <div class="appHeader position-fixed" style="background: var(--sky-800);">
         <div class="left">
             <a href="/home" class="headerButton" title="Kembali ke Dasbor" aria-label="Kembali ke Dasbor">
                 <i class="fas fa-arrow-left" style="color: #fff;"></i>

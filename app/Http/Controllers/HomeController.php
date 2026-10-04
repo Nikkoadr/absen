@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Absensi;
 use App\Models\LeaveRequest;
 use App\Models\User;
+use App\Services\JadwalService;
 use App\Support\HariKerja;
 use Illuminate\Support\Carbon;
 
 class HomeController extends Controller
 {
+    public function __construct(protected JadwalService $jadwal) {}
+
     public function index()
     {
         $pengguna = request()->user();
@@ -37,6 +40,8 @@ class HomeController extends Controller
         $leaderboard = (clone $dasar)->get();
         $hitungUser = User::count();
         $hariKerjaBerjalan = HariKerja::jumlahHariKerja((int) $today->month, (int) $today->year, $hariIni);
+        $jamKerjaHariIni = $this->jadwal->untukTanggal($pengguna->id, $hariIni)['jam_masuk']
+            ?? ($pengguna->jam_kerja ? substr($pengguna->jam_kerja, 0, 5) : null);
 
         $tren7Hari = collect(range(6, 0))->map(function ($mundur) use ($today) {
             $tgl = $today->copy()->subDays($mundur);
@@ -47,6 +52,17 @@ class HomeController extends Controller
         });
 
         if ($pengguna->role === 'admin') {
+            $staf = User::where('role', '!=', 'admin')->count();
+            $izinHariIni = LeaveRequest::where('status', 'disetujui')
+                ->where('tanggal_mulai', '<=', $hariIni)
+                ->where(function ($q) use ($hariIni) {
+                    $q->whereNull('tanggal_selesai')->orWhere('tanggal_selesai', '>=', $hariIni);
+                })
+                ->distinct()
+                ->count('user_id');
+
+            $this->jadwal->anotasiJamKerja($leaderboard);
+
             return view('home', [
                 'absenHariIni' => $absenHariIni,
                 'historyBulanIni' => $historyBulanIni,
@@ -57,7 +73,7 @@ class HomeController extends Controller
                 'hitungUser' => $hitungUser,
                 'hitungMasukHariIni' => $leaderboard->count(),
                 'hitungPulang' => $hitungPulang,
-                'hitungAlfa' => HariKerja::adalahHariKerja($hariIni) ? max(0, $hitungUser - $leaderboard->count()) : 0,
+                'hitungAlfa' => HariKerja::adalahHariKerja($hariIni) ? max(0, $staf - $leaderboard->count() - $izinHariIni) : 0,
                 'tren7Hari' => $tren7Hari,
             ]);
         }
@@ -78,6 +94,8 @@ class HomeController extends Controller
             ];
         });
 
+        $this->jadwal->anotasiJamKerja($historyBulanIni, $pengguna->jam_kerja);
+
         return view('home_mobile', [
             'absenHariIni' => $absenHariIni,
             'historyBulanIni' => $historyBulanIni,
@@ -91,7 +109,7 @@ class HomeController extends Controller
             ],
             'mingguan' => $mingguan,
             'leaderboard_mobile' => (clone $dasar)->take(10)->get(),
-            'set_jam_kerja' => $pengguna->jam_kerja,
+            'set_jam_kerja' => $jamKerjaHariIni,
         ]);
     }
 }

@@ -1,18 +1,12 @@
 @extends('layouts.main')
 @section('link')
-<!-- Ionicons -->
-<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<!-- Ionicons -->
-<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 <link rel="stylesheet" href="{{ asset('assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 @endsection
 @section('content')
 <!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
+<div class="content-wrapper" id="konten-utama">
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
@@ -34,64 +28,43 @@
 <!-- Main content -->
 <div class="content">
     <div class="container-fluid">
-        <!-- Small boxes (Stat box) -->
-    <div class="row">
+        <div class="row">
         <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-success">
-            <div class="inner">
-            <h3>Seluruh Civitas</h3>
-            <p>{{ $hitungUser }}</p>
+        <div class="card stat-card">
+            <div class="card-body">
+            <div class="stat-angka">{{ $hitungUser }}</div>
+            <div class="stat-label">Civitas terdaftar</div>
+            <a href="{{ route('data_user') }}" class="stat-link">Kelola data user</a>
             </div>
-            <div class="icon">
-            <i class="ion ion-android-people"></i>
-            </div>
-            <a href="#" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
         </div>
         </div>
-        <!-- ./col -->
         <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-info">
-            <div class="inner">
-            <h3>Masuk</h3>
-            <p>{{ $hitungMasukHariIni }}</p>
+        <div class="card stat-card">
+            <div class="card-body">
+            <div class="stat-angka">{{ $hitungMasukHariIni }}</div>
+            <div class="stat-label">Masuk hari ini</div>
+            <a href="{{ route('attendance') }}" class="stat-link">Lihat kehadiran</a>
             </div>
-            <div class="icon">
-            <i class="ion ion-ios-download-outline"></i>
-            </div>
-            <a href="#" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
         </div>
         </div>
-        <!-- ./col -->
         <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-primary">
-            <div class="inner">
-            <h3>Pulang</h3>
-            <p>{{ $hitungPulang }}</p>
+        <div class="card stat-card">
+            <div class="card-body">
+            <div class="stat-angka">{{ $hitungPulang }}</div>
+            <div class="stat-label">Pulang hari ini</div>
+            <a href="{{ route('attendance') }}" class="stat-link">Lihat kehadiran</a>
             </div>
-            <div class="icon">
-            <i class="ion ion-ios-upload-outline"></i>
-            </div>
-            <a href="#" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
         </div>
         </div>
-        <!-- ./col -->
         <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-danger">
-            <div class="inner">
-            <h3>Tidak Hadir</h3>
-            <p>{{ $hitungAlfa }}</p>
+        <div class="card stat-card">
+            <div class="card-body">
+            <div class="stat-angka">{{ $hitungAlfa }}</div>
+            <div class="stat-label">Belum hadir hari ini</div>
+            <a href="{{ route('attendance') }}" class="stat-link">Lihat kehadiran</a>
             </div>
-            <div class="icon">
-            <i class="ion ion-ios-pulse-strong"></i>
-            </div>
-            <a href="#" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
         </div>
         </div>
-        <!-- ./col -->
         </div>
         <div class="row">
             <div class="col-12">
@@ -121,18 +94,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach ($leaderboard as $data)
+                            @forelse ($leaderboard as $data)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $data->nama }}</td>
-                                <td><img style="width: 15%" src="{{ asset('storage/absen_file/'. $data->foto_masuk) }}" alt="image" class="image" /></td>
+                                <td><img class="img-presensi" src="{{ asset('storage/absen_file/'. $data->foto_masuk) }}" alt="Foto masuk {{ $data->nama }}" /></td>
                                 <td><span class="badge
-                                        @if($data->user?->jam_kerja && $data->jam_masuk > $data->user->jam_kerja) badge-warning @else badge-success @endif ">{{ $data->jam_masuk }}</span>
+                                        @if(($data->jam_kerja_hari ?? $data->user?->jam_kerja) && $data->jam_masuk > ($data->jam_kerja_hari ?? $data->user?->jam_kerja)) badge-warning @else badge-success @endif ">{{ $data->jam_masuk }}</span>
                                 </td>
                                     <td>@if ($data->foto_keluar == null)
                                         <small>Belum Pulang</small>
                                     @else
-                                        <img style=" width: 15%" src="{{ asset('storage/absen_file/'. $data->foto_keluar) }}" alt="image" class="image" />
+                                        <img class="img-presensi" src="{{ asset('storage/absen_file/'. $data->foto_keluar) }}" alt="Foto keluar {{ $data->nama }}" />
                                     @endif
                                 </td>
                                 <td>
@@ -143,7 +116,9 @@
                                     @endif
                                 </td>
                             </tr>
-                            @endforeach
+                            @empty
+                            <tr><td colspan="6" class="text-center text-muted">Belum ada presensi hari ini.</td></tr>
+                            @endforelse
                             </tbody>
                         </table>
                         </div>
@@ -193,7 +168,7 @@
             type: 'bar',
             data: {
                 labels: @json($tren7Hari->pluck('label')),
-                datasets: [{ label: 'Hadir', data: @json($tren7Hari->pluck('hadir')), backgroundColor: '#0ea5e9' }],
+                datasets: [{ label: 'Hadir', data: @json($tren7Hari->pluck('hadir')), backgroundColor: '#0284c7' }], /* Batang 4.10:1 terhadap putih, lolos batas 3:1 grafik. */
             },
             options: { responsive: true, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } },
         });

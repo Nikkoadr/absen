@@ -3,26 +3,10 @@
 <link rel="stylesheet" href="{{ asset('assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
-
-<style>
-    .kamera,
-    .kamera video {
-        display: inline-block;
-        width: 100% !important;
-        margin: auto;
-        height: auto !important;
-        border-radius: 15px;
-    }
-</style>
-<style>
-    #map {
-        height: 180px;
-        }
-</style>
 @endsection
 @section('content')
 <!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
+<div class="content-wrapper" id="konten-utama">
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
@@ -50,64 +34,27 @@
             <div class="card-header">
             <button type="button" class="btn btn-primary m-1" data-toggle="modal" data-target="#modal_import"><i class="fa-solid fa-file-import"></i> Import</button>
             @include('layouts.component.modal_import')
-            <a href="exportuser" class="btn btn-info m-1" target="_blank"><i class="fa-solid fa-file-export"></i> Export</a>
+            <a href="{{ route('exportuser') }}" class="btn btn-info m-1" target="_blank"><i class="fa-solid fa-file-export" aria-hidden="true"></i> Export</a>
             <button type="button" class="btn btn-success m-1" data-toggle="modal" data-target="#modal_tambah_user"><i class="fa-solid fa-user-plus"></i> Tambah</button>
             @include('layouts.component.modal_tambah_user')
+            <button type="button" id="tombolHapusBanyak" class="btn btn-danger m-1 d-none" title="Hapus yang dipilih" aria-label="Hapus karyawan terpilih"><i class="far fa-trash-alt" aria-hidden="true"></i> <span id="jumlahTerpilih" class="badge badge-light">0</span></button>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
             <table id="table_user" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>No</th>
-                        <th>ID</th>
-                        <th>Role</th>
-                        <th>NIK</th>
-                        <th>NUPTK</th>
-                        <th>NBM</th>
-                        <th>Nama</th>
-                        <th>Nomor HP</th>
-                        <th>Email</th>
-                        <th>Jabatan</th>
+                        <th data-orderable="false" data-searchable="false"><input type="checkbox" id="pilihSemua" aria-label="Pilih semua karyawan"></th>
+                        <th>Karyawan</th>
+                        <th>Identitas</th>
                         <th>Jam Kerja</th>
-                        <th>Jam Pulang</th>
                         <th data-orderable="false">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                @foreach ( $data_user as $data )
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $data->id }}</td>
-                        <td>{{ $data->role }}</td>
-                        <td>{{ $data->nik }}</td>
-                        <td>{{ $data->nuptk }}</td>
-                        <td>{{ $data->nbm }}</td>
-                        <td>{{ $data->nama }}</td>
-                        <td>{{ $data->nomor_hp }}</td>
-                        <td>{{ $data->email }}</td>
-                        <td>{{ $data->jabatan }}</td>
-                        <td>{{ $data->jam_kerja }}</td>
-                        <td>{{ $data->jam_pulang }}</td>
-                        <td width="10%" style="text-align: center">
-                            <div style="display: inline;">
-                                <button type="button" class="btn btn-info m-1" data-toggle="modal" data-target="#modalEditUserId{{ $data->id }}"><i class="fa-regular fa-pen-to-square"></i></button>
-                                @include('layouts.component.modal_edit_user')
-                                <button type="button" class="btn btn-warning m-1" data-toggle="modal" data-target="#ubah_password_id{{ $data->id }}"><i class="fa-solid fa-unlock-keyhole"></i></button>
-                                @include('layouts.component.modal_ubah_password')
-                                <button type="button" class="btn btn-primary m-1" data-toggle="modal" data-target="#modalLaporanIndividu{{ $data->id }}"><i class="fa-solid fa-print"></i></button>
-                                @include('layouts.component.modal_print_laporan')
-                                <form action="{{ route('hapus_data_user', $data->id) }}" method="POST" class="d-inline konfirmasi-form">
-                                    @csrf
-                                    @method('delete')
-                                    <button type="submit" class="btn btn-danger m-1"><i class="far fa-trash-alt"></i></button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                @endforeach
                 </tbody>
             </table>
+            <div id="modalWadah"></div>
             </div>
             <!-- /.card-body -->
         </div>
@@ -145,14 +92,31 @@ $(function () {
 <script>
 $(function () {
 $("#table_user").DataTable({
-    "responsive": true, 
-    "lengthChange": true, 
-    "autoWidth": true, 
-    "pageLength": 50,
+    "processing": true,
+    "serverSide": true,
+    "responsive": true,
+    "lengthChange": true,
+    "autoWidth": false,
+    "pageLength": 25,
     "aLengthMenu": [
-        [25, 50, 100, 200, -1],
-        [25, 50, 100, 200, "All"]
+        [10, 25, 50, 100],
+        [10, 25, 50, 100]
     ],
+    "ajax": {
+        "url": "{{ route('data_user.data') }}",
+        "dataSrc": function (json) {
+            document.getElementById('modalWadah').innerHTML = json.modals || '';
+            return json.data;
+        }
+    },
+    "columns": [
+        { "data": "centang", "orderable": false, "searchable": false },
+        { "data": "karyawan", "orderable": true },
+        { "data": "identitas", "orderable": false },
+        { "data": "jam", "orderable": true },
+        { "data": "aksi", "orderable": false, "searchable": false }
+    ],
+    "language": { "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json" },
     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
 }).buttons().container().appendTo('#table_user_wrapper .col-md-6:eq(0)');
 });
@@ -172,22 +136,95 @@ var Toast = Swal.mixin({
 @endif
 </script>
 <script>
-document.querySelectorAll('.konfirmasi-form').forEach(function(form) {
-    form.addEventListener('submit', function (event) {
-        event.preventDefault();
-        Swal.fire({
-            text: "Anda yakin ingin menghapus data ini?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, Hapus!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                form.submit();
-            }
-        });
+document.getElementById('table_user').addEventListener('submit', function (event) {
+    var form = event.target.closest('.konfirmasi-form');
+    if (!form) return;
+    event.preventDefault();
+    Swal.fire({
+        text: "Anda yakin ingin menghapus data ini?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, Hapus!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.submit();
+        }
     });
 });
+</script>
+<script>
+(function () {
+    var tombol = document.getElementById('tombolHapusBanyak');
+    var jumlah = document.getElementById('jumlahTerpilih');
+    var pilihSemua = document.getElementById('pilihSemua');
+    var tabel = document.getElementById('table_user');
+    var dipilih = new Set(); /* Pilihan bertahan saat pindah halaman tabel. */
+
+    function hitung() {
+        var tampil = tabel.querySelectorAll('.pilih-user');
+        var nTampilTercentang = 0;
+        tampil.forEach(function (c) { if (c.checked) nTampilTercentang++; });
+        jumlah.textContent = dipilih.size;
+        tombol.classList.toggle('d-none', dipilih.size === 0);
+        pilihSemua.checked = tampil.length > 0 && nTampilTercentang === tampil.length;
+    }
+
+    tabel.addEventListener('change', function (e) {
+        if (e.target.id === 'pilihSemua') {
+            tabel.querySelectorAll('.pilih-user').forEach(function (c) {
+                c.checked = pilihSemua.checked;
+                if (c.checked) { dipilih.add(c.value); } else { dipilih.delete(c.value); }
+            });
+        } else if (e.target.classList.contains('pilih-user')) {
+            if (e.target.checked) { dipilih.add(e.target.value); } else { dipilih.delete(e.target.value); }
+        }
+        hitung();
+    });
+
+    $('#table_user').on('draw.dt', function () {
+        tabel.querySelectorAll('.pilih-user').forEach(function (c) { c.checked = dipilih.has(c.value); });
+        hitung();
+    });
+
+    tombol.addEventListener('click', function () {
+        if (!dipilih.size) return;
+        Swal.fire({
+            text: "Hapus " + dipilih.size + " karyawan terpilih beserta presensinya?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, Hapus!'
+        }).then((result) => {
+            if (!result.isConfirmed) return;
+            fetch("{{ route('hapusBanyakUser') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                },
+                body: JSON.stringify({ ids: Array.from(dipilih) }),
+            }).then(function (r) { return r.json(); }).then(function (j) {
+                if (j.status !== 'sukses') throw new Error(j.message || 'Gagal menghapus.');
+                var dt = $('#table_user').DataTable();
+                (j.ids || []).forEach(function (id) {
+                    dipilih.delete(String(id));
+                    var input = tabel.querySelector('.pilih-user[value="' + id + '"]');
+                    if (input) dt.row(input.closest('tr')).remove();
+                });
+                dt.draw(false);
+                hitung();
+                Swal.fire({ toast: true, position: 'top-end', showConfirmButton: false, timer: 3000, icon: 'success', title: j.message });
+            }).catch(function (e) {
+                Swal.fire({ title: 'Opss..!!!', text: e.message, icon: 'error' });
+            });
+        });
+    });
+
+    hitung();
+})();
 </script>
 @endsection

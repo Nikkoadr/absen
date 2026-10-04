@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('assets/css/presensi-tokens.css') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -23,13 +24,10 @@
             }
         };
     </script>
-    <style>
-        a:focus-visible, button:focus-visible { outline: 3px solid #0369a1; outline-offset: 2px; border-radius: 6px; }
-        .nav-link { min-height: 44px; display: inline-flex; align-items: center; }
-    </style>
 </head>
 <body class="font-sans text-slate-800 bg-white antialiased">
 
+<a href="#konten" class="skip-link">Lewati ke konten</a>
 <header class="border-b border-skybrand-100 bg-white/95 sticky top-0 z-40">
     <nav class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between" aria-label="Navigasi utama">
         <a href="/" class="flex items-center gap-2 min-h-[44px]">
@@ -38,7 +36,6 @@
         </a>
         <div class="hidden md:flex items-center gap-1">
             <a href="#cara" class="nav-link px-3 text-slate-700 hover:text-skybrand-700 font-medium">Cara Presensi</a>
-            <a href="#fitur" class="nav-link px-3 text-slate-700 hover:text-skybrand-700 font-medium">Fitur</a>
             <a href="{{ route('kios') }}" class="nav-link px-3 text-slate-700 hover:text-skybrand-700 font-medium">Presensi Mandiri</a>
             @auth
                 <a href="{{ url('/home') }}" class="ml-2 inline-flex items-center min-h-[44px] px-5 rounded-lg bg-skybrand-700 text-white font-semibold hover:bg-skybrand-800">Buka Dasbor</a>
@@ -63,7 +60,7 @@
     </div>
 </header>
 
-<main>
+<main id="konten">
     <section class="bg-skybrand-50">
         <div class="max-w-5xl mx-auto px-4 pt-12 pb-10 md:pt-16 md:pb-14 grid gap-8 md:grid-cols-5 md:items-center">
             <div class="md:col-span-3">
@@ -114,37 +111,12 @@
             </li>
         </ol>
     </section>
-
-    <section id="fitur" class="bg-slate-50 scroll-mt-20">
-        <div class="max-w-5xl mx-auto px-4 py-12">
-            <h2 class="text-2xl font-bold text-skybrand-900">Yang ditangani aplikasi ini</h2>
-            <div class="mt-6 bg-white border border-slate-200 rounded-xl p-6">
-                <h3 class="font-semibold text-lg text-skybrand-800">Jadwal blok yang berubah tiap 2 minggu</h3>
-                <p class="text-slate-700 mt-2">Admin mengunggah satu file Excel berisi shift dan rentang tanggalnya. Keterlambatan tiap hari dinilai terhadap jam shift hari itu, jadi guru shift siang tidak lagi tercatat terlambat 6 jam. Tanpa penugasan, dipakai jam kerja bawaan masing-masing karyawan.</p>
-                <a href="{{ route('login') }}" class="inline-flex items-center min-h-[44px] mt-3 font-semibold text-skybrand-700">Kelola jadwal setelah masuk</a>
-            </div>
-            <ul class="mt-4 grid gap-4 sm:grid-cols-3">
-                <li class="bg-white border border-slate-200 rounded-xl p-5">
-                    <h3 class="font-semibold">Rekap bulanan siap cetak</h3>
-                    <p class="text-slate-700 text-sm mt-1">Hadir, terlambat, izin, dan alfa per tanggal, bisa dicetak atau diunduh Excel.</p>
-                </li>
-                <li class="bg-white border border-slate-200 rounded-xl p-5">
-                    <h3 class="font-semibold">Izin berpersetujuan</h3>
-                    <p class="text-slate-700 text-sm mt-1">Pengajuan dari HP, disetujui admin, dan otomatis terbaca sebagai izin di rekap.</p>
-                </li>
-                <li class="bg-white border border-slate-200 rounded-xl p-5">
-                    <h3 class="font-semibold">Hari libur mengikuti kalender</h3>
-                    <p class="text-slate-700 text-sm mt-1">Akhir pekan dan libur nasional tidak dihitung alfa, bisa disinkron dari data terbuka.</p>
-                </li>
-            </ul>
-        </div>
-    </section>
 </main>
 
 <footer class="border-t border-slate-200">
     <div class="max-w-5xl mx-auto px-4 py-8 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
         <p class="text-slate-700"><strong>SMK Muhammadiyah Kandanghaur</strong><br><span class="text-sm">Jl. Raya Karanganyar No. 28/A, Kandanghaur, Indramayu</span></p>
-        <a href="https://www.smkmuhkandanghaur.sch.id" class="inline-flex items-center min-h-[44px] font-semibold text-skybrand-700">Situs sekolah</a>
+        <a href="https://www.instagram.com/smkmuhkandanghaur/" class="inline-flex items-center min-h-[44px] font-semibold text-skybrand-700">@smkmuhkandanghaur</a>
     </div>
 </footer>
 

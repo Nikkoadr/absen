@@ -2,56 +2,21 @@
 
 @section('link')
 <style>
-    body { background: #f2f6ff; }
-    .section-title span { font-weight: bold; font-size: 18px; }
-    .kamera {
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: #ffffff;
-        padding: 10px;
-        border-radius: 15px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        margin: auto;
-        max-width: 400px;
-    }
-    .kamera video {
-        width: 100% !important;
-        height: auto !important;
-        border-radius: 10px;
-        transform: scaleX(-1); /* mirror video display */
-    }
-    .kamera canvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-    }
     #map {
         margin-bottom: 10px;
         height: 150px;
         border-radius: 15px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
     .btn-absen {
         font-size: 16px;
-        font-weight: 500;
+        font-weight: 600;
         padding: 12px;
         border-radius: 12px;
+        min-height: 52px;
     }
-    .btn-primary {
-        background: linear-gradient(45deg, #4facfe, #00f2fe);
-        border: none;
-    }
-    .btn-danger {
-        background: linear-gradient(45deg, #f43b47, #453a94);
-        border: none;
-    }
-    .wide-block h5 { font-weight: 600; }
+    .btn-danger { background-color: #b91c1c; border: none; } /* Solid: putih di atasnya 6.47:1, tidak menyaingi tombol masuk. */
 </style>
 
-<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 @endsection
 
@@ -59,16 +24,13 @@
 <div id="appCapsule">
     <div class="sky-header text-center mb-2">
         <h1 style="font-size: 20px;">Ambil Presensi</h1>
-        <p>Wajah + lokasi terverifikasi AI</p>
+        <p>Pastikan wajah terlihat dan lokasi di area sekolah</p>
     </div>
     <div class="section full mt-2">
-        <div class="section-title text-center">
-            <span>Menu Presensi</span>
-        </div>
         <div class="wide-block pt-2 pb-2">
-            <h5 class="text-center mb-3">Kamera Anda</h5>
+            <h2 class="text-center mb-3" style="font-size: 18px;">Kamera</h2>
             <div class="kamera mb-3">
-                <video id="video" autoplay muted playsinline></video>
+                <video id="video" autoplay muted playsinline aria-label="Pratinjau kamera untuk verifikasi wajah"></video>
             </div>
 
             <div class="row mt-2">
@@ -103,8 +65,8 @@
 
             <div class="card-body mb-5">
                 <input type="hidden" id="lokasi">
-                <h5 class="text-center mb-3 mt-4">Lokasi Anda</h5>
-                <div id="map"></div>
+                <h2 class="text-center mb-3 mt-4" style="font-size: 18px;">Lokasi</h2>
+                <div id="map" role="img" aria-label="Peta lokasi Anda dan radius area sekolah"></div>
             </div>
         </div>
     </div>
@@ -150,30 +112,22 @@ function startVideo() {
 
             resized.forEach(det => {
                 const { x, y, width, height } = det.box;
-
-                // Gambar kotak
                 ctx.strokeStyle = "#00FF00";
                 ctx.lineWidth = 2;
                 ctx.strokeRect(x, y, width, height);
-
-                // Gambar teks dengan un-mirror
                 const score = (det.score * 100).toFixed(2) + "%";
                 ctx.font = "16px Arial";
-
-                ctx.save(); // save transform state
-                ctx.scale(-1, 1); // mirror balik hanya untuk teks
+                ctx.save();
+                ctx.scale(-1, 1);
                 ctx.fillStyle = "#00FF00";
-
-                // Hitung posisi teks mirror balik
                 const textWidth = ctx.measureText(score).width;
-                const textX = -(x + (width / 2) + (textWidth / 2)); // karena mirror -x
+                const textX = -(x + (width / 2) + (textWidth / 2));
                 const textY = y + height + 20;
-
                 ctx.fillText(score, textX, textY);
-                ctx.restore(); // restore untuk kembali ke mirror kotak
+                ctx.restore();
             });
 
-            ctx.restore(); // keluar dari mirror canvas
+            ctx.restore();
 
 
             faceDetected = detections.length > 0;
@@ -188,9 +142,8 @@ function takePhoto() {
     canvas.height = video.videoHeight;
     const ctx = canvas.getContext('2d');
 
-    // flip hasil foto agar tidak mirror
     ctx.translate(canvas.width, 0);
-    ctx.scale(-1, 1);
+    ctx.scale(-1, 1); // Foto dibalik agar tidak mirror.
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     return canvas.toDataURL('image/jpeg', 0.8);

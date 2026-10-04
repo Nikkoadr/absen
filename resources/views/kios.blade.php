@@ -4,7 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#0ea5e9" />
+    <meta name="description" content="Presensi mandiri tanpa login untuk guru dan karyawan SMK Muhammadiyah Kandanghaur." />
     <title>Presensi Mandiri Tanpa Login</title>
+    <link rel="stylesheet" href="{{ asset('assets/css/presensi-tokens.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/mobile/css/inc/bootstrap/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" />
     <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome-free-6.4.2/css/all.min.css') }}">
@@ -21,19 +23,29 @@
     </style>
 </head>
 <body>
-<div id="loader"><div class="spinner-border text-primary" role="status"></div></div>
-<div class="sky-header text-center">
-    <h1>Presensi Mandiri</h1>
-    <p>Arahkan wajah ke kamera — tanpa perlu login</p>
-</div>
+<a href="#konten-kios" class="skip-link">Lewati ke kamera presensi</a>
+<div id="loader"><div class="spinner-border text-primary" role="status"><span class="sr-only">Memuat halaman presensi…</span></div></div>
+<header class="sky-header">
+    <div class="container" style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+        <span style="display: inline-flex; align-items: center; gap: 8px; font-weight: 800;">
+            <img src="{{ asset('assets/dist/img/logo.png') }}" alt="Logo SMK Muhammadiyah Kandanghaur" width="32" height="32" style="object-fit: contain; background: #fff; border-radius: 8px;">
+            Presensi SMK
+        </span>
+        <a href="/" style="color: #fff; font-weight: 600; min-height: 44px; display: inline-flex; align-items: center;">Beranda</a>
+    </div>
+    <div class="text-center" style="margin-top: 12px;">
+        <h1>Presensi Mandiri</h1>
+        <p>Arahkan wajah ke kamera, tanpa perlu login</p>
+    </div>
+</header>
 
-<div class="container mt-3" style="margin-bottom: 40px">
+<main class="container mt-3" id="konten-kios" style="margin-bottom: 40px">
     <div class="sky-card p-3">
-        <div class="text-center mb-2"><span class="chip-sky" id="statusModel">Memuat model AI…</span></div>
-        <div class="kamera mb-2"><video id="video" autoplay muted playsinline></video></div>
+        <div class="text-center mb-2"><span class="chip-sky" id="statusModel" role="status" aria-live="polite">Memuat model AI…</span></div>
+        <div class="kamera mb-2"><video id="video" autoplay muted playsinline aria-label="Pratinjau kamera untuk verifikasi wajah"></video></div>
         <div class="text-center mb-2">
-            <img id="fotoTerdeteksi" src="" alt="" style="display: none; width: 72px; height: 72px; object-fit: cover; border-radius: 50%; border: 3px solid #7dd3fc;">
-            <div>Terdeteksi: <strong id="namaTerdeteksi">—</strong> <span class="chip-sky" id="skorTerdeteksi"></span></div>
+            <img id="fotoTerdeteksi" src="" alt="Foto wajah yang dikenali" style="display: none; width: 72px; height: 72px; object-fit: cover; border-radius: 50%; border: 3px solid #7dd3fc;">
+            <div>Terdeteksi: <strong id="namaTerdeteksi">Belum terdeteksi</strong> <span class="chip-sky" id="skorTerdeteksi"></span></div>
         </div>
         <input type="hidden" id="lokasi">
         <input type="hidden" id="userId">
@@ -43,10 +55,10 @@
     </div>
 
     <div class="sky-card p-3 mt-3">
-        <h5 class="text-center">Lokasi Anda</h5>
-        <div id="map"></div>
+        <h2 class="text-center" style="font-size: 18px;">Lokasi Anda</h2>
+        <div id="map" role="img" aria-label="Peta lokasi Anda dan radius area sekolah"></div>
     </div>
-</div>
+</main>
 
 <script src="{{ asset('assets/mobile/js/lib/jquery-3.4.1.min.js') }}"></script>
 <script src="{{ asset('assets/mobile/js/lib/bootstrap.min.js') }}"></script>
@@ -97,7 +109,7 @@ Promise.all([
 ]).then(boot).catch(e => { statusEl.textContent = 'Gagal memuat model AI'; console.error(e); });
 
 async function boot() {
-    const res = await fetch('/api/deskriptor-wajah');
+    const res = await fetch('/api/deskriptor-wajah?token={{ $token }}');
     const daftar = await res.json();
     if (!daftar.length) {
         statusEl.textContent = 'Belum ada data wajah terdaftar. Login lalu daftarkan wajah di Profil.';
@@ -110,7 +122,7 @@ async function boot() {
         }),
         0.6
     );
-    statusEl.textContent = daftar.length + ' wajah terdaftar. Arahkan wajah ke kamera.';
+    statusEl.textContent = 'Arahkan wajah ke kamera.';
     startVideo();
 }
 
@@ -130,7 +142,7 @@ function startVideo() {
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             if (!det) {
-                namaEl.textContent = '—'; skorEl.textContent = ''; btn.disabled = true;
+                namaEl.textContent = 'Belum terdeteksi'; skorEl.textContent = ''; btn.disabled = true;
                 document.getElementById('userId').value = '';
                 return;
             }

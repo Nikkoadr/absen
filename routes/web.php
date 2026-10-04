@@ -28,6 +28,9 @@ Auth::routes([
     'reset' => false,
 ]);
 
+Route::get('/auth/google/redirect', [App\Http\Controllers\Auth\GoogleAuthController::class, 'redirect'])->name('google.redirect');
+Route::get('/auth/google/callback', [App\Http\Controllers\Auth\GoogleAuthController::class, 'callback'])->name('google.callback');
+
 // Kios presensi wajah tanpa login (dibatas throttle agar tidak disalahgunakan)
 Route::get('/presensi-mandiri', [KiosPresensiController::class, 'kios'])->name('kios');
 Route::get('/api/deskriptor-wajah', [KiosPresensiController::class, 'deskriptor'])->middleware('throttle:30,1');
@@ -59,7 +62,9 @@ Route::middleware('auth')->group(function () {
         Route::delete('/attendance/{absensi}', [AbsensiController::class, 'hapus_absen'])->name('hapus_absen');
 
         Route::get('/data_user', [UserController::class, 'index'])->name('data_user');
+        Route::get('/data_user/data', [UserController::class, 'data'])->name('data_user.data');
         Route::post('/importUser', [UserController::class, 'importUser'])->name('importUser');
+        Route::post('/hapusBanyakUser', [UserController::class, 'hapusBanyakUser'])->name('hapusBanyakUser');
         Route::get('/exportuser', [UserController::class, 'exportuser'])->name('exportuser');
         Route::post('/tambah_user', [UserController::class, 'tambah_user'])->name('tambah_user');
         Route::put('/user/{user}', [UserController::class, 'edit_user'])->name('edit_user');

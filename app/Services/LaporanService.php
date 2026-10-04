@@ -13,14 +13,15 @@ class LaporanService
 
     public function rekap(string $tanggalAwal, string $tanggalAkhir): Collection
     {
-        $mulai = Carbon::parse($tanggalAwal, 'Asia/Jakarta');
-        $selesai = Carbon::parse($tanggalAkhir, 'Asia/Jakarta');
+        $mulai = Carbon::parse($tanggalAwal, 'Asia/Jakarta')->startOfDay();
+        $selesai = Carbon::parse($tanggalAkhir, 'Asia/Jakarta')->startOfDay();
 
         $select = [];
         $cursor = $mulai->copy();
         while ($cursor->lte($selesai)) {
-            $hari = (int) $cursor->day;
-            $select[] = "MAX(CASE WHEN DAY(tanggal_absen) = {$hari} THEN CONCAT(jam_masuk, '-', IFNULL(jam_keluar, '00:00:00')) ELSE '' END) as tgl_{$hari}";
+            $kunci = $cursor->format('Ymd');
+            $tgl = $cursor->toDateString();
+            $select[] = "MAX(CASE WHEN tanggal_absen = '{$tgl}' THEN CONCAT(jam_masuk, '-', IFNULL(jam_keluar, '00:00:00')) ELSE '' END) as tgl_{$kunci}";
             $cursor->addDay();
         }
 
@@ -34,35 +35,35 @@ class LaporanService
             ->orderBy('users.nama')
             ->get();
 
+        $peta = $this->jadwal->petaRentang($tanggalAwal, $tanggalAkhir);
+
         foreach ($rekap as $baris) {
-            $baris->total_jam_terlambat = $this->totalTerlambatJam($baris, $tanggalAwal, $tanggalAkhir);
+            $baris->total_jam_terlambat = $this->totalTerlambatJam($baris, $peta, $tanggalAwal, $tanggalAkhir);
         }
 
-        $this->anotasiShift($rekap, $tanggalAwal, $tanggalAkhir);
+        $this->anotasiShift($rekap, $peta, $tanggalAwal, $tanggalAkhir);
         $this->tandaiIzinDisetujui($rekap, $tanggalAwal, $tanggalAkhir);
 
         return $rekap;
     }
 
-    /** Anotasi sj_N = jam masuk shift yang berlaku per hari (fallback jam_kerja user). */
-    public function anotasiShift(Collection $rekap, string $tanggalAwal, string $tanggalAkhir): void
+    /** Anotasi sj_Ymd = jam masuk shift yang berlaku per tanggal (fallback jam_kerja user). */
+    public function anotasiShift(Collection $rekap, Collection $peta, string $tanggalAwal, string $tanggalAkhir): void
     {
-        $peta = $this->jadwal->petaRentang($tanggalAwal, $tanggalAkhir);
+        $mulai = Carbon::parse($tanggalAwal, 'Asia/Jakarta')->startOfDay();
+        $selesai = Carbon::parse($tanggalAkhir, 'Asia/Jakarta')->startOfDay();
 
         foreach ($rekap as $baris) {
-            for ($i = 1; $i <= 31; $i++) {
-                $tanggal = $this->tanggalUntukHari($i, $tanggalAwal, $tanggalAkhir);
-
-                if ($tanggal === null) {
-                    continue;
-                }
-
-                $baris->{"sj_{$i}"} = $this->jadwal->jamMasukPada(
+            $cursor = $mulai->copy();
+            while ($cursor->lte($selesai)) {
+                $tanggal = $cursor->toDateString();
+                $baris->{'sj_'.$cursor->format('Ymd')} = $this->jadwal->jamMasukPada(
                     $peta,
                     (int) $baris->id_user,
                     $tanggal,
                     $baris->jam_kerja ?? null
                 );
+                $cursor->addDay();
             }
         }
     }
@@ -97,7 +98,7 @@ class LaporanService
                     : $mulai->copy();
 
                 for ($tgl = $mulai->copy(); $tgl->lte($selesai); $tgl->addDay()) {
-                    $kunci = 'tgl_'.$tgl->day;
+                    $kunci = 'tgl_'.$tgl->format('Ymd');
 
                     if (property_exists($baris, $kunci) && $baris->$kunci === '') {
                         $baris->$kunci = 'Izin';
@@ -110,70 +111,37 @@ class LaporanService
         }
     }
 
-    public function totalTerlambatJam(object $baris, ?string $tanggalAwal = null, ?string $tanggalAkhir = null): float
+    public function totalTerlambatJam(object $baris, Collection $peta, string $tanggalAwal, string $tanggalAkhir): float
     {
         $total = 0.0;
-        $peta = ($tanggalAwal && $tanggalAkhir) ? $this->jadwal->petaRentang($tanggalAwal, $tanggalAkhir) : collect();
+        $mulai = Carbon::parse($tanggalAwal, 'Asia/Jakarta')->startOfDay();
+        $selesai = Carbon::parse($tanggalAkhir, 'Asia/Jakarta')->startOfDay();
+        $cursor = $mulai->copy();
 
-        for ($i = 1; $i <= 31; $i++) {
-            $kunci = "tgl_{$i}";
+        while ($cursor->lte($selesai)) {
+            $kunci = 'tgl_'.$cursor->format('Ymd');
 
             if (! isset($baris->$kunci) || $baris->$kunci === '' || ! preg_match('/^\d{2}:\d{2}/', (string) $baris->$kunci)) {
+                $cursor->addDay();
+
                 continue;
             }
 
             $jamMasuk = substr((string) $baris->$kunci, 0, 5);
             $bawaan = isset($baris->jam_kerja) && $baris->jam_kerja ? substr((string) $baris->jam_kerja, 0, 5) : null;
-            $jamKerja = $bawaan;
-
-            if ($tanggalAwal && $tanggalAkhir && isset($baris->id_user)) {
-                $tanggal = $this->tanggalUntukHari($i, $tanggalAwal, $tanggalAkhir);
-                $jamKerja = $tanggal
-                    ? $this->jadwal->jamMasukPada($peta, (int) $baris->id_user, $tanggal, $baris->jam_kerja ?? null)
-                    : $bawaan;
-            }
+            $tanggal = $cursor->toDateString();
+            $jamKerja = isset($baris->id_user)
+                ? $this->jadwal->jamMasukPada($peta, (int) $baris->id_user, $tanggal, $baris->jam_kerja ?? null)
+                : $bawaan;
 
             if ($jamKerja && $jamMasuk > $jamKerja) {
                 $total += abs(Carbon::parse($jamMasuk, 'Asia/Jakarta')
                     ->diffInMinutes(Carbon::parse($jamKerja, 'Asia/Jakarta'))) / 60;
             }
+
+            $cursor->addDay();
         }
 
         return $total;
-    }
-
-    public function menitTerlambat(string $jamMasuk, string $jamKerja): int
-    {
-        if ($jamMasuk <= $jamKerja) {
-            return 0;
-        }
-
-        return abs(Carbon::parse($jamMasuk, 'Asia/Jakarta')
-            ->diffInMinutes(Carbon::parse($jamKerja, 'Asia/Jakarta')));
-    }
-
-    /**
-     * Petakan nomor hari (tgl_N) ke tanggal penuh. Rentang dibatasi 62 hari
-     * sehingga hanya mencakup maksimal 2 bulan kalender: hari >= hari awal
-     * milik bulan awal, sisanya milik bulan akhir.
-     */
-    public function tanggalUntukHari(int $hari, string $tanggalAwal, string $tanggalAkhir): ?string
-    {
-        $awal = Carbon::parse($tanggalAwal);
-        $akhir = Carbon::parse($tanggalAkhir);
-
-        if ($awal->month === $akhir->month && $awal->year === $akhir->year) {
-            return $awal->copy()->day($hari)->toDateString();
-        }
-
-        $target = $hari >= $awal->day
-            ? $awal->copy()->day($hari)
-            : $akhir->copy()->day($hari);
-
-        if ($target->lt($awal) || $target->gt($akhir)) {
-            return null;
-        }
-
-        return $target->toDateString();
     }
 }

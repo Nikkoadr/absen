@@ -32,9 +32,10 @@
         }
         td.saturday,
         td.sunday {
-            background-color: red;
+            background-color: #b91c1c; /* Merah tua: teks putih 6.47:1, merah murni hanya 4.0:1. */
             color: white;
         }
+        span.terlambat { color: #b91c1c; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -43,7 +44,7 @@
         <table>
             <tr>
                 <td style="padding: 1px" width="100px" align="center" valign="middle">
-                    <img src="{{asset('assets/dist/img/dikdasmenmuh.png')}}" width="100%">
+                    <img src="{{asset('assets/dist/img/dikdasmenmuh.png')}}" width="100%" alt="Logo Dikdasmen Muhammadiyah">
                 </td>
                 <td style="padding: 1px" align="center" valign="middle">
                     <b style="color:#007bff;font-size:13pt !important;">MAJELIS PENDIDIKAN DASAR MENENGAH DAN PENDIDIKAN NONFORMAL</b><br>
@@ -54,7 +55,7 @@
                     <b>Nomor : 18572022/BAN-SM/SK/2022</b>
                 </td>
                 <td style="padding: 1px" width="100px" align="center" valign="middle">
-                    <img src="{{asset('assets/dist/img/logo.png')}}" width="70%">
+                    <img src="{{asset('assets/dist/img/logo.png')}}" width="70%" alt="Logo SMK Muhammadiyah Kandanghaur">
                 </td>
             </tr>
             <tr>
@@ -97,7 +98,7 @@
 </tr>
     </thead>
     <tbody>
-    @foreach ($rekap as $data)
+    @forelse ($rekap as $data)
         <tr>
             <td style="border: 1px solid black;">{{ $data->nama }}</td>
             <td style="border: 1px solid black;">{{ $data->jabatan ?? '-' }}</td>
@@ -109,16 +110,16 @@
             @endphp
             @while ($cursor->lte($periodeAkhir))
                 <td style="border: 1px solid black;">
-                    @if (($data->{'tgl_'.$cursor->day} ?? '') === 'Izin')
+                    @if (($data->{'tgl_'.$cursor->format('Ymd')} ?? '') === 'Izin')
                         <span style="color: blue">I</span>
-                    @elseif ($data->{'tgl_'.$cursor->day})
+                    @elseif ($data->{'tgl_'.$cursor->format('Ymd')})
                         @php
-                            [$jamMasuk, $jamKeluar] = explode('-', $data->{'tgl_'.$cursor->day});
-                            $batasHari = substr($data->{'sj_'.$cursor->day} ?? $data->jam_kerja ?? '', 0, 5);
+                            [$jamMasuk, $jamKeluar] = explode('-', $data->{'tgl_'.$cursor->format('Ymd')});
+                            $batasHari = substr($data->{'sj_'.$cursor->format('Ymd')} ?? $data->jam_kerja ?? '', 0, 5);
                             $total++;
                         @endphp
                         @if($batasHari !== '' && $jamMasuk > $batasHari)
-                            <span style="color: red">T</span>
+                            <span class="terlambat">T</span>
                         @else
                             H
                         @endif
@@ -133,7 +134,10 @@
             Terlambat Dalam 1 Bulan : {{ $data->total_jam_terlambat * 60}} Menit<br>
             Izin Disetujui : {{ $data->jumlah_izin ?? 0 }} Hari (I), selainnya tanpa presensi = Alfa (A)<br>
         </td>
-    @endforeach
+        </tr>
+    @empty
+        <tr><td colspan="99" style="border: 1px solid black;">Belum ada data pada periode ini.</td></tr>
+    @endforelse
 </tbody>
 </table>
 </div>

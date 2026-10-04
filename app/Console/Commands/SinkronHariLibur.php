@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Holiday;
 use Illuminate\Console\Command;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 
 class SinkronHariLibur extends Command
@@ -23,8 +24,21 @@ class SinkronHariLibur extends Command
         $tahun = (int) ($this->argument('tahun') ?? now('Asia/Jakarta')->year);
         $url = "https://raw.githubusercontent.com/fajriyan/open-data/main/data-nasional/referensi/kalender/libur-nasional/{$tahun}.json";
 
-        // Data publik non-sensitif; tanpa verifikasi SSL karena cacert Laragon bermasalah (cURL 77).
-        $res = Http::withoutVerifying()->timeout(20)->get($url);
+        // Data publik non-sensitif; verifikasi SSL diutamakan, fallback tanpa
+        // verifikasi hanya bila cacert setempat bermasalah (mis. cURL 77 di Laragon).
+        try {
+            $res = Http::timeout(20)->get($url);
+        } catch (ConnectionException) {
+            $this->warn('Verifikasi SSL gagal, mencoba tanpa verifikasi (data publik).');
+
+            try {
+                $res = Http::withoutVerifying()->timeout(20)->get($url);
+            } catch (ConnectionException $e) {
+                $this->error("Tidak dapat mengunduh data tahun {$tahun}. Periksa koneksi.");
+
+                return self::FAILURE;
+            }
+        }
 
         if (! $res->successful()) {
             $this->error("Gagal mengunduh data tahun {$tahun} (HTTP {$res->status()}).");
@@ -37,11 +51,14 @@ class SinkronHariLibur extends Command
 
         foreach ($res->json() ?? [] as $baris) {
             foreach ($this->uraiTanggal((string) ($baris['date'] ?? ''), $tahun) as $tanggal) {
-                $model = Holiday::updateOrCreate(
-                    ['tanggal' => $tanggal],
-                    ['nama' => (string) ($baris['holiday_name'] ?? 'Hari libur nasional')]
-                );
-                $model->wasRecentlyCreated ? $dibuat++ : $diperbarui++;
+                $model = Holiday::firstOrCreate(['tanggal' => $tanggal]);
+
+                if ($model->wasRecentlyCreated) {
+                    $model->update(['nama' => (string) ($baris['holiday_name'] ?? 'Hari libur nasional')]);
+                    $dibuat++;
+                } else {
+                    $diperbarui++;
+                }
             }
         }
 
@@ -50,22 +67,33 @@ class SinkronHariLibur extends Command
         return self::SUCCESS;
     }
 
-    /** @return string[] tanggal Y-m-d (kembangkan rentang "21 Maret to 22 Maret") */
+    /** @return string[] tanggal Y-m-d (rentang "21 Maret to 22 Maret" dikembangkan inklusif) */
     public function uraiTanggal(string $mentah, int $tahun): array
     {
         $bagian = preg_split('/\s+to\s+/i', trim($mentah));
-        $hasil = [];
+        $terurai = [];
 
         foreach ($bagian as $b) {
             if (preg_match('/^(\d{1,2})\s+([A-Za-z]+)$/', trim($b), $m)) {
                 $bulan = self::BULAN[strtolower($m[2])] ?? null;
 
-                if ($bulan) {
-                    $hasil[] = sprintf('%04d-%02d-%02d', $tahun, $bulan, (int) $m[1]);
+                if ($bulan && checkdate($bulan, (int) $m[1], $tahun)) {
+                    $terurai[] = sprintf('%04d-%02d-%02d', $tahun, $bulan, (int) $m[1]);
                 }
             }
         }
 
-        return $hasil;
+        if (count($terurai) === 2 && $terurai[1] >= $terurai[0]) {
+            $hasil = [];
+            $cursor = $terurai[0];
+            while ($cursor <= $terurai[1]) {
+                $hasil[] = $cursor;
+                $cursor = date('Y-m-d', strtotime($cursor.' +1 day'));
+            }
+
+            return $hasil;
+        }
+
+        return $terurai;
     }
 }

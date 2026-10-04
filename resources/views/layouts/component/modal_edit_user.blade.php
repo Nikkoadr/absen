@@ -12,7 +12,7 @@
                         @csrf
                         @method('put')
                         <div class="form-group row">
-                            <label for="role" class="col-sm-5 col-form-label">Role <span style="color: red">*</span></label>
+                            <label for="role" class="col-sm-5 col-form-label">Role <span style="color: #b91c1c;" aria-hidden="true">*</span></label>
                                 <div class="col-sm-7">
                                     <select type="text" class="form-control @error('role') is-invalid @enderror" name="role" id="role">
                                     <option value="admin" @if ($data->role =="admin") selected @endif>Admin</option>
@@ -61,7 +61,7 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="nama" class="col-sm-5 col-form-label text-md-end">Nama <span style="color: red">*</span></label>
+                            <label for="nama" class="col-sm-5 col-form-label text-md-end">Nama <span style="color: #b91c1c;" aria-hidden="true">*</span></label>
                             <div class="col-sm-7">
                                 <input id="nama" type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" value="{{ $data->nama }}" autocomplete="nama" autofocus>
                                 @error('nama')
@@ -72,7 +72,7 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="nomor_hp" class="col-sm-5 col-form-label text-md-end">Nomor HP <span style="color: red">*</span></label>
+                            <label for="nomor_hp" class="col-sm-5 col-form-label text-md-end">Nomor HP <span style="color: #b91c1c;" aria-hidden="true">*</span></label>
                             <div class="col-sm-7">
                                 <input id="nomor_hp" type="text" class="form-control @error('nomor_hp') is-invalid @enderror" name="nomor_hp" value="{{ $data->nomor_hp }}" autocomplete="nomor_hp" autofocus>
                                 @error('nomor_hp')
@@ -83,7 +83,7 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="email" class="col-sm-5 col-form-label text-md-end">E-mail <span style="color: red">*</span></label>
+                            <label for="email" class="col-sm-5 col-form-label text-md-end">E-mail <span style="color: #b91c1c;" aria-hidden="true">*</span></label>
                             <div class="col-sm-7">
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $data->email }}" autocomplete="email">
                                 @error('email')
@@ -126,7 +126,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <button style="float: right;" type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary float-right">
                             Edit
                         </button>
                     </form>

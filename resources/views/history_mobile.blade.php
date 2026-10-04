@@ -29,7 +29,7 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="tahun">Tahun:</label>
-                                        <input type="text" class="form-control" id="tahun" name="tahun" placeholder="Masukkan tahun" value="{{ $tahun }}">
+                                        <input type="number" class="form-control" id="tahun" name="tahun" placeholder="Contoh: 2026" min="2020" max="2100" value="{{ $tahun }}">
                                     </div>
                                 </div>
                             </div>
@@ -49,16 +49,16 @@
 <div class="section mt-3 mb-5">
     <div class="card">
         <ul class="listview image-listview">
-            @foreach ($history as $data)
+            @forelse ($history as $data)
                 <li>
                     <div class="item">
                         <div class="icon-box bg-primary">
-                            <i class="fas fa-fingerprint"></i>
+                            <i class="fas fa-fingerprint" aria-hidden="true"></i>
                         </div>
                         <div class="in">
                             <div>{{ Illuminate\Support\Carbon::parse($data->tanggal_absen)->format('d-M-Y'); }}</div>
                             <span class="badge 
-                            @if($data->jam_masuk > $set_jam_kerja)
+                            @if(($data->jam_kerja_hari ?? $set_jam_kerja) && $data->jam_masuk > ($data->jam_kerja_hari ?? $set_jam_kerja))
                                 badge-warning
                                 @else
                                 badge-success
@@ -73,7 +73,9 @@
                         </div>
                     </div>
                 </li>
-            @endforeach
+            @empty
+                <li><div class="item"><div class="in"><div class="text-muted">Belum ada presensi pada bulan ini.</div></div></div></li>
+            @endforelse
         </ul>
     </div>
 </div>

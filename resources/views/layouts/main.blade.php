@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- CSRF Token -->
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<title>Absen | Smkmuhkandanghaur</title>
+<title>Presensi SMK Muhammadiyah Kandanghaur</title>
 <link rel="icon" type="image/x-icon" href="{{ asset('assets/dist/img/logoKotak.png') }}">
 <!-- Google Font: Source Sans Pro -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -14,9 +14,11 @@
 <!-- Theme style -->
 <link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/presensi-admin.css') }}">
 @yield('link')
 </head>
 <body class="hold-transition sidebar-mini">
+<a href="#konten-utama" class="skip-link">Lewati ke konten</a>
 <div class="wrapper">
 @include('layouts.partials.navbar')
 @include('layouts.partials.asidebar')

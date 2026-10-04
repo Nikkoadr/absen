@@ -3,19 +3,22 @@
 
 @endsection
 @section('content')
+@php
+$inisial = fn ($nama) => collect(preg_split('/\s+/', trim((string) $nama)))->filter()->take(2)->map(fn ($kata) => mb_strtoupper(mb_substr($kata, 0, 1)))->join('');
+@endphp
     <!-- App Capsule -->
     <div id="appCapsule">
         <div class="sky-header" id="user-section">
             <div id="user-detail">
                 <div class="avatar">
-                    @if(Auth::user()->pasfoto==null)
-                    <img src="{{ asset('assets/dist/img/defaultpp.jpg') }}" alt="avatar" class="imaged w64 rounded" />
+                    @if(Auth::user()->pasfoto)
+                    <img src="{{ asset('storage/absen_file/pasFotoAbsen/'. Auth::user()->pasfoto) }}" alt="Foto profil {{ Auth::user()->nama }}" class="imaged w64 rounded" />
                     @else
-                    <img src="{{ asset('storage/absen_file/pasFotoAbsen/'. Auth::user()->pasfoto) }}" alt="avatar" class="imaged w64 rounded" />
+                    <span class="avatar-inisial" role="img" aria-label="Foto profil {{ Auth::user()->nama }}">{{ $inisial(Auth::user()->nama) }}</span>
                     @endif
                 </div>
                 <div id="user-info">
-                    <p class="mb-0">Halo, {{ Auth::user()->nama }} 👋</p>
+                    <p class="mb-0">Halo, {{ Auth::user()->nama }}</p>
                     <div class="jam-besar" id="jamBerjalan">--:--:--</div>
                     <div class="tanggal-kecil">{{ \Carbon\Carbon::now('Asia/Jakarta')->isoFormat('dddd, D MMMM Y') }} &middot; {{ Auth::user()->jabatan ?? ucfirst(Auth::user()->role) }}</div>
                     <div class="mt-1">
@@ -195,7 +198,7 @@
                                         <div class="in">
                                             <div>{{ Illuminate\Support\Carbon::parse($data->tanggal_absen)->format('d-M-Y'); }}</div>
                                             <span class="badge
-                                            @if($set_jam_kerja && $data->jam_masuk > $set_jam_kerja)
+                                            @if(($data->jam_kerja_hari ?? $set_jam_kerja) && $data->jam_masuk > ($data->jam_kerja_hari ?? $set_jam_kerja))
                                                 badge-warning
                                                 @else
                                                 badge-success
@@ -216,9 +219,9 @@
                             <li>
                                 <div class="item">
                                     @if(empty($data->pasfoto))
-                                    <img src="assets/mobile/img/sample/avatar/avatar1.jpg" alt="image" class="image" />
+                                    <span class="avatar-inisial kecil" role="img" aria-label="Foto profil {{ $data->nama }}">{{ $inisial($data->nama) }}</span>
                                     @else
-                                    <img src="{{ asset('storage/absen_file/pasFotoAbsen/'. $data->pasfoto) }}" alt="image" class="image" />
+                                    <img src="{{ asset('storage/absen_file/pasFotoAbsen/'. $data->pasfoto) }}" alt="Foto profil {{ $data->nama }}" class="image" />
                                     @endif
                                     <div class="in">
                                         <div><b>{{ $data->nama }}</b><br>

@@ -47,9 +47,9 @@
                 <tr>
                     <td rowspan="7">
                     @if($user->pasfoto == null)
-                    <img style="width: 130px" src="{{ asset('assets/dist/img/defaultpp.jpg') }}"/>
+                    <img style="width: 130px" src="{{ asset('assets/dist/img/defaultpp.jpg') }}" alt="Pas foto {{ $user->nama }} belum diunggah"/>
                     @else
-                    <img style="width: 130px" src="{{ asset('storage/absen_file/pasFotoAbsen/'. $user ->pasfoto) }}"/>
+                    <img style="width: 130px" src="{{ asset('storage/absen_file/pasFotoAbsen/'. $user ->pasfoto) }}" alt="Pas foto {{ $user->nama }}"/>
                     @endif
                     </td>
                     <td>
@@ -146,11 +146,11 @@
                 <td align="center"><b style="font-size: 12px">JUMALH JAM</b></td>
                 <td align="center"><b style="font-size: 12px">KETERANGAN</b></td>
             </tr>
-            @foreach ($rekap as $data)
+            @forelse ($rekap as $data)
             <tr>
                 <td width="100px" align="center" width="250px">{{ $loop->iteration }}</td>
                 <td align="center" width="250px">{{ \Illuminate\Support\Carbon::parse($data->tanggal_absen ?? $bulan . '-01')->format('d F Y') }}</td>
-                <td align="center" width="250px"><img style="width: 60px" src="{{ asset('storage/absen_file/'. $data->foto_masuk) }}" alt="fotoMasuk"></td>
+                <td align="center" width="250px"><img style="width: 60px" src="{{ asset('storage/absen_file/'. $data->foto_masuk) }}" alt="Foto masuk"></td>
                 <td align="center" width="250px">
                     <span @if($data->jam_masuk > ($data->jam_kerja_hari ?? $user->jam_kerja))
                         style="background: yellow"
@@ -162,7 +162,7 @@
                     @if($data->foto_keluar == null)
                     Belum Absen Pulang
                     @else
-                    <img style="width: 60px" src="{{ asset('storage/absen_file/'. $data->foto_keluar) }}" alt="fotoMasuk"></td>
+                    <img style="width: 60px" src="{{ asset('storage/absen_file/'. $data->foto_keluar) }}" alt="Foto pulang"></td>
                     @endif
                 <td align="center" width="250px">
                     @if($data->jam_keluar == null)
@@ -186,7 +186,9 @@
                     @endif
                 </td>
             </tr>
-            @endforeach
+            @empty
+            <tr><td colspan="8" align="center">Belum ada presensi pada bulan ini.</td></tr>
+            @endforelse
         </table>
         <b style="font-size: 20px; float: right; margin-top :10px">Total Absen Selam Satu Bulan: {{ count($rekap) }}</b>
     </div>

@@ -73,11 +73,31 @@ class ShiftImport implements ToCollection, WithHeadingRow
                 ]);
             }
 
-            ShiftAssignment::firstOrCreate([
+            if (ShiftAssignment::bertabrakan($user->id, $mulai, $selesai)) {
+                $this->dilewati[] = "Baris {$no}: rentang bertabrakan dengan penugasan lain {$email}.";
+
+                continue;
+            }
+
+            $ada = ShiftAssignment::where('user_id', $user->id)
+                ->where('shift_id', $shift->id)
+                ->where('tanggal_mulai', $mulai)
+                ->first();
+
+            if ($ada) {
+                if (($ada->tanggal_selesai?->toDateString()) !== $selesai) {
+                    $ada->update(['tanggal_selesai' => $selesai]);
+                }
+
+                $this->diimpor++;
+
+                continue;
+            }
+
+            ShiftAssignment::create([
                 'user_id' => $user->id,
                 'shift_id' => $shift->id,
                 'tanggal_mulai' => $mulai,
-            ], [
                 'tanggal_selesai' => $selesai,
             ]);
 

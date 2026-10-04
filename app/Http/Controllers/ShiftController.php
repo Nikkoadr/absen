@@ -52,6 +52,10 @@ class ShiftController extends Controller
             'tanggal_selesai' => ['nullable', 'date', 'after_or_equal:tanggal_mulai'],
         ]);
 
+        if (ShiftAssignment::bertabrakan($data['user_id'], $data['tanggal_mulai'], $data['tanggal_selesai'])) {
+            return back()->withErrors(['tanggal_mulai' => 'Rentang bertabrakan dengan penugasan lain karyawan ini.'])->withInput();
+        }
+
         ShiftAssignment::create($data);
 
         return to_route('shift.index')->with('success', 'Penugasan shift berhasil disimpan.');

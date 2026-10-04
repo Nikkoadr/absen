@@ -16,15 +16,16 @@
                 <div class="card">
                     <form action="{{ route('request_izin_user') }}" method="POST">
                         @csrf
+                        <p class="text-muted small mt-2">Tanda * wajib diisi.</p>
                         <div class="col">
                             <div class="row mb-3">
-                                <label for="nama" class="col-sm-3 col-form-label text-md-end">Nama <span style="color: red">*</span> : </label>
+                                <label for="nama" class="col-sm-3 col-form-label text-md-end">Nama <span style="color: #b91c1c;" aria-hidden="true">*</span> : </label>
                                 <div class="col-sm-9">
                                     <input id="nama" readonly type="text" class="form-control" name="nama" value="{{ Auth::user()->nama }}">
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="jenis" class="col-sm-3 col-form-label text-md-end">Jenis Izin <span style="color: red">*</span> : </label>
+                                <label for="jenis" class="col-sm-3 col-form-label text-md-end">Jenis Izin <span style="color: #b91c1c;" aria-hidden="true">*</span> : </label>
                                 <div class="col-sm-9">
                                     <select id="jenis" class="form-control @error('jenis') is-invalid @enderror" name="jenis" required>
                                         <option value="" disabled selected>Pilih jenis izin</option>
@@ -41,7 +42,7 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="tanggal_mulai" class="col-sm-3 col-form-label text-md-end">Tanggal Mulai <span style="color: red">*</span> : </label>
+                                <label for="tanggal_mulai" class="col-sm-3 col-form-label text-md-end">Tanggal Mulai <span style="color: #b91c1c;" aria-hidden="true">*</span> : </label>
                                 <div class="col-sm-9">
                                     <input id="tanggal_mulai" type="date" class="form-control @error('tanggal_mulai') is-invalid @enderror" name="tanggal_mulai" value="{{ old('tanggal_mulai') }}" required>
                                     @error('tanggal_mulai')
@@ -76,7 +77,6 @@
                             <div style="margin-bottom: 50px" class="form-group boxed">
                                 <div class="input-wrapper">
                                     <button type="submit" class="btn btn-primary btn-block">
-                                        <ion-icon name="refresh-outline"></ion-icon>
                                         Ajukan Izin
                                     </button>
                                 </div>
@@ -90,8 +90,8 @@
                         <ul class="list-group list-group-flush">
                             @foreach ($riwayat as $izin)
                                 <li class="list-group-item">
-                                    {{ $izin->tanggal_mulai->format('d M Y') }} — {{ ucwords(str_replace('_', ' ', $izin->jenis)) }}
-                                    <span class="badge bg-info float-end">{{ ucfirst($izin->status) }}</span>
+                                    {{ $izin->tanggal_mulai->format('d M Y') }} · {{ ucwords(str_replace('_', ' ', $izin->jenis)) }}
+                                    <span class="chip-sky float-end">{{ ucfirst($izin->status) }}</span>
                                 </li>
                             @endforeach
                         </ul>
@@ -105,5 +105,3 @@
 @endsection
 @section('script')
 @endsection
-</body>
-</html>

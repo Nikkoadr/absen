@@ -72,4 +72,45 @@ class JadwalService
 
         return $bawaan ? substr($bawaan, 0, 5) : null;
     }
+
+    /** Varian untukTanggal memakai peta yang sudah dimuat (tanpa query per baris). */
+    public function untukTanggalDariPeta(Collection $peta, int $userId, string $tanggal, ?User $user = null): array
+    {
+        $tugas = ($peta[$userId] ?? collect())->first(function ($t) use ($tanggal) {
+            $mulaiOk = substr((string) $t->tanggal_mulai, 0, 10) <= $tanggal;
+            $selesai = $t->tanggal_selesai ? substr((string) $t->tanggal_selesai, 0, 10) : null;
+
+            return $mulaiOk && ($selesai === null || $selesai >= $tanggal);
+        });
+
+        if ($tugas?->shift) {
+            return [
+                'jam_masuk' => substr((string) $tugas->shift->jam_masuk, 0, 5),
+                'jam_pulang' => $tugas->shift->jam_pulang ? substr((string) $tugas->shift->jam_pulang, 0, 5) : null,
+                'nama' => $tugas->shift->nama,
+            ];
+        }
+
+        return [
+            'jam_masuk' => $user?->jam_kerja ? substr((string) $user->jam_kerja, 0, 5) : null,
+            'jam_pulang' => $user?->jam_pulang ? substr((string) $user->jam_pulang, 0, 5) : null,
+            'nama' => null,
+        ];
+    }
+
+    /** Isi jam_kerja_hari tiap baris presensi sesuai shift tanggal itu (sekali query peta). */
+    public function anotasiJamKerja(Collection $absensi, ?string $bawaanDefault = null): void
+    {
+        if ($absensi->isEmpty()) {
+            return;
+        }
+
+        $tanggal = $absensi->map(fn ($a) => substr((string) $a->tanggal_absen, 0, 10));
+        $peta = $this->petaRentang($tanggal->min(), $tanggal->max());
+
+        foreach ($absensi as $a) {
+            $bawaan = ($a->relationLoaded('user') ? $a->user?->jam_kerja : null) ?? $bawaanDefault;
+            $a->jam_kerja_hari = $this->jamMasukPada($peta, (int) $a->id_user, substr((string) $a->tanggal_absen, 0, 10), $bawaan);
+        }
+    }
 }

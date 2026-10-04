@@ -27,11 +27,11 @@
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="tahun">Tahun:</label>
-                                        <input type="text" class="form-control" id="tahun" name="tahun" placeholder="Masukkan tahun" value="{{ $tahun }}" readonly>
+                                        <input type="number" class="form-control" id="tahun" name="tahun" min="2020" max="2100" value="{{ $tahun }}" readonly>
                                     </div>
                                 </div>
                         </div>
-                        <button style="float: right;" type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary float-right">
                             Lihat Laporan
                         </button>
                     </form>

@@ -61,7 +61,7 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="nama" class="col-sm-5 col-form-label text-md-end">Nama <span style="color: red">*</span></label>
+                            <label for="nama" class="col-sm-5 col-form-label text-md-end">Nama <span style="color: #b91c1c;" aria-hidden="true">*</span></label>
                             <div class="col-sm-7">
                                 <input id="nama" type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" value="{{ old('nama') }}" required autocomplete="nama" autofocus>
                                 @error('nama')
@@ -84,7 +84,7 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="email" class="col-sm-5 col-form-label text-md-end">E-mail <span style="color: red">*</span></label>
+                            <label for="email" class="col-sm-5 col-form-label text-md-end">E-mail <span style="color: #b91c1c;" aria-hidden="true">*</span></label>
                             <div class="col-sm-7">
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
                                 @error('email')
@@ -95,7 +95,7 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="password" class="col-sm-5 col-form-label text-md-end">Password <span style="color: red">*</span></label>
+                            <label for="password" class="col-sm-5 col-form-label text-md-end">Password <span style="color: #b91c1c;" aria-hidden="true">*</span></label>
                             <div class="col-sm-7">
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
                                 @error('password')
@@ -106,7 +106,7 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="password-confirm" class="col-sm-5 col-form-label text-md-end">Konfirmasi Password <span style="color: red">*</span></label>
+                            <label for="password-confirm" class="col-sm-5 col-form-label text-md-end">Konfirmasi Password <span style="color: #b91c1c;" aria-hidden="true">*</span></label>
                             <div class="col-sm-7">
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                             </div>
@@ -144,7 +144,7 @@
                                 @enderror
                             </div>
                         </div>
-                                <button style="float: right;" type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary float-right">
                                     Tambah
                                 </button>
                     </form>

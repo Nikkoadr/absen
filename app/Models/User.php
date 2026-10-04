@@ -19,6 +19,7 @@ class User extends Authenticatable
         'nama',
         'nomor_hp',
         'email',
+        'google_id',
         'password',
         'jabatan',
         'jam_kerja',
@@ -30,6 +31,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'face_descriptor',
     ];
 
     protected function casts(): array

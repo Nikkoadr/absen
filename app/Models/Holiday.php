@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class Holiday extends Model
 {
@@ -27,6 +28,14 @@ class Holiday extends Model
 
     public function scopeTanggal(Builder $query, string $tanggal): Builder
     {
-        return $query->where('tanggal', $tanggal);
+        $bulanHari = Carbon::parse($tanggal)->format('m-d');
+
+        return $query->where(function ($q) use ($tanggal, $bulanHari) {
+            $q->where('tanggal', $tanggal)
+                ->orWhere(function ($q2) use ($bulanHari) {
+                    $q2->where('berulang_tiap_tahun', true)
+                        ->whereRaw("DATE_FORMAT(tanggal, '%m-%d') = ?", [$bulanHari]);
+                });
+        });
     }
 }

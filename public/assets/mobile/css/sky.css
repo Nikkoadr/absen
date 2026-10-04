@@ -22,11 +22,11 @@ body { background: linear-gradient(180deg, var(--sky-100) 0%, #f8fafc 240px) !im
 .aksi-wajah-fixed .btn { flex: 1; margin: 0; }
 
 .sky-header {
-    background: linear-gradient(135deg, var(--sky-600), var(--sky-400)) !important;
+    background: var(--sky-800) !important; /* Solid, bukan gradien: teks putih kecil butuh 4.5:1 dan #0284c7 hanya 4.10:1. */
     color: #fff;
     border-radius: 0 0 24px 24px;
     padding: 18px 16px 22px;
-    box-shadow: 0 8px 24px rgba(2, 132, 199, .25);
+    box-shadow: 0 8px 24px rgba(2, 132, 199, .25); /* Satu-satunya elevasi di layar: header di atas konten. */
 }
 .sky-header h1, .sky-header h2, .sky-header h5 { color: #fff !important; margin: 0; }
 .sky-header p { color: rgba(255,255,255,.85) !important; margin: 4px 0 0; }
@@ -39,25 +39,58 @@ body { background: linear-gradient(180deg, var(--sky-100) 0%, #f8fafc 240px) !im
 }
 
 .btn-sky {
-    background: linear-gradient(135deg, var(--sky-500), var(--sky-700));
+    background: var(--sky-700); /* Solid: putih di atasnya 5.93:1, tombol kedua tetap menonjol tanpa glow. */
     border: none;
     color: #fff;
     border-radius: 14px;
     font-weight: 600;
-    box-shadow: 0 8px 18px rgba(2, 132, 199, .35);
+    min-height: 48px;
 }
-.btn-sky:active, .btn-sky:focus { filter: brightness(1.05); color: #fff; }
+.btn-sky:active, .btn-sky:focus { background: var(--sky-800); color: #fff; }
+.btn-sky:disabled { background: var(--sky-200); color: var(--sky-700); }
+
+/* Tombol Bootstrap disatukan ke palet: biru bawaan (#007bff) hanya 3.98:1 untuk teks putih. */
+.btn-primary { background-color: var(--sky-700) !important; border-color: var(--sky-700) !important; min-height: 44px; }
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus { background-color: var(--sky-800) !important; border-color: var(--sky-800) !important; }
+.btn-outline-primary { color: var(--sky-700) !important; border-color: var(--sky-700) !important; min-height: 44px; }
+.btn-outline-primary:hover, .btn-outline-primary:active { background-color: var(--sky-700) !important; color: #fff !important; }
+
+/* Ikon bottom-menu muat dalam item 56px bawaan template; status aktif ikut konvensi kelas active. */
+.appBottomMenu .item > .col > i { font-size: 22px; }
+.appBottomMenu .item.active i, .appBottomMenu .item.active strong { color: var(--sky-700) !important; font-weight: 600 !important; }
+.appBottomMenu .action-button i { color: #fff; font-size: 24px; }
+
+/* Badge sukses digelapkan: putih di atas #28a745 hanya 3.13:1, di atas #1e7e34 5.14:1. */
+.badge-success { background-color: #1e7e34 !important; }
+
+/* Avatar inisial: pengganti foto stok. Putih di atas sky-700 5.93:1. */
+.avatar-inisial {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--sky-700);
+    color: #fff;
+    font-weight: 800;
+    font-size: 24px;
+}
+.avatar-inisial.kecil { width: 40px; height: 40px; font-size: 16px; }
+.avatar-inisial.besar { width: 120px; height: 120px; font-size: 44px; }
 
 .appBottomMenu { border-top: 1px solid var(--sky-100); }
 .appBottomMenu .item strong { color: var(--sky-700); font-size: 11px; }
 .appBottomMenu .item.active strong { color: var(--sky-500); }
 .appBottomMenu .action-button.large {
-    background: linear-gradient(135deg, var(--sky-500), var(--sky-700)) !important;
+    background: var(--sky-700) !important; /* Solid agar ikon putih tetap kontras, konsisten dengan tombol utama. */
     border: 2px solid #fff;
-    box-shadow: 0 8px 20px rgba(2, 132, 199, .45) !important;
 }
 
 .kamera { border: 2px solid var(--sky-200); }
+.kamera video { width: 100%; height: auto; border-radius: 10px; transform: scaleX(-1); } /* Pratinjau dibalik agar gerak terasa alami. */
+.kamera canvas { position: absolute; top: 10px; left: 10px; }
 #map { border: 2px solid var(--sky-200); }
 
 .chip-sky {
@@ -86,7 +119,17 @@ body { background: linear-gradient(180deg, var(--sky-100) 0%, #f8fafc 240px) !im
 .minggu-bar { display: flex; gap: 6px; align-items: flex-end; justify-content: space-between; }
 .hari-bar { flex: 1; text-align: center; }
 .batang { width: 100%; border-radius: 8px; background: var(--sky-100); height: 56px; position: relative; overflow: hidden; }
-.batang.isi { background: linear-gradient(180deg, var(--sky-400), var(--sky-600)); }
+.batang.isi { background: var(--sky-600); } /* Solid: 3.57:1 terhadap trek, ujung terang gradien lama gagal. */
 .batang.hari-ini { outline: 2px solid var(--sky-500); outline-offset: 1px; }
 .hari-bar small { font-size: 11px; color: var(--sky-700); font-weight: 600; }
 .menu-ikon-bulat { width: 60px; height: 60px; border-radius: 20px; display: inline-flex; align-items: center; justify-content: center; background: var(--sky-100); color: var(--sky-600); font-size: 26px; }
+
+a:focus-visible, button:focus-visible, input:focus-visible {
+    outline: 3px solid var(--sky-700);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+}

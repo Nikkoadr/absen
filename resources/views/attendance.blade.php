@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="{{ asset('assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 @endsection
 @section('content')
-<div class="content-wrapper">
+<div class="content-wrapper" id="konten-utama">
 <section class="content-header">
     <div class="container-fluid">
     <div class="row mb-2">
@@ -33,7 +33,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="hari">Hari:</label>
-                            <input type="text" class="form-control" id="hari" name="hari" placeholder="Masukkan hari (1-31)" value="{{ $hari }}">
+                            <input type="number" class="form-control" id="hari" name="hari" placeholder="1-31" min="1" max="31" value="{{ $hari }}">
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -51,13 +51,13 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="tahun">Tahun:</label>
-                            <input type="text" class="form-control" id="tahun" name="tahun" placeholder="Masukkan tahun" value="{{ $tahun }}">
+                            <input type="number" class="form-control" id="tahun" name="tahun" placeholder="Contoh: 2026" min="2020" max="2100" value="{{ $tahun }}">
                         </div>
                     </div>
                     <div class="col-md-3 align-self-end">
                         <div class="form-group">
-                            <label></label>
-                            <button type="submit" class="btn btn-primary btn-block">Cari</button>
+                            <label for="cari" class="d-none d-md-block" aria-hidden="true">&nbsp;</label>
+                            <button type="submit" id="cari" class="btn btn-primary btn-block">Cari</button>
                         </div>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach ($attendance as $data )
+                @forelse ($attendance as $data )
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $data -> nama }}</td>
@@ -92,15 +92,17 @@
                     <td>{{ $data -> jam_masuk }}</td>
                     <td>{{ $data -> jam_keluar }}</td>
                     <td>
-                        <a href="{{ route('edit_absen', $data->id) }}" class="btn btn-info"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <a href="{{ route('edit_absen', $data->id) }}" class="btn btn-info" aria-label="Ubah kehadiran {{ $data->nama }}" title="Ubah"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></a>
                         <form action="{{ route('hapus_absen', $data->id) }}" method="POST" class="d-inline konfirmasi-form">
                             @csrf
                             @method('delete')
-                            <button type="submit" class="btn btn-danger m-1"><i class="far fa-trash-alt"></i></button>
+                            <button type="submit" class="btn btn-danger m-1" aria-label="Hapus kehadiran {{ $data->nama }}" title="Hapus"><i class="far fa-trash-alt" aria-hidden="true"></i></button>
                         </form>
                     </td>
                 </tr>
-                @endforeach
+                @empty
+                <tr><td colspan="6" class="text-center text-muted">Tidak ada data pada filter ini.</td></tr>
+                @endforelse
                 </tbody>
             </table>
             </div>
@@ -122,7 +124,6 @@
 <script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js')}}"></script>
 <script>
 $(function () {
 $("#table_att").DataTable({

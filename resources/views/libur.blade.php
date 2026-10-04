@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="{{ asset('assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 @endsection
 @section('content')
-<div class="content-wrapper">
+<div class="content-wrapper" id="konten-utama">
 <div class="content-header">
     <div class="container-fluid">
     <div class="row mb-2">
@@ -36,7 +36,7 @@
             <form action="{{ route('libur.sinkron') }}" method="POST">
                 @csrf
                 <div class="card-body">
-                    <p class="text-muted">Ambil kalender libur nasional Indonesia dari data terbuka, realtime per tahun.</p>
+                    <p class="text-muted">Ambil kalender libur nasional Indonesia dari data terbuka GitHub per tahun yang dipilih.</p>
                     <div class="form-group">
                         <label for="tahun">Tahun</label>
                         <input type="number" name="tahun" id="tahun" value="{{ now()->year }}" min="2020" max="2100" class="form-control">

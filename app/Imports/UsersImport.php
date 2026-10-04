@@ -14,12 +14,17 @@ class UsersImport implements ToModel, WithHeadingRow
     public function model(array $row): Model|array|null
     {
         $email = trim((string) ($row['email'] ?? ''));
-        if ($email === '' || User::where('email', $email)->exists()) {
+        if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL) || User::where('email', $email)->exists()) {
+            return null;
+        }
+
+        $role = strtolower(trim((string) ($row['role'] ?? 'karyawan')));
+        if (! in_array($role, ['admin', 'karyawan', 'guru', 'siswa'], true)) {
             return null;
         }
 
         return new User([
-            'role' => $row['role'] ?? 'siswa',
+            'role' => $role,
             'nik' => $row['nik'] ?? null,
             'nuptk' => $row['nuptk'] ?? null,
             'nbm' => $row['nbm'] ?? null,

@@ -7,11 +7,14 @@ use App\Http\Requests\UpdatePasswordRequest;
 use App\Http\Requests\UpdateProfilRequest;
 use App\Models\Absensi;
 use App\Models\User;
+use App\Services\JadwalService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
 class ProfileController extends Controller
 {
+    public function __construct(protected JadwalService $jadwal) {}
+
     public function index()
     {
         $pengguna = request()->user();
@@ -24,6 +27,7 @@ class ProfileController extends Controller
                 ->bulan((int) Carbon::now($zona)->month, (int) Carbon::now($zona)->year)
                 ->orderBy('tanggal_absen')
                 ->get();
+            $this->jadwal->anotasiJamKerja($historyBulanIni, $pengguna->jam_kerja);
             $absenHariIni = Absensi::milikPengguna($pengguna->id)->padaTanggal($hariIni)->first();
 
             return view('profile', [
@@ -37,6 +41,7 @@ class ProfileController extends Controller
             ->orderByDesc('tanggal_absen')
             ->take(5)
             ->get();
+        $this->jadwal->anotasiJamKerja($riwayatTerakhir, $pengguna->jam_kerja);
 
         return view('profile_mobile', compact('riwayatTerakhir'));
     }
@@ -61,18 +66,18 @@ class ProfileController extends Controller
         $this->authorizeProfil($user->id);
 
         $request->validate([
-            'pas_foto' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'pas_foto' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $berkas = $request->file('pas_foto');
-        $namaBaru = $berkas->hashName('pasFotoAbsen');
-        $berkas->storeAs('pasFotoAbsen', basename($namaBaru), config('filesystems.default'));
+        $namaBaru = $berkas->hashName();
+        $berkas->storeAs('pasFotoAbsen', $namaBaru, config('filesystems.default'));
 
         if ($user->pasfoto) {
             \Illuminate\Support\Facades\Storage::disk(config('filesystems.default'))->delete('pasFotoAbsen/'.$user->pasfoto);
         }
 
-        $user->update(['pasfoto' => basename($namaBaru)]);
+        $user->update(['pasfoto' => $namaBaru]);
 
         return to_route('profile')->with('success', 'Foto profil berhasil diunggah.');
     }
@@ -84,6 +89,7 @@ class ProfileController extends Controller
             ->bulan($request->bulan(), $request->tahun())
             ->orderBy('tanggal_absen')
             ->get();
+        $this->jadwal->anotasiJamKerja($history, $pengguna->jam_kerja);
 
         return view('history_mobile', [
             'history' => $history,

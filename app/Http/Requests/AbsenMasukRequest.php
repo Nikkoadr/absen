@@ -15,7 +15,7 @@ class AbsenMasukRequest extends FormRequest
     {
         return [
             'lokasi' => ['required', 'string', 'regex:/^-?\d+(\.\d+)?,-?\d+(\.\d+)?$/'],
-            'foto' => ['required', 'string', 'min:100'],
+            'foto' => ['required', 'string', 'min:100', 'max:2000000'],
         ];
     }
 
@@ -25,11 +25,6 @@ class AbsenMasukRequest extends FormRequest
             'lokasi.regex' => 'Format lokasi tidak valid.',
             'foto.min' => 'Foto minimal berisi 100 karakter.',
         ];
-    }
-
-    public function koordinat(): array
-    {
-        return array_map('floatval', explode(',', $this->string('lokasi')->toString()));
     }
 
     public function fotoBiner(): ?string
