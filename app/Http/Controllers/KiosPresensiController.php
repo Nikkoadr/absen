@@ -24,11 +24,12 @@ class KiosPresensiController extends Controller
     public function deskriptor()
     {
         $data = User::whereNotNull('face_descriptor')
-            ->select('id', 'nama', 'face_descriptor')
+            ->select('id', 'nama', 'pasfoto', 'face_descriptor')
             ->get()
             ->map(fn ($u) => [
                 'id' => $u->id,
                 'nama' => $u->nama,
+                'foto' => $u->pasfoto ? asset('storage/absen_file/pasFotoAbsen/'.$u->pasfoto) : null,
                 'descriptor' => $u->face_descriptor,
             ]);
 

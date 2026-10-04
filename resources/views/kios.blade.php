@@ -31,7 +31,10 @@
     <div class="sky-card p-3">
         <div class="text-center mb-2"><span class="chip-sky" id="statusModel">Memuat model AI…</span></div>
         <div class="kamera mb-2"><video id="video" autoplay muted playsinline></video></div>
-        <div class="text-center mb-2">Terdeteksi: <span id="namaTerdeteksi">—</span> <span class="chip-sky" id="skorTerdeteksi"></span></div>
+        <div class="text-center mb-2">
+            <img id="fotoTerdeteksi" src="" alt="" style="display: none; width: 72px; height: 72px; object-fit: cover; border-radius: 50%; border: 3px solid #7dd3fc;">
+            <div>Terdeteksi: <strong id="namaTerdeteksi">—</strong> <span class="chip-sky" id="skorTerdeteksi"></span></div>
+        </div>
         <input type="hidden" id="lokasi">
         <input type="hidden" id="userId">
         <input type="hidden" id="skor">
@@ -56,7 +59,36 @@ const statusEl = document.getElementById('statusModel');
 const namaEl = document.getElementById('namaTerdeteksi');
 const skorEl = document.getElementById('skorTerdeteksi');
 const btn = document.getElementById('btnAbsen');
+const fotoEl = document.getElementById('fotoTerdeteksi');
+
+function tampilkanOrang(profil, jarak) {
+    const nilai = Number(jarak).toFixed(2);
+
+    if (!profil) {
+        namaEl.textContent = 'Tidak dikenal';
+        skorEl.textContent = nilai;
+        fotoEl.style.display = 'none';
+        btn.disabled = true;
+        document.getElementById('userId').value = '';
+        return;
+    }
+
+    namaEl.textContent = profil.nama + ' (ID ' + profil.id + ')';
+    skorEl.textContent = nilai;
+
+    if (profil.foto) {
+        fotoEl.src = profil.foto;
+        fotoEl.style.display = 'inline-block';
+    } else {
+        fotoEl.style.display = 'none';
+    }
+
+    document.getElementById('userId').value = profil.id;
+    document.getElementById('skor').value = jarak;
+    btn.disabled = false;
+}
 let matcher = null;
+const profilWajah = {};
 
 Promise.all([
     faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
@@ -72,7 +104,10 @@ async function boot() {
         return;
     }
     matcher = new faceapi.FaceMatcher(
-        daftar.map(d => new faceapi.LabeledFaceDescriptors(String(d.id), [new Float32Array(d.descriptor)])),
+        daftar.map(d => {
+            profilWajah[String(d.id)] = d;
+            return new faceapi.LabeledFaceDescriptors(String(d.id), [new Float32Array(d.descriptor)]);
+        }),
         0.6
     );
     statusEl.textContent = daftar.length + ' wajah terdaftar. Arahkan wajah ke kamera.';
@@ -100,24 +135,29 @@ function startVideo() {
                 return;
             }
             const r = faceapi.resizeResults(det, size);
-            new faceapi.draw.DrawBox(r.detection.box, { label: 'wajah' }).draw(canvas);
             const hasil = matcher.findBestMatch(r.descriptor);
-            if (hasil.label === 'unknown') {
-                namaEl.textContent = 'Tidak dikenal'; skorEl.textContent = Number(hasil.distance).toFixed(2);
-                btn.disabled = true;
-                document.getElementById('userId').value = '';
+            const profil = hasil.label === 'unknown' ? null : (profilWajah[hasil.label] || null);
+            new faceapi.draw.DrawBox(r.detection.box, { label: profil ? profil.nama : 'wajah' }).draw(canvas);
+            if (!profil) {
+                tampilkanOrang(null, hasil.distance);
                 return;
             }
-            namaEl.textContent = hasil.label;
-            skorEl.textContent = Number(hasil.distance).toFixed(2);
-            document.getElementById('userId').value = hasil.label;
-            document.getElementById('skor').value = hasil.distance;
-            btn.disabled = false;
+            tampilkanOrang(profil, hasil.distance);
         }, 1200);
     });
 }
 
 btn.addEventListener('click', async () => {
+    const nama = namaEl.textContent;
+    const konfirmasi = await Swal.fire({
+        title: 'Konfirmasi Presensi',
+        text: 'Catat presensi untuk ' + nama + '?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Catat',
+        cancelButtonText: 'Batal',
+    });
+    if (!konfirmasi.isConfirmed) return;
     const video = document.getElementById('video');
     const c = document.createElement('canvas');
     c.width = video.videoWidth; c.height = video.videoHeight;
