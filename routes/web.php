@@ -4,8 +4,19 @@ use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IzinController;
+use App\Http\Controllers\KelasController;
 use App\Http\Controllers\KiosPresensiController;
+use App\Http\Controllers\KompetensiController;
+use App\Http\Controllers\AnalitikController;
+use App\Http\Controllers\AuditLogController;
+use App\Http\Controllers\BackupController;
+use App\Http\Controllers\KenaikanController;
+use App\Http\Controllers\PerangkatController;
+use App\Http\Controllers\MonitorController;
+use App\Http\Controllers\RfidTapController;
 use App\Http\Controllers\ShiftController;
+use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\WaliKelasController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
@@ -33,6 +44,7 @@ Route::get('/auth/google/callback', [App\Http\Controllers\Auth\GoogleAuthControl
 
 // Kios presensi wajah tanpa login (dibatas throttle agar tidak disalahgunakan)
 Route::get('/presensi-mandiri', [KiosPresensiController::class, 'kios'])->name('kios');
+Route::get('/monitor', [MonitorController::class, 'layar'])->name('monitor');
 Route::get('/api/deskriptor-wajah', [KiosPresensiController::class, 'deskriptor'])->middleware('throttle:30,1');
 Route::post('/presensi-mandiri', [KiosPresensiController::class, 'simpan'])->middleware('throttle:10,1')->name('kios.simpan');
 
@@ -51,6 +63,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/izin', [IzinController::class, 'izin'])->name('izin');
     Route::post('/izin', [IzinController::class, 'request_izin_user'])->name('request_izin_user');
+
+    Route::get('/wali-kelas', [WaliKelasController::class, 'index'])->name('wali.index');
+
+    Route::get('/tap-gerbang', [RfidTapController::class, 'layar'])->name('tap.layar');
+    Route::post('/tap-gerbang', [RfidTapController::class, 'tapOperator'])->middleware('throttle:120,1')->name('tap.operator');
 
     Route::middleware('can:is_admin')->group(function () {
         Route::get('/perizinan', [IzinController::class, 'daftar'])->name('perizinan');
@@ -72,7 +89,10 @@ Route::middleware('auth')->group(function () {
         Route::put('/user/{user}/password', [UserController::class, 'ubah_password'])->name('ubah_password');
 
         Route::post('/laporan/individu/{user}', [LaporanController::class, 'printLaporanIndividu'])->name('printLaporanIndividu');
+        Route::get('/laporan/karyawan', [LaporanController::class, 'laporanKaryawan'])->name('laporan.karyawan');
+        Route::get('/laporan/siswa', [LaporanController::class, 'laporanSiswa'])->name('laporan.siswa');
         Route::get('/laporanSemua', [LaporanController::class, 'laporanSemua'])->name('laporanSemua');
+        Route::get('/analitik', [AnalitikController::class, 'index'])->name('analitik.index');
         Route::post('/printLaporanBulanan', [LaporanController::class, 'printSemuaLaporan'])->name('printSemuaLaporan');
         Route::post('/downloadLaporanBulanan', [LaporanController::class, 'downloadLaporanBulanan'])->name('downloadLaporanBulanan');
 
@@ -89,6 +109,38 @@ Route::middleware('auth')->group(function () {
         Route::delete('/shift/{shift}', [ShiftController::class, 'destroyShift'])->name('shift.destroy');
         Route::post('/shift/tugas', [ShiftController::class, 'storeTugas'])->name('shift.tugas.store');
         Route::delete('/shift/tugas/{tugas}', [ShiftController::class, 'destroyTugas'])->name('shift.tugas.destroy');
+
+        Route::get('/kompetensi', [KompetensiController::class, 'index'])->name('kompetensi.index');
+        Route::post('/kompetensi', [KompetensiController::class, 'store'])->name('kompetensi.store');
+        Route::delete('/kompetensi/{kompetensi}', [KompetensiController::class, 'destroy'])->name('kompetensi.destroy');
+
+        Route::get('/kelas', [KelasController::class, 'index'])->name('kelas.index');
+        Route::post('/kelas', [KelasController::class, 'store'])->name('kelas.store');
+        Route::delete('/kelas/{kelas}', [KelasController::class, 'destroy'])->name('kelas.destroy');
+
+        Route::get('/siswa', [SiswaController::class, 'index'])->name('siswa.index');
+        Route::get('/siswa/data', [SiswaController::class, 'data'])->name('siswa.data');
+        Route::post('/siswa', [SiswaController::class, 'store'])->name('siswa.store');
+        Route::get('/siswa/contoh', [SiswaController::class, 'contoh'])->name('siswa.contoh');
+        Route::post('/siswa/impor', [SiswaController::class, 'impor'])->name('siswa.impor');
+        Route::put('/siswa/{siswa}', [SiswaController::class, 'update'])->name('siswa.update');
+        Route::delete('/siswa/{siswa}', [SiswaController::class, 'destroy'])->name('siswa.destroy');
+
+        Route::get('/kenaikan', [KenaikanController::class, 'index'])->name('kenaikan.index');
+        Route::post('/kenaikan', [KenaikanController::class, 'proses'])->name('kenaikan.proses');
+
+        Route::get('/perangkat', [PerangkatController::class, 'index'])->name('perangkat.index');
+        Route::post('/perangkat', [PerangkatController::class, 'store'])->name('perangkat.store');
+
+        Route::get('/audit', [AuditLogController::class, 'index'])->name('audit.index');
+        Route::get('/audit/data', [AuditLogController::class, 'data'])->name('audit.data');
+
+        Route::get('/cadangan', [BackupController::class, 'index'])->name('cadangan.index');
+        Route::post('/cadangan', [BackupController::class, 'buat'])->name('cadangan.buat');
+        Route::get('/cadangan/{nama}', [BackupController::class, 'unduh'])->name('cadangan.unduh');
+        Route::put('/perangkat/{perangkat}/regenerasi', [PerangkatController::class, 'regenerasi'])->name('perangkat.regenerasi');
+        Route::put('/perangkat/{perangkat}/toggle', [PerangkatController::class, 'toggle'])->name('perangkat.toggle');
+        Route::delete('/perangkat/{perangkat}', [PerangkatController::class, 'destroy'])->name('perangkat.destroy');
         Route::post('/libur', [HolidayController::class, 'store'])->name('libur.store');
         Route::post('/libur/sinkron', [HolidayController::class, 'sinkron'])->name('libur.sinkron');
         Route::delete('/libur/{libur}', [HolidayController::class, 'destroy'])->name('libur.destroy');

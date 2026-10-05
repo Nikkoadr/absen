@@ -67,7 +67,8 @@
         </table>
         <div style="height:5px;border-bottom:solid 2px black;border-top:solid 1px black;margin:10px 0"></div>
         <div style="text-align:center; margin:10px">
-            <b style="font-size:20pt !important;">Laporan Bulanan</b>
+            <b style="font-size:20pt !important;">Laporan Bulanan</b><br>
+            <span style="font-size:12pt;">{{ $judulKelompok ?? '' }}</span>
         </div>
 <h3>Periode : {{ \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAwal)->translatedFormat('d F Y') }} - {{ \Carbon\Carbon::createFromFormat('Y-m-d', $tanggalAkhir)->translatedFormat('d F Y') }}</h3>
 <table style="border: 1px solid black;">

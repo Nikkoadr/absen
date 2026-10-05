@@ -14,6 +14,8 @@
     <meta name="description" content="Absensi SMK Muhammadiyah Kandanghaur">
     <meta name="keywords" content="bootstrap 4, mobile template, cordova, phonegap, mobile, html" />
     <link rel="apple-touch-icon" sizes="180x180" href="assets/mobile/img/icon/192x192.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/icons/apple-180.png" />
     <link rel="stylesheet" href="{{ asset('assets/mobile/css/inc/bootstrap/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" />
     <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome-free-6.4.2/css/all.min.css') }}">
@@ -50,6 +52,10 @@
     <!-- Base Js File -->
     <script src="{{ asset('assets/mobile/js/base.js') }}"></script>
     <script src="{{ asset('assets/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/presensi-notif.js') }}"></script>
+    <script>
+    if ('serviceWorker' in navigator) { window.addEventListener('load', function () { navigator.serviceWorker.register('/sw.js').catch(function () {}); }); }
+    </script>
 @yield('script')
 </body>
 </html>

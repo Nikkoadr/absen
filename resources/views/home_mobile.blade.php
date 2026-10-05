@@ -136,8 +136,10 @@ $inisial = fn ($nama) => collect(preg_split('/\s+/', trim((string) $nama)))->fil
                             <div class="card-body">
                                 <div class="presencecontent">
                                     <div class="iconpresence">
-                                        @if ($absenHariIni != null )
-                                            <img style="width: 60px" src="{{ asset('storage/absen_file/'. $absenHariIni->foto_masuk) }}">
+                                        @if ($absenHariIni != null && $absenHariIni->foto_masuk)
+                                            <img style="width: 60px" src="{{ asset('storage/absen_file/'. $absenHariIni->foto_masuk) }}" alt="Foto masuk hari ini">
+                                        @elseif ($absenHariIni != null)
+                                            <span class="chip-sky">RFID</span>
                                         @else
                                             <i class="fas fa-clock"></i>
                                         @endif
@@ -155,8 +157,10 @@ $inisial = fn ($nama) => collect(preg_split('/\s+/', trim((string) $nama)))->fil
                             <div class="card-body">
                                 <div class="presencecontent">
                                     <div class="iconpresence">
-                                        @if ($absenHariIni != null && $absenHariIni->jam_keluar != null)
-                                            <img style="width: 60px" src="{{ asset('storage/absen_file/'. $absenHariIni->foto_keluar) }}">
+                                        @if ($absenHariIni != null && $absenHariIni->jam_keluar != null && $absenHariIni->foto_keluar)
+                                            <img style="width: 60px" src="{{ asset('storage/absen_file/'. $absenHariIni->foto_keluar) }}" alt="Foto pulang hari ini">
+                                        @elseif ($absenHariIni != null && $absenHariIni->jam_keluar != null)
+                                            <span class="chip-sky">RFID</span>
                                         @else
                                             <i class="fas fa-clock"></i>
                                         @endif

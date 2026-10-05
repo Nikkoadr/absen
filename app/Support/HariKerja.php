@@ -16,7 +16,7 @@ class HariKerja
 
     public static function jumlahHariKerja(int $bulan, int $tahun, ?string $sampaiTanggal = null): int
     {
-        $batas = $sampaiTanggal ?? Carbon::create($tahun, $bulan, 1, 'Asia/Jakarta')->endOfMonth()->toDateString();
+        $batas = $sampaiTanggal ?? Carbon::create($tahun, $bulan, 1, 0, 0, 0, 'Asia/Jakarta')->endOfMonth()->toDateString();
         $mulai = Carbon::create($tahun, $bulan, 1, 0, 0, 0, 'Asia/Jakarta');
         $akhir = Carbon::parse($batas, 'Asia/Jakarta');
         $libur = array_flip(static::daftarLibur($bulan, $tahun));

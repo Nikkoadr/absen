@@ -7,6 +7,8 @@
     <meta name="description" content="Presensi SMK Muhammadiyah Kandanghaur: presensi wajah, shift blok 2 mingguan, dan rekap bulanan.">
     <title>Presensi SMK Muhammadiyah Kandanghaur</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/dist/img/logoKotak.png') }}">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="apple-touch-icon" href="/icons/apple-180.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -147,6 +149,9 @@
     jam();
     setInterval(jam, 1000);
 })();
+</script>
+<script>
+if ('serviceWorker' in navigator) { window.addEventListener('load', function () { navigator.serviceWorker.register('/sw.js').catch(function () {}); }); }
 </script>
 </body>
 </html>

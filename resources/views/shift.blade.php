@@ -84,7 +84,7 @@
                         <td>{{ substr($s->jam_masuk, 0, 5) }}</td>
                         <td>{{ $s->jam_pulang ? substr($s->jam_pulang, 0, 5) : '-' }}</td>
                         <td>
-                            <form action="{{ route('shift.destroy', $s) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus shift ini beserta penugasannya?')">
+                            <form action="{{ route('shift.destroy', $s) }}" method="POST" class="d-inline konfirmasi-form">
                                 @csrf @method('delete')
                                 <button class="btn btn-sm btn-danger">Hapus</button>
                             </form>
@@ -152,7 +152,7 @@
                         <td>{{ $t->shift->nama }} ({{ substr($t->shift->jam_masuk, 0, 5) }})</td>
                         <td>{{ $t->tanggal_mulai->format('d M Y') }} s.d. {{ $t->tanggal_selesai?->format('d M Y') ?? 'seterusnya' }}</td>
                         <td>
-                            <form action="{{ route('shift.tugas.destroy', $t) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus penugasan ini?')">
+                            <form action="{{ route('shift.tugas.destroy', $t) }}" method="POST" class="d-inline konfirmasi-form">
                                 @csrf @method('delete')
                                 <button class="btn btn-sm btn-danger">Hapus</button>
                             </form>
@@ -171,4 +171,9 @@
     </div>
 </section>
 </div>
+@endsection
+@section('script')
+<script>
+Presensi.konfirmasiForm(document, 'Anda yakin ingin menghapus data ini?');
+</script>
 @endsection

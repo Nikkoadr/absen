@@ -19,6 +19,8 @@ class UpdateSettingRequest extends FormRequest
             'longitude' => ['required', 'numeric', 'between:-180,180'],
             'radius' => ['required', 'integer', 'min:1', 'max:100000'],
             'limit_absen' => ['required', 'date_format:H:i,H:i:s'],
+            'telegram_bot_token' => ['nullable', 'string', 'max:100'],
+            'telegram_aktif' => ['nullable', 'boolean'],
         ];
     }
 }

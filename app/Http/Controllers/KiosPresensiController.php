@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Setting;
 use App\Models\User;
 use App\Services\AbsensiService;
+use App\Jobs\KirimNotifikasiOrtu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -69,6 +70,14 @@ class KiosPresensiController extends Controller
 
         $pengguna = User::findOrFail($data['user_id']);
         $hasil = $this->absensi->catat($pengguna, $data['lokasi'], $biner);
+
+        if ($hasil['status'] === 'sukses' && isset($hasil['notifikasi'])) {
+            KirimNotifikasiOrtu::dispatch(
+                $hasil['notifikasi']['user_id'],
+                $hasil['notifikasi']['jenis'],
+                $hasil['notifikasi']['jam']
+            );
+        }
 
         return response()->json(['status' => $hasil['status'], 'message' => $hasil['message']], $hasil['http']);
     }

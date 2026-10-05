@@ -103,7 +103,12 @@ $(function () {
         serverSide: true,
         responsive: true,
         autoWidth: false,
-        ajax: "{{ route('libur.data') }}",
+        ajax: {
+            url: "{{ route('libur.data') }}",
+            error: function () {
+                Presensi.galat('Gagal memuat daftar libur.');
+            }
+        },
         columns: [
             { data: "no", orderable: false, searchable: false },
             { data: "tanggal" },
@@ -116,8 +121,7 @@ $(function () {
         if (!event.target.matches(".hapus-libur")) return;
         event.preventDefault();
         const form = event.target;
-        Swal.fire({ text: "Hapus hari libur ini?", icon: "warning", showCancelButton: true, confirmButtonText: "Ya, Hapus!" })
-            .then((r) => { if (r.isConfirmed) form.submit(); });
+        Presensi.konfirmasi("Hapus hari libur ini?").then((ya) => { if (ya) form.submit(); });
     });
 });
 </script>

@@ -27,6 +27,7 @@ class GoogleAuthController extends Controller
             ?? User::where('email', $google->getEmail())->first();
 
         if ($pengguna) {
+            abort_if(! $pengguna->aktif, 403, 'Akun dinonaktifkan. Hubungi admin sekolah.');
             $pengguna->update(['google_id' => $google->getId()]);
         } else {
             $pengguna = User::create([

@@ -1,0 +1,32 @@
+{
+    "name": "Presensi SMK Muhammadiyah Kandanghaur",
+    "short_name": "Presensi SMK",
+    "description": "Presensi wajah, RFID, dan rekap bulanan SMK Muhammadiyah Kandanghaur.",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#075985",
+    "theme_color": "#075985",
+    "lang": "id",
+    "icons": [
+        {
+            "src": "/icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/icons/maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}

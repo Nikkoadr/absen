@@ -202,7 +202,7 @@ function takePhoto() {
 $("#ambilFoto").click(function () {
     if (!faceDetected) {
         Swal.fire({
-            title: "Opss..!!!",
+            title: "Gagal",
             text: "Wajah belum terdeteksi, pastikan wajah terlihat jelas di kamera.",
             icon: "error"
         });
@@ -234,10 +234,10 @@ function sendAbsenRequest(foto) {
                 message = respond.message;
             }
             if (status == "sukses") {
-                Swal.fire({ title: "Terimakasih", text: message, icon: "success" });
+                Swal.fire({ title: "Berhasil", text: message, icon: "success" });
                 setTimeout(() => location.href = '/home', 2000);
             } else {
-                Swal.fire({ title: "Opss..!!!", text: message, icon: "error" });
+                Swal.fire({ title: "Gagal", text: message, icon: "error" });
             }
         },
         error: function (xhr) {
@@ -247,7 +247,7 @@ function sendAbsenRequest(foto) {
             } else if (xhr.responseJSON && xhr.responseJSON.errors) {
                 message = Object.values(xhr.responseJSON.errors).flat().join(' ');
             }
-            Swal.fire({ title: "Opss..!!!", text: message, icon: "error" });
+            Presensi.galat(message);
         }
     });
 }
@@ -277,16 +277,19 @@ function initMap(latitude, longitude) {
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
         position => initMap(position.coords.latitude, position.coords.longitude),
-        error => console.error('Error getting geolocation:', error),
+        error => {
+            console.error('Error getting geolocation:', error);
+            document.getElementById('map').innerHTML = '<p class="text-muted text-center p-3 mb-0">Lokasi tidak dapat dibaca. Aktifkan GPS lalu muat ulang.</p>';
+        },
         { timeout: 10000 }
     );
 }
 
 $("#tombolpulang").click(() => {
-    Swal.fire({ title: "Opss..!!!", text: "Maaf Belum Waktunya Pulang ya !", icon: "error" });
+    Presensi.galat("Belum waktunya pulang.");
 });
 $("#tombolmasuk").click(() => {
-    Swal.fire({ title: "Maaf !", text: "Presensi Masuknya sudah tidak bisa karena terlalu siang", icon: "error" });
+    Presensi.galat("Presensi masuk sudah ditutup karena terlalu siang.");
 });
 </script>
 @endsection

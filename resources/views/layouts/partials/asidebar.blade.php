@@ -38,12 +38,52 @@
             <p>Ambil Presensi</p>
         </a>
         </li>
+        @if(Auth::user()->role === 'guru')
+        <li class="nav-item">
+        <a href="/wali-kelas" class="nav-link {{ request()->is('wali-kelas') ? 'active' : '' }}">
+            <i class="nav-icon fa-solid fa-chalkboard-user"></i>
+            <p>Kelas Saya</p>
+        </a>
+        </li>
+        @endif
+        @if(in_array(Auth::user()->role, ['admin', 'guru']))
+        <li class="nav-item">
+        <a href="/monitor" class="nav-link {{ request()->is('monitor') ? 'active' : '' }}">
+            <i class="nav-icon fa-solid fa-nfc-symbol"></i>
+            <p>Monitor Gerbang</p>
+        </a>
+        </li>
+        @endif
         @can('is_admin')
         <li class="nav-header">KELOLA DATA</li>
         <li class="nav-item">
         <a href="/data_user" class="nav-link {{ request()->is('data_user') ? 'active' : '' }}">
             <i class="nav-icon fa-solid fa-users"></i>
             <p>Data Karyawan</p>
+        </a>
+        </li>
+        <li class="nav-item">
+        <a href="/siswa" class="nav-link {{ request()->is('siswa') ? 'active' : '' }}">
+            <i class="nav-icon fa-solid fa-graduation-cap"></i>
+            <p>Data Siswa</p>
+        </a>
+        </li>
+        <li class="nav-item">
+        <a href="/kenaikan" class="nav-link {{ request()->is('kenaikan') ? 'active' : '' }}">
+            <i class="nav-icon fa-solid fa-arrow-up-right-dots"></i>
+            <p>Kenaikan Kelas</p>
+        </a>
+        </li>
+        <li class="nav-item">
+        <a href="/kelas" class="nav-link {{ request()->is('kelas') ? 'active' : '' }}">
+            <i class="nav-icon fa-solid fa-school"></i>
+            <p>Kelas</p>
+        </a>
+        </li>
+        <li class="nav-item">
+        <a href="/kompetensi" class="nav-link {{ request()->is('kompetensi') ? 'active' : '' }}">
+            <i class="nav-icon fa-solid fa-book-open"></i>
+            <p>Kompetensi</p>
         </a>
         </li>
         <li class="nav-item">
@@ -66,7 +106,7 @@
         </li>
         <li class="nav-header">LAPORAN</li>
         <li class="nav-item menu-close">
-        <a href="#" class="nav-link {{ request()->is('laporanSemua') ? 'active' : '' }}">
+        <a href="#" class="nav-link {{ request()->is('laporan/*') ? 'active' : '' }}">
             <i class="nav-icon fa-solid fa-database"></i>
             <p>
             Laporan
@@ -75,14 +115,44 @@
         </a>
         <ul class="nav nav-treeview">
             <li class="nav-item">
-            <a href="/laporanSemua" class="nav-link {{ request()->is('laporanSemua') ? 'active' : '' }}">
+            <a href="/laporan/karyawan" class="nav-link {{ request()->is('laporan/karyawan') ? 'active' : '' }}">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Rekap Bulanan</p>
+                <p>Rekap Karyawan</p>
+            </a>
+            </li>
+            <li class="nav-item">
+            <a href="/laporan/siswa" class="nav-link {{ request()->is('laporan/siswa') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Rekap Siswa</p>
+            </a>
+            </li>
+            <li class="nav-item">
+            <a href="/analitik" class="nav-link {{ request()->is('analitik') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Analitik</p>
             </a>
             </li>
         </ul>
         </li>
         <li class="nav-header">SISTEM</li>
+        <li class="nav-item">
+        <a href="/cadangan" class="nav-link {{ request()->is('cadangan') ? 'active' : '' }}">
+            <i class="nav-icon fa-solid fa-box-archive"></i>
+            <p>Cadangan</p>
+        </a>
+        </li>
+        <li class="nav-item">
+        <a href="/audit" class="nav-link {{ request()->is('audit') ? 'active' : '' }}">
+            <i class="nav-icon fa-solid fa-clock-rotate-left"></i>
+            <p>Audit Log</p>
+        </a>
+        </li>
+        <li class="nav-item">
+        <a href="/perangkat" class="nav-link {{ request()->is('perangkat') ? 'active' : '' }}">
+            <i class="nav-icon fa-solid fa-tower-broadcast"></i>
+            <p>Perangkat RFID</p>
+        </a>
+        </li>
         <li class="nav-item">
         <a href="/libur" class="nav-link {{ request()->is('libur') ? 'active' : '' }}">
             <i class="nav-icon fa-solid fa-calendar-xmark"></i>

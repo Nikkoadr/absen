@@ -25,7 +25,9 @@ class SettingController extends Controller
 
     public function editSetting(UpdateSettingRequest $request)
     {
-        Setting::firstOrFail()->update($request->validated());
+        Setting::firstOrFail()->update(
+            array_merge(['telegram_aktif' => false], $request->validated())
+        );
 
         return to_route('setting')->with('success', 'Pengaturan berhasil diperbarui.');
     }

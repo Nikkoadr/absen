@@ -14,6 +14,8 @@ class Setting extends Model
         'longitude',
         'radius',
         'limit_absen',
+        'telegram_bot_token',
+        'telegram_aktif',
     ];
 
     protected function casts(): array
@@ -22,6 +24,7 @@ class Setting extends Model
             'latitude' => 'decimal:7',
             'longitude' => 'decimal:7',
             'radius' => 'integer',
+            'telegram_aktif' => 'boolean',
         ];
     }
 }

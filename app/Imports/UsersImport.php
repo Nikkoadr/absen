@@ -23,19 +23,25 @@ class UsersImport implements ToModel, WithHeadingRow
             return null;
         }
 
-        return new User([
+        $user = new User([
             'role' => $role,
+            'nama' => $row['nama'] ?? $email,
+            'email' => $email,
+            'password' => (string) ($row['password'] ?? 'password123'),
+        ]);
+        $user->save();
+
+        $user->karyawan()->create([
             'nik' => $row['nik'] ?? null,
             'nuptk' => $row['nuptk'] ?? null,
             'nbm' => $row['nbm'] ?? null,
-            'nama' => $row['nama'] ?? $email,
             'nomor_hp' => $row['nomor_hp'] ?? null,
-            'email' => $email,
-            'password' => (string) ($row['password'] ?? 'password123'),
             'jabatan' => $row['jabatan'] ?? null,
             'jam_kerja' => $this->parseTime($row['jam_kerja'] ?? null),
             'jam_pulang' => $this->parseTime($row['jam_pulang'] ?? null),
         ]);
+
+        return $user;
     }
 
     protected function parseTime($value): ?string

@@ -13,17 +13,12 @@ class User extends Authenticatable
 
     protected $fillable = [
         'role',
-        'nik',
-        'nuptk',
-        'nbm',
+        'aktif',
         'nama',
-        'nomor_hp',
         'email',
         'google_id',
         'password',
-        'jabatan',
-        'jam_kerja',
-        'jam_pulang',
+        'tanggal_lahir',
         'pasfoto',
         'face_descriptor',
     ];
@@ -38,13 +33,66 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'tanggal_lahir' => 'date:Y-m-d',
             'password' => 'hashed',
             'face_descriptor' => 'array',
+            'aktif' => 'boolean',
         ];
     }
 
     public function absensi()
     {
         return $this->hasMany(Absensi::class, 'id_user');
+    }
+
+    public function karyawan()
+    {
+        return $this->hasOne(Karyawan::class);
+    }
+
+    public function siswa()
+    {
+        return $this->hasOne(Siswa::class);
+    }
+
+    /* Kompatibilitas baca selama migrasi view ke relasi baru. */
+    protected function profil(): ?Karyawan
+    {
+        return $this->relationLoaded('karyawan') ? $this->karyawan : $this->karyawan()->first();
+    }
+
+    public function getNikAttribute(): ?string
+    {
+        return $this->profil()?->nik;
+    }
+
+    public function getNuptkAttribute(): ?string
+    {
+        return $this->profil()?->nuptk;
+    }
+
+    public function getNbmAttribute(): ?string
+    {
+        return $this->profil()?->nbm;
+    }
+
+    public function getNomorHpAttribute(): ?string
+    {
+        return $this->profil()?->nomor_hp;
+    }
+
+    public function getJabatanAttribute(): ?string
+    {
+        return $this->profil()?->jabatan;
+    }
+
+    public function getJamKerjaAttribute(): ?string
+    {
+        return $this->profil()?->jam_kerja;
+    }
+
+    public function getJamPulangAttribute(): ?string
+    {
+        return $this->profil()?->jam_pulang;
     }
 }

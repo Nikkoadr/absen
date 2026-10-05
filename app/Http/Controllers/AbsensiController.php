@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AbsenMasukRequest;
 use App\Http\Requests\FilterTanggalRequest;
+use App\Jobs\KirimNotifikasiOrtu;
 use App\Models\Absensi;
 use App\Services\AbsensiService;
 use Illuminate\Http\Request;
@@ -41,6 +42,14 @@ class AbsensiController extends Controller
             $request->string('lokasi')->toString(),
             $request->fotoBiner()
         );
+
+        if ($hasil['status'] === 'sukses' && isset($hasil['notifikasi'])) {
+            KirimNotifikasiOrtu::dispatch(
+                $hasil['notifikasi']['user_id'],
+                $hasil['notifikasi']['jenis'],
+                $hasil['notifikasi']['jam']
+            );
+        }
 
         return response()->json([
             'status' => $hasil['status'],

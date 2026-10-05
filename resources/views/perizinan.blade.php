@@ -37,7 +37,7 @@
                             @csrf @method('put')
                             <button class="btn btn-sm btn-success">Setujui</button>
                         </form>
-                        <form action="{{ route('perizinan.tolak', $izin) }}" method="POST" class="d-inline">
+                        <form action="{{ route('perizinan.tolak', $izin) }}" method="POST" class="d-inline konfirmasi-form" data-konfirmasi="Tolak pengajuan izin ini?">
                             @csrf @method('put')
                             <button class="btn btn-sm btn-danger">Tolak</button>
                         </form>
@@ -54,4 +54,9 @@
     </div>
 </section>
 </div>
+@endsection
+@section('script')
+<script>
+Presensi.konfirmasiForm(document, 'Anda yakin ingin menghapus data ini?');
+</script>
 @endsection

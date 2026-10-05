@@ -11,10 +11,21 @@ class UsersExport implements FromCollection, WithHeadings
 {
     public function collection(): Enumerable
     {
-        return User::orderBy('nama')->get([
-            'id', 'role', 'nik', 'nuptk', 'nbm', 'nama',
-            'nomor_hp', 'email', 'jabatan', 'jam_kerja', 'jam_pulang',
-        ]);
+        return User::leftJoin('karyawans', 'karyawans.user_id', '=', 'users.id')
+            ->orderBy('users.nama')
+            ->get([
+                'users.id',
+                'users.role',
+                'karyawans.nik',
+                'karyawans.nuptk',
+                'karyawans.nbm',
+                'users.nama',
+                'karyawans.nomor_hp',
+                'users.email',
+                'karyawans.jabatan',
+                'karyawans.jam_kerja',
+                'karyawans.jam_pulang',
+            ]);
     }
 
     public function headings(): array

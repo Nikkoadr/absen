@@ -133,36 +133,11 @@ $("#table_att").DataTable({
 });
 </script>
 <script>
-document.querySelectorAll('.konfirmasi-form').forEach(function(form) {
-    form.addEventListener('submit', function (event) {
-        event.preventDefault();
-        Swal.fire({
-            text: "Anda yakin ingin menghapus data ini?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, Hapus!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                form.submit();
-            }
-        });
-    });
-});
+Presensi.konfirmasiForm(document, 'Anda yakin ingin menghapus data ini?');
 </script>
 <script>
 @if (session()->has('success'))
-var Toast = Swal.mixin({
-    toast: true,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 5000
-});
-    Toast.fire({
-    icon: 'success',
-    title: '{{ session('success') }}'
-    })
+Presensi.sukses(@json(session('success')));
 @endif
 </script>
 @endsection

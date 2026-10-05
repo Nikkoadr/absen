@@ -32,6 +32,7 @@
             <div class="kamera mb-3">
                 <video id="video" autoplay muted playsinline aria-label="Pratinjau kamera untuk verifikasi wajah"></video>
             </div>
+            <p id="statusKamera" role="status" class="text-muted text-center mb-0">Memuat kamera…</p>
 
             <div class="row mt-2">
                 <div class="col">
@@ -86,12 +87,17 @@ Promise.all([
 
 function startVideo() {
     const video = document.getElementById('video');
+    const status = document.getElementById('statusKamera');
     navigator.mediaDevices.getUserMedia({ video: {} })
         .then(stream => video.srcObject = stream)
-        .catch(err => console.error("Camera error:", err));
+        .catch(err => {
+            console.error("Camera error:", err);
+            if (status) status.textContent = 'Kamera tidak dapat diakses. Periksa izin kamera browser.';
+        });
 
     video.addEventListener('loadedmetadata', () => {
         video.play();
+        if (status) status.textContent = 'Arahkan wajah ke kamera hingga bingkai hijau muncul.';
 
         const canvas = faceapi.createCanvasFromMedia(video);
         document.querySelector('.kamera').append(canvas);
@@ -152,7 +158,7 @@ function takePhoto() {
 $("#ambilFoto").click(function () {
     if (!faceDetected) {
         Swal.fire({
-            title: "Opss..!!!",
+            title: "Gagal",
             text: "Wajah belum terdeteksi, pastikan wajah terlihat jelas di kamera.",
             icon: "error"
         });
@@ -184,10 +190,10 @@ function sendAbsenRequest(foto) {
                 message = respond.message;
             }
             if (status == "sukses") {
-                Swal.fire({ title: "Terimakasih", text: message, icon: "success" });
+                Swal.fire({ title: "Berhasil", text: message, icon: "success" });
                 setTimeout(() => location.href = '/home', 2000);
             } else {
-                Swal.fire({ title: "Opss..!!!", text: message, icon: "error" });
+                Swal.fire({ title: "Gagal", text: message, icon: "error" });
             }
         },
         error: function (xhr) {
@@ -197,7 +203,7 @@ function sendAbsenRequest(foto) {
             } else if (xhr.responseJSON && xhr.responseJSON.errors) {
                 message = Object.values(xhr.responseJSON.errors).flat().join(' ');
             }
-            Swal.fire({ title: "Opss..!!!", text: message, icon: "error" });
+            Presensi.galat(message);
         }
     });
 }
@@ -227,16 +233,19 @@ function initMap(latitude, longitude) {
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
         position => initMap(position.coords.latitude, position.coords.longitude),
-        error => console.error('Error getting geolocation:', error),
+        error => {
+            console.error('Error getting geolocation:', error);
+            document.getElementById('map').innerHTML = '<p class="text-muted text-center p-3 mb-0">Lokasi tidak dapat dibaca. Aktifkan GPS lalu muat ulang.</p>';
+        },
         { timeout: 10000 }
     );
 }
 
 $("#tombolpulang").click(() => {
-    Swal.fire({ title: "Opss..!!!", text: "Maaf Belum Waktunya Pulang ya !", icon: "error" });
+    Presensi.galat("Belum waktunya pulang.");
 });
 $("#tombolmasuk").click(() => {
-    Swal.fire({ title: "Maaf !", text: "Presensi Masuknya sudah tidak bisa karena terlalu siang", icon: "error" });
+    Presensi.galat("Presensi masuk sudah ditutup karena terlalu siang.");
 });
 </script>
 @endsection

@@ -56,6 +56,15 @@
                         <label for="limit_absen">Limit Absen Harian</label>
                         <input type="time" class="form-control" id="limit_absen" name="limit_absen" value="{{ $setting->limit_absen }}">
                     </div>
+                    <div class="form-group">
+                        <label for="telegram_bot_token">Token Bot Telegram</label>
+                        <input type="text" class="form-control" id="telegram_bot_token" name="telegram_bot_token" value="{{ $setting->telegram_bot_token }}" placeholder="cth: 123456:ABC...">
+                        <small class="form-text text-muted">Dari BotFather. Uji via <code>php artisan telegram:uji ID_CHAT</code>.</small>
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="telegram_aktif" name="telegram_aktif" value="1" {{ $setting->telegram_aktif ? 'checked' : '' }}>
+                        <label class="form-check-label" for="telegram_aktif">Aktifkan notifikasi ke orang tua</label>
+                    </div>
                     <button type="submit" class="btn btn-primary float-right">Simpan</button>
                 </form>
             </div>
@@ -76,16 +85,7 @@
 <script src="assets/plugins/sweetalert2/sweetalert2.all.min.js"></script>
 <script>
 @if (session()->has('success'))
-var Toast = Swal.mixin({
-    toast: true,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 3000
-});
-    Toast.fire({
-    icon: 'success',
-    title: '{{ session('success') }}'
-    })
+Presensi.sukses(@json(session('success')));
 @endif
 </script>
 @endsection

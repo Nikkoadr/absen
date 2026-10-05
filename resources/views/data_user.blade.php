@@ -107,6 +107,9 @@ $("#table_user").DataTable({
         "dataSrc": function (json) {
             document.getElementById('modalWadah').innerHTML = json.modals || '';
             return json.data;
+        },
+        "error": function () {
+            Presensi.galat('Gagal memuat data karyawan.');
         }
     },
     "columns": [
@@ -123,36 +126,11 @@ $("#table_user").DataTable({
 </script>
 <script>
 @if (session()->has('success'))
-var Toast = Swal.mixin({
-    toast: true,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 5000
-});
-    Toast.fire({
-    icon: 'success',
-    title: '{{ session('success') }}'
-    })
+Presensi.sukses(@json(session('success')));
 @endif
 </script>
 <script>
-document.getElementById('table_user').addEventListener('submit', function (event) {
-    var form = event.target.closest('.konfirmasi-form');
-    if (!form) return;
-    event.preventDefault();
-    Swal.fire({
-        text: "Anda yakin ingin menghapus data ini?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Ya, Hapus!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            form.submit();
-        }
-    });
-});
+Presensi.konfirmasiForm(document.getElementById('table_user'), 'Anda yakin ingin menghapus data ini?');
 </script>
 <script>
 (function () {
@@ -190,37 +168,30 @@ document.getElementById('table_user').addEventListener('submit', function (event
 
     tombol.addEventListener('click', function () {
         if (!dipilih.size) return;
-        Swal.fire({
-            text: "Hapus " + dipilih.size + " karyawan terpilih beserta presensinya?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Ya, Hapus!'
-        }).then((result) => {
-            if (!result.isConfirmed) return;
-            fetch("{{ route('hapusBanyakUser') }}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                },
-                body: JSON.stringify({ ids: Array.from(dipilih) }),
-            }).then(function (r) { return r.json(); }).then(function (j) {
-                if (j.status !== 'sukses') throw new Error(j.message || 'Gagal menghapus.');
-                var dt = $('#table_user').DataTable();
-                (j.ids || []).forEach(function (id) {
-                    dipilih.delete(String(id));
-                    var input = tabel.querySelector('.pilih-user[value="' + id + '"]');
-                    if (input) dt.row(input.closest('tr')).remove();
+        Presensi.konfirmasi("Hapus " + dipilih.size + " karyawan terpilih beserta presensinya?").then(function (ya) {
+            if (!ya) return;
+            Presensi.aman(function () {
+                return fetch("{{ route('hapusBanyakUser') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    },
+                    body: JSON.stringify({ ids: Array.from(dipilih) }),
+                }).then(function (r) { return r.json(); }).then(function (j) {
+                    if (j.status !== 'sukses') throw new Error(j.message || 'Gagal menghapus.');
+                    var dt = $('#table_user').DataTable();
+                    (j.ids || []).forEach(function (id) {
+                        dipilih.delete(String(id));
+                        var input = tabel.querySelector('.pilih-user[value="' + id + '"]');
+                        if (input) dt.row(input.closest('tr')).remove();
+                    });
+                    dt.draw(false);
+                    hitung();
+                    Presensi.sukses(j.message);
                 });
-                dt.draw(false);
-                hitung();
-                Swal.fire({ toast: true, position: 'top-end', showConfirmButton: false, timer: 3000, icon: 'success', title: j.message });
-            }).catch(function (e) {
-                Swal.fire({ title: 'Opss..!!!', text: e.message, icon: 'error' });
-            });
+            }, 'Gagal menghapus data terpilih.');
         });
     });
 

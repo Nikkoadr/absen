@@ -98,16 +98,11 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $data->nama }}</td>
-                                <td><img class="img-presensi" src="{{ asset('storage/absen_file/'. $data->foto_masuk) }}" alt="Foto masuk {{ $data->nama }}" /></td>
+                                <td>@if ($data->foto_masuk)<img class="img-presensi" src="{{ asset('storage/absen_file/'. $data->foto_masuk) }}" alt="Foto masuk {{ $data->nama }}" />@else<span class="badge badge-secondary">RFID</span>@endif</td>
                                 <td><span class="badge
                                         @if(($data->jam_kerja_hari ?? $data->user?->jam_kerja) && $data->jam_masuk > ($data->jam_kerja_hari ?? $data->user?->jam_kerja)) badge-warning @else badge-success @endif ">{{ $data->jam_masuk }}</span>
                                 </td>
-                                    <td>@if ($data->foto_keluar == null)
-                                        <small>Belum Pulang</small>
-                                    @else
-                                        <img class="img-presensi" src="{{ asset('storage/absen_file/'. $data->foto_keluar) }}" alt="Foto keluar {{ $data->nama }}" />
-                                    @endif
-                                </td>
+                                <td>@if ($data->foto_keluar)<img class="img-presensi" src="{{ asset('storage/absen_file/'. $data->foto_keluar) }}" alt="Foto keluar {{ $data->nama }}" />@elseif ($data->jam_keluar)<span class="badge badge-secondary">RFID</span>@else<small>Belum Pulang</small>@endif</td>
                                 <td>
                                     @if ($data->jam_keluar == null)
                                     <small>Belum Pulang</small>

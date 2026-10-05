@@ -16,15 +16,18 @@ class HomeController extends Controller
     public function index()
     {
         $pengguna = request()->user();
+        $pengguna->loadMissing(['karyawan', 'siswa.kelas']);
+        $bawaan = $this->jadwal->bawaanPengguna($pengguna);
         $zona = 'Asia/Jakarta';
         $today = Carbon::today($zona);
         $hariIni = $today->toDateString();
 
-        $dasar = Absensi::with('user:id,nama,jam_kerja')
+        $dasar = Absensi::with(['user:id,nama', 'user.karyawan:user_id,jam_kerja', 'user.siswa:user_id,kelas_id', 'user.siswa.kelas:id,jam_masuk'])
             ->join('users', 'absensi.id_user', '=', 'users.id')
+            ->leftJoin('karyawans', 'karyawans.user_id', '=', 'users.id')
             ->padaTanggal($hariIni)
             ->orderBy('jam_masuk')
-            ->select('absensi.*', 'users.nama', 'users.jabatan', 'users.pasfoto');
+            ->select('absensi.*', 'users.nama', 'karyawans.jabatan as jabatan', 'users.pasfoto');
 
         $absenHariIni = Absensi::milikPengguna($pengguna->id)->padaTanggal($hariIni)->first();
         $historyBulanIni = Absensi::milikPengguna($pengguna->id)
@@ -41,7 +44,7 @@ class HomeController extends Controller
         $hitungUser = User::count();
         $hariKerjaBerjalan = HariKerja::jumlahHariKerja((int) $today->month, (int) $today->year, $hariIni);
         $jamKerjaHariIni = $this->jadwal->untukTanggal($pengguna->id, $hariIni)['jam_masuk']
-            ?? ($pengguna->jam_kerja ? substr($pengguna->jam_kerja, 0, 5) : null);
+            ?? ($bawaan ? substr($bawaan, 0, 5) : null);
 
         $tren7Hari = collect(range(6, 0))->map(function ($mundur) use ($today) {
             $tgl = $today->copy()->subDays($mundur);
@@ -94,7 +97,7 @@ class HomeController extends Controller
             ];
         });
 
-        $this->jadwal->anotasiJamKerja($historyBulanIni, $pengguna->jam_kerja);
+        $this->jadwal->anotasiJamKerja($historyBulanIni, $bawaan);
 
         return view('home_mobile', [
             'absenHariIni' => $absenHariIni,

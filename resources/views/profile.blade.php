@@ -125,15 +125,17 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ Illuminate\Support\Carbon::parse($data->tanggal_absen)->format('d-M-Y'); }}</td>
-                                <td><img class="img-presensi" src="{{ asset('storage/absen_file/'. $data->foto_masuk) }}" alt="Foto masuk {{ Illuminate\Support\Carbon::parse($data->tanggal_absen)->format('d-M-Y') }}"></td>
+                                <td>@if ($data->foto_masuk)<img class="img-presensi" src="{{ asset('storage/absen_file/'. $data->foto_masuk) }}" alt="Foto masuk {{ Illuminate\Support\Carbon::parse($data->tanggal_absen)->format('d-M-Y') }}">@else<span class="badge badge-secondary">RFID</span>@endif</td>
                                 <td><span class="badge
                                     @if(($data->jam_kerja_hari ?? Auth::user()->jam_kerja) && $data->jam_masuk > ($data->jam_kerja_hari ?? Auth::user()->jam_kerja)) badge-warning @else badge-success @endif ">{{ $data->jam_masuk }}</span>
                                 </td>
                                 <td>
-                                    @if ($data->foto_keluar == null)
-                                        <small>Belum Foto Pulang</small>
-                                    @else
+                                    @if ($data->foto_keluar)
                                         <img class="img-presensi" src="{{ asset('storage/absen_file/'. $data->foto_keluar) }}" alt="Foto pulang {{ Illuminate\Support\Carbon::parse($data->tanggal_absen)->format('d-M-Y') }}" />
+                                    @elseif ($data->jam_keluar)
+                                        <span class="badge badge-secondary">RFID</span>
+                                    @else
+                                        <small>Belum Foto Pulang</small>
                                     @endif
                                 </td>
                                 <td>
@@ -367,16 +369,7 @@ document.getElementById('btnDaftarWajahDesktop')?.addEventListener('click', asyn
 <script>
 @if (session()->has('success'))
 $(function() {
-var Toast = Swal.mixin({
-    toast: true,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 3000
-});
-    Toast.fire({
-    icon: 'success',
-    title: '{{ session('success') }}'
-    })
+Presensi.sukses(@json(session('success')));
 });
 @endif
 </script>

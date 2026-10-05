@@ -13,11 +13,13 @@ class LaporanBulananExport implements FromCollection, WithHeadings
     public function __construct(
         protected string $tanggalAwal,
         protected string $tanggalAkhir,
+        protected ?int $kelasId = null,
+        protected ?string $kelompok = null,
     ) {}
 
     public function collection(): Collection
     {
-        $rekap = app(LaporanService::class)->rekap($this->tanggalAwal, $this->tanggalAkhir);
+        $rekap = app(LaporanService::class)->rekap($this->tanggalAwal, $this->tanggalAkhir, $this->kelasId, $this->kelompok);
         $mulai = Carbon::parse($this->tanggalAwal);
         $selesai = Carbon::parse($this->tanggalAkhir);
 

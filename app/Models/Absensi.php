@@ -14,6 +14,7 @@ class Absensi extends Model
 
     protected $fillable = [
         'id_user',
+        'gerbang_id',
         'tanggal_absen',
         'jam_masuk',
         'jam_keluar',
@@ -33,6 +34,11 @@ class Absensi extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');
+    }
+
+    public function gerbang()
+    {
+        return $this->belongsTo(Perangkat::class, 'gerbang_id');
     }
 
     public function scopePadaTanggal(Builder $query, string $tanggal): Builder

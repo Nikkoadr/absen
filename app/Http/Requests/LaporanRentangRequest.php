@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
 
 class LaporanRentangRequest extends FormRequest
 {
@@ -17,6 +18,8 @@ class LaporanRentangRequest extends FormRequest
         return [
             'tanggal_awal' => ['required', 'date'],
             'tanggal_akhir' => ['required', 'date', 'after_or_equal:tanggal_awal'],
+            'kelompok' => ['required', 'string', Rule::in(['karyawan', 'siswa'])],
+            'kelas_id' => ['nullable', 'integer', 'exists:kelas,id'],
         ];
     }
 

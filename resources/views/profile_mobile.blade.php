@@ -239,16 +239,7 @@ document.getElementById('btnDaftarWajah')?.addEventListener('click', async () =>
 </script>
 <script>
 @if (session()->has('success'))
-var Toast = Swal.mixin({
-    toast: true,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 3000
-});
-    Toast.fire({
-    icon: 'success',
-    title: '{{ session('success') }}'
-    })
+Presensi.sukses(@json(session('success')));
 @endif
 </script>
 @endsection

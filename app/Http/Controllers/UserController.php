@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Imports\UsersImport;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -92,16 +93,28 @@ class UserController extends Controller
 
     public function tambah_user(StoreUserRequest $request)
     {
-        User::create($request->validated());
+        [$userData, $profil] = $this->pisahProfil($request->validated());
+        $user = User::create($userData);
+        $user->karyawan()->create($profil);
 
         return to_route('data_user')->with('success', 'Data karyawan berhasil ditambahkan.');
     }
 
     public function edit_user(UpdateUserRequest $request, User $user)
     {
-        $user->update($request->validated());
+        [$userData, $profil] = $this->pisahProfil($request->validated());
+        $user->update($userData);
+        $user->karyawan()->updateOrCreate([], $profil);
 
         return to_route('data_user')->with('success', 'Data karyawan berhasil diperbarui.');
+    }
+
+    /** Pisahkan kolom profil karyawan dari data users. */
+    protected function pisahProfil(array $valid): array
+    {
+        $kunci = ['nik', 'nuptk', 'nbm', 'nomor_hp', 'jabatan', 'jam_kerja', 'jam_pulang'];
+
+        return [Arr::except($valid, $kunci), Arr::only($valid, $kunci)];
     }
 
     public function ubah_password(UpdatePasswordRequest $request, User $user)

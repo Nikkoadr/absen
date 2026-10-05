@@ -11,7 +11,7 @@ class LaporanService
 {
     public function __construct(protected JadwalService $jadwal) {}
 
-    public function rekap(string $tanggalAwal, string $tanggalAkhir): Collection
+    public function rekap(string $tanggalAwal, string $tanggalAkhir, ?int $kelasId = null, ?string $kelompok = null): Collection
     {
         $mulai = Carbon::parse($tanggalAwal, 'Asia/Jakarta')->startOfDay();
         $selesai = Carbon::parse($tanggalAkhir, 'Asia/Jakarta')->startOfDay();
@@ -21,19 +21,29 @@ class LaporanService
         while ($cursor->lte($selesai)) {
             $kunci = $cursor->format('Ymd');
             $tgl = $cursor->toDateString();
-            $select[] = "MAX(CASE WHEN tanggal_absen = '{$tgl}' THEN CONCAT(jam_masuk, '-', IFNULL(jam_keluar, '00:00:00')) ELSE '' END) as tgl_{$kunci}";
+            $select[] = "MAX(CASE WHEN absensi.tanggal_absen = '{$tgl}' THEN CONCAT(absensi.jam_masuk, '-', IFNULL(absensi.jam_keluar, '00:00:00')) ELSE '' END) as tgl_{$kunci}";
             $cursor->addDay();
         }
 
         $rekap = DB::table('users')
-            ->selectRaw('users.id as id_user, users.jam_kerja, users.nama, users.jabatan, '.implode(', ', $select))
+            ->selectRaw('users.id as id_user, karyawans.jam_kerja, users.nama, karyawans.jabatan, kelas.jam_masuk as jam_kelas, '.implode(', ', $select))
+            ->leftJoin('karyawans', 'karyawans.user_id', '=', 'users.id')
+            ->leftJoin('siswas', 'siswas.user_id', '=', 'users.id')
+            ->leftJoin('kelas', 'kelas.id', '=', 'siswas.kelas_id')
             ->leftJoin('absensi', function ($join) use ($tanggalAwal, $tanggalAkhir) {
                 $join->on('users.id', '=', 'absensi.id_user')
                     ->whereBetween('tanggal_absen', [$tanggalAwal, $tanggalAkhir]);
             })
-            ->groupByRaw('users.id, users.jam_kerja, users.nama, users.jabatan')
+            ->when($kelasId, fn ($q) => $q->where('siswas.kelas_id', $kelasId))
+            ->when($kelompok === 'karyawan', fn ($q) => $q->where('users.role', '<>', 'siswa'))
+            ->when($kelompok === 'siswa', fn ($q) => $q->where('users.role', '=', 'siswa'))
+            ->groupByRaw('users.id, karyawans.jam_kerja, users.nama, karyawans.jabatan, kelas.jam_masuk')
             ->orderBy('users.nama')
             ->get();
+
+        foreach ($rekap as $baris) {
+            $baris->jam_kerja = $baris->jam_kerja ?? $baris->jam_kelas;
+        }
 
         $peta = $this->jadwal->petaRentang($tanggalAwal, $tanggalAkhir);
 

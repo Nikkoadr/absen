@@ -13,6 +13,20 @@ use Illuminate\Support\Collection;
  */
 class JadwalService
 {
+    /** Bawaan jam masuk: karyawan dari profilnya, siswa dari jadwal kelasnya. */
+    public function bawaanPengguna(?User $user): ?string
+    {
+        if (! $user) {
+            return null;
+        }
+
+        if ($user->role === 'siswa') {
+            return $user->siswa?->kelas?->jam_masuk;
+        }
+
+        return $user->jam_kerja;
+    }
+
     /** @return array{jam_masuk: ?string, jam_pulang: ?string, nama: ?string} */
     public function untukTanggal(int $userId, string $tanggal): array
     {
@@ -32,8 +46,16 @@ class JadwalService
 
         $user = User::find($userId);
 
+        if ($user?->role === 'siswa' && ($kls = $user->siswa?->kelas)) {
+            return [
+                'jam_masuk' => substr((string) $kls->jam_masuk, 0, 5),
+                'jam_pulang' => $kls->jam_pulang ? substr((string) $kls->jam_pulang, 0, 5) : null,
+                'nama' => null,
+            ];
+        }
+
         return [
-            'jam_masuk' => $user?->jam_kerja ? substr((string) $user->jam_kerja, 0, 5) : null,
+            'jam_masuk' => $this->bawaanPengguna($user) ? substr((string) $this->bawaanPengguna($user), 0, 5) : null,
             'jam_pulang' => $user?->jam_pulang ? substr((string) $user->jam_pulang, 0, 5) : null,
             'nama' => null,
         ];
@@ -91,6 +113,14 @@ class JadwalService
             ];
         }
 
+        if ($user?->role === 'siswa' && ($kls = $user->siswa?->kelas)) {
+            return [
+                'jam_masuk' => substr((string) $kls->jam_masuk, 0, 5),
+                'jam_pulang' => $kls->jam_pulang ? substr((string) $kls->jam_pulang, 0, 5) : null,
+                'nama' => null,
+            ];
+        }
+
         return [
             'jam_masuk' => $user?->jam_kerja ? substr((string) $user->jam_kerja, 0, 5) : null,
             'jam_pulang' => $user?->jam_pulang ? substr((string) $user->jam_pulang, 0, 5) : null,
@@ -109,7 +139,8 @@ class JadwalService
         $peta = $this->petaRentang($tanggal->min(), $tanggal->max());
 
         foreach ($absensi as $a) {
-            $bawaan = ($a->relationLoaded('user') ? $a->user?->jam_kerja : null) ?? $bawaanDefault;
+            $u = $a->relationLoaded('user') ? $a->user : null;
+            $bawaan = $u ? $this->bawaanPengguna($u) : $bawaanDefault;
             $a->jam_kerja_hari = $this->jamMasukPada($peta, (int) $a->id_user, substr((string) $a->tanggal_absen, 0, 10), $bawaan);
         }
     }

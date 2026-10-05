@@ -6,6 +6,8 @@
     <meta name="theme-color" content="#0ea5e9" />
     <meta name="description" content="Presensi mandiri tanpa login untuk guru dan karyawan SMK Muhammadiyah Kandanghaur." />
     <title>Presensi Mandiri Tanpa Login</title>
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/icons/apple-180.png" />
     <link rel="stylesheet" href="{{ asset('assets/css/presensi-tokens.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/mobile/css/inc/bootstrap/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" />
@@ -109,8 +111,15 @@ Promise.all([
 ]).then(boot).catch(e => { statusEl.textContent = 'Gagal memuat model AI'; console.error(e); });
 
 async function boot() {
-    const res = await fetch('/api/deskriptor-wajah?token={{ $token }}');
-    const daftar = await res.json();
+    let daftar;
+    try {
+        const res = await fetch('/api/deskriptor-wajah?token={{ $token }}');
+        daftar = await res.json();
+    } catch (e) {
+        console.error(e);
+        statusEl.textContent = 'Jaringan bermasalah. Muat ulang halaman.';
+        return;
+    }
     if (!daftar.length) {
         statusEl.textContent = 'Belum ada data wajah terdaftar. Login lalu daftarkan wajah di Profil.';
         return;
@@ -162,7 +171,7 @@ function startVideo() {
 btn.addEventListener('click', async () => {
     const uid = document.getElementById('userId').value;
     if (!uid) {
-        Swal.fire({ title: 'Opss', text: 'Wajah belum terdeteksi. Arahkan wajah ke kamera hingga nama muncul.', icon: 'error' });
+        Swal.fire({ title: 'Gagal', text: 'Wajah belum terdeteksi. Arahkan wajah ke kamera hingga nama muncul.', icon: 'error' });
         return;
     }
     const nama = namaEl.textContent;
@@ -176,7 +185,7 @@ btn.addEventListener('click', async () => {
     });
     if (!konfirmasi.isConfirmed) return;
     if (document.getElementById('userId').value !== uid) {
-        Swal.fire({ title: 'Opss', text: 'Wajah berubah saat konfirmasi. Pastikan wajah yang benar lalu ulangi.', icon: 'error' });
+        Swal.fire({ title: 'Gagal', text: 'Wajah berubah saat konfirmasi. Pastikan wajah yang benar lalu ulangi.', icon: 'error' });
         return;
     }
     btn.disabled = true;
@@ -198,9 +207,9 @@ btn.addEventListener('click', async () => {
         const r = await fetch('/presensi-mandiri', { method: 'POST', headers: { 'Accept': 'application/json' }, body: payload });
         const j = await r.json();
         const pesan = j.message || (j.errors ? Object.values(j.errors).flat().join(' ') : 'Terjadi kesalahan. Coba lagi.');
-        Swal.fire({ title: j.status === 'sukses' ? 'Terima kasih' : 'Opss', text: pesan, icon: j.status === 'sukses' ? 'success' : 'error' });
+        Swal.fire({ title: j.status === 'sukses' ? 'Berhasil' : 'Gagal', text: pesan, icon: j.status === 'sukses' ? 'success' : 'error' });
     } catch (e) {
-        Swal.fire({ title: 'Opss', text: 'Terjadi kesalahan. Coba lagi.', icon: 'error' });
+        Swal.fire({ title: 'Gagal', text: 'Terjadi kesalahan. Coba lagi.', icon: 'error' });
     } finally {
         btn.disabled = !document.getElementById('userId').value;
     }
@@ -216,8 +225,14 @@ function initMap(lat, lon) {
     @endif
 }
 if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(p => initMap(p.coords.latitude, p.coords.longitude), e => console.error(e), { timeout: 10000 });
+    navigator.geolocation.getCurrentPosition(p => initMap(p.coords.latitude, p.coords.longitude), e => {
+        console.error(e);
+        document.getElementById('map').innerHTML = '<p class="text-muted text-center p-3 mb-0">Lokasi tidak dapat dibaca. Aktifkan GPS lalu muat ulang.</p>';
+    }, { timeout: 10000 });
 }
+</script>
+<script>
+if ('serviceWorker' in navigator) { window.addEventListener('load', function () { navigator.serviceWorker.register('/sw.js').catch(function () {}); }); }
 </script>
 </body>
 </html>

@@ -7,6 +7,8 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <title>Presensi SMK Muhammadiyah Kandanghaur</title>
 <link rel="icon" type="image/x-icon" href="{{ asset('assets/dist/img/logoKotak.png') }}">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icons/apple-180.png">
 <!-- Google Font: Source Sans Pro -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 <!-- Font Awesome Icons -->
@@ -40,6 +42,10 @@ Application : v2.4.10 | Laravel : v{{ Illuminate\Foundation\Application::VERSION
 <!-- AdminLTE App -->
 <script src="{{ asset('assets/dist/js/adminlte.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+<script src="{{ asset('assets/js/presensi-notif.js') }}"></script>
+<script>
+if ('serviceWorker' in navigator) { window.addEventListener('load', function () { navigator.serviceWorker.register('/sw.js').catch(function () {}); }); }
+</script>
 @yield('script')
 </body>
 </html>

@@ -6,6 +6,7 @@ use App\Exports\LaporanBulananExport;
 use App\Http\Requests\FilterTanggalRequest;
 use App\Http\Requests\LaporanRentangRequest;
 use App\Models\Absensi;
+use App\Models\LeaveRequest;
 use App\Models\User;
 use App\Services\JadwalService;
 use App\Services\LaporanService;
@@ -26,10 +27,11 @@ class LaporanController extends Controller
         ]);
 
         $pengguna = $user->exists ? $user : User::findOrFail($data['id'] ?? abort(422, 'ID karyawan wajib diisi.'));
-        $awalBulan = Carbon::create($data['tahun'], $data['bulan'], 1, 'Asia/Jakarta')->startOfMonth()->toDateString();
-        $akhirBulan = Carbon::create($data['tahun'], $data['bulan'], 1, 'Asia/Jakarta')->endOfMonth()->toDateString();
+        $pengguna->loadMissing(['karyawan', 'siswa.kelas.kompetensi']);
+        $awalBulan = Carbon::create($data['tahun'], $data['bulan'], 1, 0, 0, 0, 'Asia/Jakarta')->startOfMonth()->toDateString();
+        $akhirBulan = Carbon::create($data['tahun'], $data['bulan'], 1, 0, 0, 0, 'Asia/Jakarta')->endOfMonth()->toDateString();
         $peta = $this->jadwal->petaRentang($awalBulan, $akhirBulan);
-        $rekap = Absensi::with('user:id,nama,jam_kerja,jam_pulang')
+        $rekap = Absensi::with(['user:id,nama', 'user.karyawan:user_id,jam_kerja,jam_pulang', 'user.siswa:user_id,kelas_id', 'user.siswa.kelas:id,jam_masuk,jam_pulang'])
             ->milikPengguna($pengguna->id)
             ->bulan((int) $data['bulan'], (int) $data['tahun'])
             ->orderBy('tanggal_absen')
@@ -45,25 +47,64 @@ class LaporanController extends Controller
             'bulan' => (int) $data['bulan'],
             'tahun' => (int) $data['tahun'],
             'rekap' => $rekap,
+            'jumlahIzin' => LeaveRequest::milikPengguna($pengguna->id)
+                ->where('status', 'disetujui')
+                ->whereMonth('tanggal_mulai', (int) $data['bulan'])
+                ->whereYear('tanggal_mulai', (int) $data['tahun'])
+                ->count(),
         ]);
     }
 
     public function laporanSemua(FilterTanggalRequest $request)
     {
-        return view('laporanSemua', [
-            'bulan' => $request->bulan(),
-            'tahun' => $request->tahun(),
+        return to_route('laporan.karyawan');
+    }
+
+    public function laporanKaryawan()
+    {
+        return $this->formulir('karyawan');
+    }
+
+    public function laporanSiswa()
+    {
+        return $this->formulir('siswa');
+    }
+
+    protected function formulir(string $kelompok)
+    {
+        return view('laporan', [
+            'kelompok' => $kelompok,
+            'judul' => $kelompok === 'siswa' ? 'Rekap Presensi Siswa' : 'Rekap Presensi Karyawan',
+            'kelas' => $kelompok === 'siswa'
+                ? \App\Models\Kelas::with('kompetensi:id,singkatan')->orderBy('tingkat')->orderBy('nama')->get()
+                : collect(),
         ]);
+    }
+
+    protected function judulHasil(array $data): string
+    {
+        if (($data['kelompok'] ?? null) !== 'siswa') {
+            return 'Karyawan';
+        }
+
+        if (empty($data['kelas_id'])) {
+            return 'Siswa - Semua Kelas';
+        }
+
+        $kelas = \App\Models\Kelas::with('kompetensi:id,singkatan')->find($data['kelas_id']);
+
+        return $kelas ? "Siswa - {$kelas->tingkat} {$kelas->nama} ({$kelas->kompetensi->singkatan})" : 'Siswa';
     }
 
     public function printSemuaLaporan(LaporanRentangRequest $request)
     {
         $data = $request->validated();
-        $rekap = $this->laporan->rekap($data['tanggal_awal'], $data['tanggal_akhir']);
+        $rekap = $this->laporan->rekap($data['tanggal_awal'], $data['tanggal_akhir'], $data['kelas_id'] ?? null, $data['kelompok']);
 
         return view('layouts.component.printLaporanSemua', [
             'tanggalAwal' => $data['tanggal_awal'],
             'tanggalAkhir' => $data['tanggal_akhir'],
+            'judulKelompok' => $this->judulHasil($data),
             'rekap' => $rekap,
         ]);
     }
@@ -73,8 +114,8 @@ class LaporanController extends Controller
         $data = $request->validated();
 
         return Excel::download(
-            new LaporanBulananExport($data['tanggal_awal'], $data['tanggal_akhir']),
-            "rekap-presensi-{$data['tanggal_awal']}_{$data['tanggal_akhir']}.xlsx"
+            new LaporanBulananExport($data['tanggal_awal'], $data['tanggal_akhir'], $data['kelas_id'] ?? null, $data['kelompok']),
+            "rekap-presensi-{$data['kelompok']}-{$data['tanggal_awal']}_{$data['tanggal_akhir']}.xlsx"
         );
     }
 }

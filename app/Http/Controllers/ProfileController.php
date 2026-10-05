@@ -9,6 +9,7 @@ use App\Models\Absensi;
 use App\Models\User;
 use App\Services\JadwalService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 
 class ProfileController extends Controller
@@ -18,6 +19,8 @@ class ProfileController extends Controller
     public function index()
     {
         $pengguna = request()->user();
+        $pengguna->loadMissing(['karyawan', 'siswa.kelas']);
+        $bawaan = $this->jadwal->bawaanPengguna($pengguna);
 
         if ($pengguna->role === 'admin') {
             $zona = 'Asia/Jakarta';
@@ -27,7 +30,7 @@ class ProfileController extends Controller
                 ->bulan((int) Carbon::now($zona)->month, (int) Carbon::now($zona)->year)
                 ->orderBy('tanggal_absen')
                 ->get();
-            $this->jadwal->anotasiJamKerja($historyBulanIni, $pengguna->jam_kerja);
+            $this->jadwal->anotasiJamKerja($historyBulanIni, $bawaan);
             $absenHariIni = Absensi::milikPengguna($pengguna->id)->padaTanggal($hariIni)->first();
 
             return view('profile', [
@@ -41,14 +44,17 @@ class ProfileController extends Controller
             ->orderByDesc('tanggal_absen')
             ->take(5)
             ->get();
-        $this->jadwal->anotasiJamKerja($riwayatTerakhir, $pengguna->jam_kerja);
+        $this->jadwal->anotasiJamKerja($riwayatTerakhir, $bawaan);
 
         return view('profile_mobile', compact('riwayatTerakhir'));
     }
 
     public function edit_user(UpdateProfilRequest $request, User $user)
     {
-        $user->update($request->validated());
+        $valid = $request->validated();
+        $kunci = ['nik', 'nuptk', 'nbm', 'nomor_hp', 'jabatan', 'jam_kerja', 'jam_pulang'];
+        $user->update(Arr::except($valid, $kunci));
+        $user->karyawan()->updateOrCreate([], Arr::only($valid, $kunci));
 
         return to_route('profile')->with('success', 'Profil berhasil diperbarui.');
     }
@@ -85,11 +91,12 @@ class ProfileController extends Controller
     public function history(FilterTanggalRequest $request)
     {
         $pengguna = $request->user();
+        $pengguna->loadMissing(['karyawan', 'siswa.kelas']);
         $history = Absensi::milikPengguna($pengguna->id)
             ->bulan($request->bulan(), $request->tahun())
             ->orderBy('tanggal_absen')
             ->get();
-        $this->jadwal->anotasiJamKerja($history, $pengguna->jam_kerja);
+        $this->jadwal->anotasiJamKerja($history, $this->jadwal->bawaanPengguna($pengguna));
 
         return view('history_mobile', [
             'history' => $history,
