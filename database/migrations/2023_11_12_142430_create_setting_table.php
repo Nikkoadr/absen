@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('setting', function (Blueprint $table) {
             $table->id();
-            $table->string('namaLokasi');
-            $table->string('latitude');
-            $table->string('longitude');
-            $table->string('radius');
+            $table->string('nama_lokasi', 150);
+            $table->decimal('latitude', 10, 7);
+            $table->decimal('longitude', 10, 7);
+            $table->integer('radius')->unsigned();
             $table->time('limit_absen');
+            $table->string('telegram_bot_token', 100)->nullable();
+            $table->boolean('telegram_aktif')->default(false);
             $table->timestamps();
         });
     }

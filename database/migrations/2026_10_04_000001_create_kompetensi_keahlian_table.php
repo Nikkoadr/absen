@@ -8,15 +8,16 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('google_id')->nullable()->unique()->after('email');
+        Schema::create('kompetensi_keahlian', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama', 100);
+            $table->string('singkatan', 10);
+            $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('google_id');
-        });
+        Schema::dropIfExists('kompetensi_keahlian');
     }
 };

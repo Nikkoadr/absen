@@ -51,10 +51,12 @@ class SinkronHariLibur extends Command
 
         foreach ($res->json() ?? [] as $baris) {
             foreach ($this->uraiTanggal((string) ($baris['date'] ?? ''), $tahun) as $tanggal) {
-                $model = Holiday::firstOrCreate(['tanggal' => $tanggal]);
+                $model = Holiday::firstOrCreate(
+                    ['tanggal' => $tanggal],
+                    ['nama' => (string) ($baris['holiday_name'] ?? 'Hari libur nasional')]
+                );
 
                 if ($model->wasRecentlyCreated) {
-                    $model->update(['nama' => (string) ($baris['holiday_name'] ?? 'Hari libur nasional')]);
                     $dibuat++;
                 } else {
                     $diperbarui++;

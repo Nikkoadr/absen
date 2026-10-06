@@ -14,20 +14,19 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->enum('role', ['admin', 'karyawan', 'guru', 'siswa'])->default('siswa');
-            $table->string('nik')->nullable();
-            $table->string('nuptk')->nullable();
-            $table->string('nbm')->nullable();
+            $table->boolean('aktif')->default(true);
             $table->string('nama');
-            $table->string('nomor_hp')->nullable();
             $table->string('email')->unique();
+            $table->string('google_id')->nullable()->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('jabatan')->nullable();
-            $table->time('jam_kerja')->nullable();
-            $table->time('jam_pulang')->nullable();
+            $table->date('tanggal_lahir')->nullable();
             $table->string('pasfoto')->nullable();
+            $table->json('face_descriptor')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->index('role');
+            $table->index('nama');
         });
     }
 

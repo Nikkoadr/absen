@@ -19,7 +19,7 @@ class seed_setting extends Seeder
             'latitude' => '-6.363041',
             'longitude' => '108.113627',
             'radius' => '70',
-            'limit_absen' => '13:00',
+            'limit_absen' => '13:00:00',
 
         ]);
     }

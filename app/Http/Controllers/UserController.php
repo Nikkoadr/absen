@@ -28,17 +28,23 @@ class UserController extends Controller
         $panjang = $panjang < 1 || $panjang > 100 ? 10 : $panjang;
         $cari = trim((string) $request->input('search.value', ''));
 
-        $dasar = User::query();
+        $dasar = User::with(['karyawan', 'siswa']);
         $total = (clone $dasar)->count();
 
         if ($cari !== '') {
             $dasar->where(function ($q) use ($cari) {
                 $q->where('nama', 'like', "%{$cari}%")
                     ->orWhere('email', 'like', "%{$cari}%")
-                    ->orWhere('nik', 'like', "%{$cari}%")
-                    ->orWhere('nuptk', 'like', "%{$cari}%")
-                    ->orWhere('nbm', 'like', "%{$cari}%")
-                    ->orWhere('jabatan', 'like', "%{$cari}%");
+                    ->orWhereHas('karyawan', fn ($k) => $k
+                        ->where('nik', 'like', "%{$cari}%")
+                        ->orWhere('nuptk', 'like', "%{$cari}%")
+                        ->orWhere('nbm', 'like', "%{$cari}%")
+                        ->orWhere('nomor_hp', 'like', "%{$cari}%")
+                        ->orWhere('jabatan', 'like', "%{$cari}%"))
+                    ->orWhereHas('siswa', fn ($s) => $s
+                        ->where('nis', 'like', "%{$cari}%")
+                        ->orWhere('nisn', 'like', "%{$cari}%")
+                        ->orWhere('nama_ortu', 'like', "%{$cari}%"));
             });
         }
         $tersaring = (clone $dasar)->count();
